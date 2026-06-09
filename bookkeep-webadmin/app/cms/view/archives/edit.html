@@ -1,0 +1,129 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('Archives/edit')}">
+        <input type="hidden" name="id" value="{$info['id']|default='0'}">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">文章标题</label>
+                <div class="col-sm-6">
+                    <input name="title" class="form-control" type="text" placeholder="请输入文章标题" value="{$info.title|default=''}"/>
+                    <span class="help-block m-b-none"></span></div>
+                <label class="col-sm-2 control-label">短标题</label>
+                <div class="col-sm-2">
+                    <input name="shorttitle" class="form-control" type="text" placeholder="请输入文章短标题" value="{$info.shorttitle|default=''}"/>
+                </div>
+            </div>
+<!--        <div class="form-group">-->
+<!--            <label class="col-sm-2 control-label">启用跳转</label>-->
+<!--            <div class="col-sm-10">-->
+<!--                <div class="input-group m-b">-->
+<!--                    <span class="input-group-addon"> <input name="is_jump" type="checkbox" value="1"  {notempty name="info['is_jump']"} {if condition="$info['is_jump'] eq '1' " }  checked {/if} {/notempty}> </span>-->
+<!--                    <input type="text" class="form-control" name="jump_url" placeholder="启用了地址跳转这里必须设置跳转网址" value="{$info.jump_url|default=''}" >-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">文章属性</label>
+                <div class="col-sm-6"> {$arcatt_checkbox_html}<span class="help-block m-b-none"></span></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">来源</label>
+                <div class="col-sm-4">
+                    <input name="source" class="form-control" type="text" placeholder="请输入文章来源" value="{$info.source|default='原创'}"/>
+                    <span class="help-block m-b-none"></span></div>
+                <label class="col-sm-2 control-label">作者</label>
+                <div class="col-sm-4">
+                    <input name="writer" class="form-control" type="text" placeholder="请输入文章作者" value="{$info.writer|default='管理员'}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">文章主栏目</label>
+                <div class="col-sm-4 fly-form-select">
+                    <select data-placeholder="上级栏目..." name="type_id" class="chosen-select chosen-select-typeid">
+                        <option value="0">请选择栏目</option>
+                        {volist name='arctypelist' id='vo'}
+                        <option value="{$vo['id']}" {notempty name="$info['type_id']"} {if condition="$info['type_id'] eq $vo['id'] " }  selected="selected" {/if} {/notempty}>{$vo['name']}</option>
+                        {/volist}
+                    </select>
+                    <span class="help-block m-b-none"></span>
+                </div>
+                <label class="col-sm-2 control-label">文章副栏目</label>
+                <div class="col-sm-4 fly-form-select">
+                    <select data-placeholder="副级栏目..." name="type_id2" class="chosen-select chosen-select-typeid2">
+                        <option value="0">请选择栏目</option>
+                        {volist name='arctypelist' id='vo'}
+                        <option value="{$vo['id']}"  {notempty name="$info['type_id2']"} {if condition="$info['type_id2'] eq $vo['id'] " }  selected="selected" {/if} {/notempty}>{$vo['name']}</option>
+                        {/volist}
+                    </select>
+                    <span class="help-block m-b-none">文章级栏目，可以不选择</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">缩略图标</label>
+                <div class="col-sm-8">
+                    <div id="drop_area"></div>
+                    {assign name="litpic" value="$info.litpic|default='0'" /}
+                    {:hook('File', ['name' => 'litpic', 'value' => $litpic, 'type' => 'imgpath'])}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">关键字</label>
+                <div class="col-sm-10">
+                    <input name="keywords" class="form-control" type="text" placeholder="请输入文章关键字" value="{$info.keywords|default=''}"/>
+                    <span class="help-block m-b-none">* 用来查找相关文章，可输入多个关键字，中间用英文逗号“,”隔开。不能出现"'&?;:()等字符。</span></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">文章描述</label>
+                <div class="col-sm-10">
+                    <p>
+                        <input type="checkbox" name="down_remote_img" checked>远程图片本地化
+                        <input type="checkbox" name="clear_link" checked>清除非本站链接
+                        <input type="checkbox" name="get_first_pic" checked>无缩略图提取内容第一张图片
+                    </p>
+                    <textarea name="description" class="form-control">{$info.description|default=''}</textarea>
+                    <span class="help-block m-b-none"></span></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">文章内容</label>
+                <div class="col-sm-10">
+                    <textarea class="body" name="body">{$info.body|default=''}</textarea>
+                    {:hook('ArticleEditor', ['name' => 'body'])}
+                    <span class="help-block m-b-none"></span></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">点击次数</label>
+                <div class="col-sm-10">
+                    <input name="click" class="form-control" value="{$info.click|default=''}" type="text" placeholder="请输入点击次数"/>
+                    <span class="help-block m-b-none">这功能是提供给管理员作弊用的。不过尽量不要用呀！^_^</span></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布时间</label>
+                <div class="col-sm-10">
+                    <input name="pubdate" class="form-control datetimepicker-now" id="datetimeStart"  type="text" placeholder="选择发布时间"/>
+                    <span class="help-block m-b-none">文档发布时间</span></div>
+            </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否发布</label> </label>
+            <div class="col-sm-4">
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="visible1" value="1" name="visible" {if condition="$info.visible eq '1' " }  checked {/if}>
+                    <label for="visible1"> 是 </label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="visible0" value="0" name="visible" {if condition="$info.visible eq '0' " }  checked {/if}>
+                    <label for="visible0"> 否 </label>
+                </div>
+            </div>
+        </div>
+            {$ext_field}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    {include file="admin@layout/save_btn"}
+                </div>
+            </div>
+        </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#datetimeStart").datetimepicker("setDate", new Date());
+    });
+</script>

@@ -1,0 +1,85 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="toast"></div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">{:lang('please confirm before restoring data')}</div>
+                <div class="ibox-content">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{:lang('backup name')}</th>
+                            <th>{:lang('compress')}</th>
+                            <th>{:lang('data size')}</th>
+                            <th>{:lang('backup time')}</th>
+                            <th>{:lang('restore status')}</th>
+                            <th>{:lang('operate')}</th>
+                        </tr>
+                        </thead>
+                        {notempty name='list'}
+                        <tbody>
+                        {volist name='list' id='vo'}
+                        <tr>
+                            <td>{$vo.time|date='Ymd-His',###}</td>
+                            <td>{$vo.compress}</td>
+                            <td>{$vo.size|format_bytes}</td>
+                            <td>{$key}</td>
+                            <td>-</td>
+                            <td style="width: 200px;">
+                                <lqf_link><a class="btn ajax-get db-import" href="{:url('dataRestoreHandle?time='.$vo['time'])}" class="btn"><i class="fa fa-exchange"></i> {:lang('还')} {:lang('原')}</a></lqf_link>
+                                <lqf_link><a class="btn ajax-get" href="{:url('backupDel?time='.$vo['time'])}"><i  class="fa fa-trash-o"></i> {:lang('删除')}</a></lqf_link>
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                        {else/}
+                        <tbody>
+                        <tr class="odd">
+                            <td colspan="6" class="text-center" valign="top">{:config('empty_list_describe')}</td>
+                        </tr>
+                        </tbody>
+                        {/notempty}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".db-import").click(function () {
+        var self = this, status = ".";
+        $.get(self.href, success, "json");
+        window.onbeforeunload = function () {
+            return "{:lang('正在还原数据库')}，{:lang('请不要关闭')}！"
+        }
+        return false;
+        function success(data) {
+            if (data.status) {
+                if (data.gz) {
+                    data.msg += status;
+                    if (status.length === 5) {
+                        status = ".";
+                    } else {
+                        status += ".";
+                    }
+                }
+                $(self).parent().parent().prev().text(data.msg);
+                if (data.part) {
+                    $.get(self.href,
+                        {"part": data.part, "start": data.start},
+                        success,
+                        "json"
+                    );
+                } else {
+                    window.onbeforeunload = function () {
+                        return null;
+                    }
+                }
+            } else {
+
+                toast.warning(data.msg);
+            }
+        }
+    });
+</script>

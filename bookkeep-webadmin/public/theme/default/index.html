@@ -1,0 +1,149 @@
+全局变量：
+<p>网站标题：{fly:global name='web_title' /}</p>
+<p>网站名称：{fly:global name='web_name' /}</p>
+<p>网站描述：{fly:global name='web_description' /}</p>
+<p>网站关键字：{fly:global name='web_keywords' /}</p>
+
+{fly:global name='web_name' /}
+{fly:global name='web_beian' /}
+
+
+<hr>
+留言表单：
+{fly:guestbookform type='default' tid='25' addfield='content,realname,email'}
+<form method="post" action="{$field.action}">
+    <input type="text" name="content">
+    <input type="text" name="realname">
+    <input type="text" name="email">
+    <input type="submit" value='点击搜索'/>
+    {$field.hidden}
+</form>
+{/fly:guestbookform}
+
+
+{fly:tag sort='now' getall='0' row='100'}
+<a href='{$field.link}'>{$field.tag}</a>
+{/fly:tag}
+
+
+<hr>全局标签：<br>
+
+{fly:global name='web_name|md5' /}
+
+<!--<style>-->
+<!--   .active{color:#f00;}-->
+<!--</style>-->
+
+<!--<hr>栏目标签：<br>-->
+
+{fly:channel type='top'  typeid='1,2,3'  currentstyle='active' }
+<p><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a></p>
+{/fly:channel}
+
+<!--<hr>列表标签：<br>-->
+{fly:arclist typeid='0'  titlelen='200' infolen='160' row='10' orderby='id' orderway='desc' mod='3' empty='暂时没有数据'}
+<p  {eq name='mod' value='0'} style="background: #f1a417;" {/eq} >
+【<a href="{$field.typeurl}"> {$field.typename}</a>】<a href='{$field.arcurl}' >{$field.title}</a>
+{$field.create_time|strtotime|date="y-m-d",###}
+</p>
+<img src="{$field.litpic}" width="100">
+
+<p>{$key} - {$i}</p>
+<hr>
+{/fly:arclist}
+
+<hr>单页标签：<br>
+{fly:arcview aid='99'}
+{$field.typename}
+<a href="{$field.arcurl}">{$field.title}</a>
+{/fly:arcview}
+
+<hr>导航标签：<br>
+{fly:position style="crumb" symbol='>>' /}
+
+
+<!--单页栏目调用-->
+{fly:type typeid='1'}
+<a href="{$field.typeurl}" rel="nofollow" target="_self">
+    <span>{$field.content|msubstr=0,300,false}</span>
+</a>
+{/fly:type}
+
+<!--<hr>模板标签：<br>-->
+<!--{fly:assign name='typeid' value='2' /}-->
+<!--{fly:channel type='son'  typeid='$typeid'  currentstyle='active' }-->
+<!--<p><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a></p>-->
+
+<!--{fly:notempty name='$field.typename' /}-->
+<!--{$field.typename}《nono》-->
+<!--{/fly:notempty}-->
+
+<!--{/fly:channel}-->
+
+<!--<hr>模板嵌套标签：<br>-->
+<!--{fly:channel type='top'  currentstyle='active' }-->
+<!--<p><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a></p>-->
+
+<!--《判断标签》<br>-->
+<!--{fly:if condition='($field.nodes > 0)'}-->
+<!--当前栏目列表有下级栏目-->
+<!--{fly:else /}-->
+<!--当前栏目列表没有下级栏目-->
+<!--{/fly:if}-->
+
+<!--<br>《子极标签》<br>-->
+<!--{fly:volist name='$field.nodes' id='field1'}-->
+<!--《<a href='{$field1.typeurl}'>{$field1.typename}</a>》<br>-->
+<!--{/fly:volist}-->
+
+<!--<br>《判断 比较标签》<br>-->
+<!--{fly:eq name='$field.id' value='2'}-->
+<!--&lt;!&ndash; 栏目ID的值等于3，就输出栏目名称 start &ndash;&gt;-->
+<!--<br>这是等2：{$field.typename}<br>-->
+<!--&lt;!&ndash; 栏目ID的值等于3，就输出栏目名称 end &ndash;&gt;-->
+<!--{/fly:eq}-->
+
+<!--{/fly:channel}-->
+<!--<br>《广告位标签》<br>-->
+<!--{fly:ads aid='1,2,3'}-->
+<!--<a href='{$field.links}' >{$field.title}<img alt='{$field.title}' src='{$field.litpic}' width="100" /></a><br>-->
+<!--{/fly:ads}-->
+
+<br>《广告列表标签》<br>
+{fly:adslist adsid='1'}
+<a href='{$field.links}' >{$field.title}<img alt='{$field.title}' src='{$field.litpic}' width="100" /></a><br>
+{/fly:adslist}
+
+
+<br>《友情链接标签》<br>
+{fly:flink  type='all' }
+<a href='{$field.links}' >{$field.title}<img alt='{$field.title}' src='{$field.logo}' width="100" /></a><br>
+{/fly:flink}
+
+<!--{fly:include file="default/head" /}-->
+
+
+<!--{fly:list  pagesize='2' empty='暂时没有数据'}-->
+
+<!--<p   {eq name='mod' value='0'} style="background: #f1a417;" {/eq} >-->
+<!--【<a href="{$field.typeurl}"> {$field.typename}</a>】<a href='{$field.arcurl}' >{$field.title}</a>-->
+<!--{$field.create_time|strtotime|date="y-m-d",###}-->
+<!--</p>-->
+<!--&lt;!&ndash;<img src="{$field.litpic}" width="100">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<p>{$key} - {$i}</p>&ndash;&gt;-->
+<!--<hr>-->
+<!--{/fly:list}-->
+
+<!--{fly:pagelist listitem='index,pre,pageno,next,end,info' listsize=‘2’ /}-->
+
+
+<!--{fly:searchurl /}-->
+
+{fly:searchform type='default'}
+<form method="get" action="{$field.action}">
+    <input type="text" name="keywords"/>
+    <input type="submit" value='点击搜索'/>
+    {$field.hidden}
+</form>
+{/fly:searchform}

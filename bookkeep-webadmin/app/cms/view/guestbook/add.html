@@ -1,0 +1,24 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('Guestbook/add')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表单名称</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text" placeholder="请输入名称" required/>
+                <span class="help-block m-b-none">表单的中文名称，在后台管理，前台发布等均使用此名字。</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表单标识</label>
+            <div class="col-sm-10">
+                <input name="nid" class="form-control" type="text" placeholder="必须唯一性不能重复"/>
+                <span class="help-block m-b-none">
+                    与文档的模板相关连，建议由小写字母、数字组成，因为部份Unix系统无法识别中文文件。<br></span></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

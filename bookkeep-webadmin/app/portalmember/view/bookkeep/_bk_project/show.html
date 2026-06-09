@@ -1,0 +1,100 @@
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{:lang('我的项目')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('关键字搜索')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm">
+                                            <i class="fa fa-search"></i> {:lang('查询')}</button>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-info ajax-open" width="800" height="600"
+                                                data-url="{:url('bookkeep.BkProject/add')}">
+                                            <i class="fa fa-plus"></i> {:lang('添加项目')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('bookkeep.BkProject/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100"><span>{:lang('名称')}</span></th>
+                            <th width="200"><span>{:lang('备注')}</span></th>
+                            <th width="80"><span>{:lang('排序')}</span></th>
+                            <th width="80"  class="text-center">{:lang('启用')}</th>
+                            <th width="80"  class="text-center">{:lang('默认')}</th>
+                            <th width="80"  class="text-center">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible=''; if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['remark']%></td>
+        <td><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort"
+                   data-url="{:url('bookkeep.BkProject/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5">
+        </td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('bookkeep.BkProject/set_visible',array('name'=>'visible'))}" data-id="<%=data[i]['id']%>"
+            <%=visible%> >
+        </td>
+        <td class="text-center">
+            <%if(data[i]['is_default']=='1'){%>
+            <label class="label label-success">{:lang('默认项目')}</label>
+            <%}else{%>
+                <a class="ajax-get text-primary" data-url="{:url('bookkeep.BkProject/set_default')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('设为默认')}">{:lang('设为默认')}</a>
+            <%}%>
+        </td>
+        <td class="text-center">
+            <lqf_link><a class="ajax-open" data-url="{:url('bookkeep.BkProject/edit')}" width="800" height="600"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('bookkeep.BkProject/del')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

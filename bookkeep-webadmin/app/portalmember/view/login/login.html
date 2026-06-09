@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$webconfig.web_title}</title>
+    <meta name="keywords" content="{$webconfig.web_keywords}">
+    <meta name="description" content="{$webconfig.web_description}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="__STATIC__/module/login/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__STATIC__/module/login/css/form-elements.css">
+    <link rel="stylesheet" href="__STATIC__/module/login/css/style.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="__STATIC__/module/login/ico/favicon.png">
+</head>
+
+<body>
+<!-- Top content -->
+<div class="top-content">
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1><strong>科科记账系统后台管理中心</strong></h1>
+                    <div class="description">
+                        <p>{$webconfig.web_desc|default=''}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>{:lang('登录您的账号和密码')}</h3>
+                            <p></p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        <form role="form" action="{:url('Login/login')}" method="post" class="login-form ">
+                            <div class="form-group">
+                                <label class="control-label" for="form-username">{:lang('账号')}</label>
+                                <input type="text" name="username" placeholder="{:lang('您好的账号')}"
+                                       class="form-username form-control" id="form-username">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="form-password">{:lang('密码')}</label>
+                                <input type="password" name="password" placeholder="{:lang('密码')}"
+                                       class="form-password form-control" id="form-password">
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <input type="text" name="verify" class="form-control verify"
+                                               placeholder="请输入您的验证码">
+                                    </div>
+                                    <div class="col-sm-6 col-xs-12">
+                                        <img src="{:captcha_src()}" alt="captcha"
+                                             class="admin-login-captcha-img captcha_change" id="captcha_img"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn login-btn">{:lang('登录')}</button>
+                            <div class="form-group">
+                                <p class="form-control-static">{:lang('没有账号')}，
+                                    <a href="{:url('Login/reg')}">{:lang('去注册')}</a>
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <p class="form-control-static" style="color: #0a001f;">{:lang('小程序扫码')} </p>
+                            </div>
+                            <div class="form-group">
+                                    <img src="__STATIC__/module/bookkeep/xcx.jpg" width="100">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="copyrights">
+    {$webconfig.web_copyright}
+    <span style="display: none;"><a href="http://www.07fly.xyz">技术支持:零起飞网络</a></span>
+
+</div>
+
+<!-- Javascript -->
+<script src="__STATIC__/module/login/js/jquery-1.11.1.min.js"></script>
+<script src="__STATIC__/module/login/bootstrap/js/bootstrap.min.js"></script>
+<script src="__STATIC__/module/login/js/jquery.backstretch.min.js"></script>
+<!-- layer javascript -->
+<script src="__STATIC__/module/admin/js/plugins/layer/layer.min.js"></script>
+
+<!--[if lt IE 10]>
+<script src="__STATIC__/module/login/js/placeholder.js"></script>
+<![endif]-->
+<script>
+    $(document).ready(function () {
+        $("body").keydown(function (e) {
+            var e = event || window.event;
+            if (e.keyCode == 13) {
+                ajaxlogin();
+            }
+        });
+        $.backstretch("__STATIC__/module/login/img/b1.jpg");
+    });
+    //点击验证码
+    $(".captcha_change").click(function () {
+        reloadcode();
+    });
+    //绑定登录
+    $("body").on("click", ".login-btn", function () {
+        ajaxlogin();
+    });
+
+    function ajaxlogin() {
+        form = $('.login-form');
+        target = form.get(0).action;
+        FormData = $("form").serialize();
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: FormData,
+            dataType: "json",
+            success: function (data) {
+                reloadcode();
+                if (data.code == '1') {
+                    layer.msg(data.msg, {icon: 1,shade:0.01});
+                    window.location.href = data.url;
+                } else {
+                    layer.msg(data.msg, {icon: 5});
+                }
+            }
+        });
+    }
+
+    //刷新验证码
+    function reloadcode() {
+        var captcha_img_obj = $("#captcha_img");
+        captcha_img_obj.attr("src", captcha_img_obj.attr("src") + "?" + Math.random());
+    }
+
+</script>
+</body>
+
+</html>

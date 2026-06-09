@@ -1,0 +1,132 @@
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{:lang('账户管理')}</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div data-toggle="buttons" class="btn-group">
+                                        <label class="btn btn-sm btn-info btn-outline active">
+                                            <input type="radio" value="" name="is_debt" checked>{:lang('全部')}
+                                        </label>
+                                        <label class="btn btn-sm btn-info btn-outline">
+                                            <input type="radio" value="0" name="is_debt" >{:lang('资产')}
+                                        </label>
+                                        <label class="btn btn-sm btn-info btn-outline">
+                                            <input type="radio" value="1" name="is_debt">{:lang('负责')}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('关键字搜索')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm">
+                                            <i class="fa fa-search"></i> {:lang('查询')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-info ajax-open" width="800" height="600"
+                                                data-url="{:url('bookkeep.BkAccount/add')}">
+                                            <i class="fa fa-plus"></i> {:lang('添加账户')}</button>
+                                    </span>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success ajax-open"
+                                                width="800" height="600"
+                                                data-url="{:url('bookkeep.BkAccount/add')}">
+                                            <i class="fa fa-plus"></i> {:lang('转账')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('bookkeep.BkAccount/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100"><span>{:lang('账户名称')}</span></th>
+                            <th width="100"><span>{:lang('账户类型')}</span></th>
+                            <th width="100"><span>{:lang('余额')}</span></th>
+                            <th width="80"><span>{:lang('币种')}</span></th>
+                            <th width="80"><span>{:lang('排序')}</span></th>
+                            <th width="80" class="text-center"><span>{:lang('计入总资产')}</span></th>
+                            <th width="80"  class="text-center">{:lang('是否启用')}</th>
+                            <th width="80"  class="text-center">{:lang('是否默认')}</th>
+                            <th width="80"  class="text-center">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <table class="table ajax-list-table table-page-bar">
+                        <tfoot>
+                        <tr>
+                            <td align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+        var visible=''; if(data[i]['visible']=='1') visible='checked';
+        var isasset=''; if(data[i]['is_asset']=='1') isasset='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['account_type_name']%></td>
+        <td><%=data[i]['balance']%></td>
+        <td><%=data[i]['currency']%></td>
+        <td><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort"
+                   data-url="{:url('bookkeep.BkAccount/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5">
+        </td>
+        <td class="text-center">
+            <input name="is_asset" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('bookkeep.BkAccount/set_visible',array('name'=>'is_asset'))}" data-id="<%=data[i]['id']%>" <%=isasset%> >
+        </td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('bookkeep.BkAccount/set_visible',array('name'=>'visible'))}" data-id="<%=data[i]['id']%>"
+            <%=visible%> >
+        </td>
+        <td class="text-center">
+            <%if(data[i]['is_default']=='1'){%>
+            <label class="label label-success">{:lang('默认账户')}</label>
+            <%}else{%>
+                <a class="ajax-get text-primary" data-url="{:url('bookkeep.BkAccount/set_default')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('设为默认')}">{:lang('设为默认')}</a>
+            <%}%>
+        </td>
+        <td class="text-center">
+            <lqf_link><a class="ajax-open" data-url="{:url('bookkeep.BkAccount/edit')}" width="800" height="600"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('bookkeep.BkAccount/del')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

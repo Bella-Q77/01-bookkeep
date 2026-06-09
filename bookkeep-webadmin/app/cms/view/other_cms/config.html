@@ -1,0 +1,104 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('OtherCms/config')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">服务器地址</label>
+            <div class="col-sm-10">
+                <input name="hostname" class="form-control" type="text" placeholder="服务器地址" required value="{$dbconfig.hostname|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数据库名</label>
+            <div class="col-sm-10">
+                <input name="database" class="form-control" type="text" placeholder="数据库名" required value="{$dbconfig.database|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-10">
+                <input name="username" class="form-control" type="text" placeholder="数据库用户名" required value="{$dbconfig.username|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-10">
+                <input name="password" class="form-control" type="text" placeholder="数据库密码" required value="{$dbconfig.password|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">端口</label>
+            <div class="col-sm-10">
+                <input name="hostport" class="form-control" type="text" placeholder="数据库端口" required value="{$dbconfig.hostport|default='3306'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">前缀</label>
+            <div class="col-sm-10">
+                <input name="prefix" class="form-control" type="text" placeholder="数据库前缀" required value="{$dbconfig.prefix|default='dede_'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                {include file="admin@layout/save_btn"}
+            </div>
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-success sync-data" data-url="{:url('OtherCms/add')}"> DedeCMS 导入 </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="ibox-title">导入信息</div>
+<div class="ibox-content">
+    <div class="upgrade-text"></div>
+</div>
+
+<script type="text/javascript">
+
+    //点击升级
+    $("body").on("click", ".sync-data", function () {
+        var step = 1;
+        var target =$(this).attr('data-url');
+        var version =$(this).attr('data-ver');
+        var title='数据升级，正在备份程序，请不要关闭浏览器...';
+        $('.upgrade-text').append('<div class="ibox-title">升级日志：</div>');
+        upgrade(target,step);
+    });
+
+    //升级函数
+    function upgrade(url,step) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {'step': step},
+            dataType: "json",
+            async: false,
+            beforeSend: function () {
+                layer.msg('数据升级，正在备份程序，请不要关闭浏览器...',
+                    {
+                        time: 1000,
+                        icon: 16,
+                        shade: 0.01
+                    }
+                );
+            },
+            success: function (data) {
+                if (data.code == '1') {
+                    layer.msg(data.msg, {icon: 1});
+                    $('.upgrade-text').append('<p style="padding-left: 15px;">' + data.msg + '</p>');
+                    if(data.step!='-1'){
+                        upgrade(data.url, data.step);
+                    }
+                }else{
+                    $('.upgrade-text').append('<p style="padding-left: 15px;">' + data.msg + '</p>');
+                    layer.msg(data.msg, {icon: 5});
+                }
+            }
+        });
+    }
+</script>

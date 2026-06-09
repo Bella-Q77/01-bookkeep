@@ -1,0 +1,232 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$page_title|default=''}{$sys_config.main_title|default=''}-Powered by 07FLY pro</title>
+    <meta name="keywords" content="{$sys_config.seo_keywords|default=''}">
+    <meta name="description" content="{$sys_config.seo_description|default=''}">
+    <link rel="shortcut icon" href="__STATIC__/img/favicon.png">
+    <link href="__STATIC__/module/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/datapicker/datetimepicker.min.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"  rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/animate.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/07fly.css?v=1.1.0" rel="stylesheet">
+    <!-- 全局js -->
+    <script src="__STATIC__/module/admin/js/jquery.min.js?v=2.1.4"></script>
+    <script src="__STATIC__/module/admin/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__STATIC__/module/admin/js/plugins/layer/layer.min.js"></script>
+    <script type="text/javascript">
+        var pjax_mode = "{$pjax_mode|default=''}";
+        var static_root = "{$static_root|default=''}";
+    </script>
+</head>
+<body class="fixed-sidebar gray-bg " style="overflow:hidden">
+<div id="wrapper">
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close"><i class="fa fa-times-circle"></i></div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="{:url('Member/index')}">
+                            <span class="clear">
+                                <span class="block m-t-xs" style="font-size:18px;">
+                                <strong class="font-bold">{$sys_config.main_title|default=''}</strong>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="profile-element">
+                        <a class="dropdown-toggle J_menuItem" href="{:url('Member/index')}">
+                            <span class="clear">
+                                <span class="block m-t-xs" style="font-size:18px;">
+                                <strong class="font-bold">科科记账后台中心</strong>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="logo-element">{$sys_config.main_title|default=''}</div>
+                </li>
+                <li class="line dk"></li>
+                {$menu_view}
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row black-bg">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2" href="#" title="展示收起侧栏">
+                        <i class="fa fa-outdent"></i>
+                    </a>
+                </div>
+                <div class="nav navbar-left-box navbar-top-links">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                           {$book.name|default=''}<i class="fa fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            {notempty name="book_list"}
+                            {volist name="book_list" id="vo"}
+                            <li>
+                                <a data-url="{:url('Index/chg_book',array('id'=>$vo['id']))}" class="ajax-get"
+                                   data-calback="window.location.reload();"  >
+                                    <div>{$vo.name}</div>
+                                </a>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                            <li class="divider"></li>
+                            <li>
+                                <a class="ajax-open" href="{:url('bookkeep.BkBook/add')}"
+                                   data-calback="window.location.reload();" width="800" height="600">
+                                    <div class="text-danger"><i class="fa fa-plus"></i> <strong>{:lang('添加账本')} </strong></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+
+                    <!--系统公告-->
+                    <li class="dropdown msg-icon">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell "></i> <span class="label label-danger msg-icon-nums">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="{:url('admin/SysMsg/show_my')}" class="J_menuItem">
+                                    <div>
+                                        <i class="fa fa-qq fa-fw"></i> 您有<span class="msg-icon-my">0</span>条未接收
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{:url('admin/OaNotifyUser/show')}" class="J_menuItem">
+                                    <div>
+                                        <i class="fa fa-volume-up fa-fw"></i> <span class="msg-icon-noti">0</span>条未读公告
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--语言包-->
+                    <li class="dropdown msg-icon">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-language "></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="{:url('index/language',array('lang'=>'cn'))}" class="ajax-get" data-calback="window.location.reload();">
+                                    {:lang('chinese')}
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{:url('index/language',array('lang'=>'en'))}" class="ajax-get" data-calback="window.location.reload();">
+                                    {:lang('english')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:url('index/language',array('lang'=>'brazil'))}" class="ajax-get" data-calback="window.location.reload();">
+                                    {:lang('brazil')}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--修改详细-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            {$member.nickname|default=''} <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a data-url="{:url('index/edit_account',array('id'=>$member['id']))}" class="ajax-open" title="{:lang('personal data')}" data-calback="" width="800" height="500">
+                                    <div><i class="fa fa-envelope fa-fw"></i>{:lang('个人资料')}</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-url="{:url('index/edit_pwd',array('id'=>$member['id']))}" class="ajax-open" title="{:lang('personal data')}" data-calback="" width="800" height="500">
+                                    <div><i class="fa fa-envelope fa-fw"></i>{:lang('修改密码')}</div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a class="ajax-get" href="{:url('Login/logout')}"
+                                       data-calback="window.location.reload();">
+                                        <strong>{:lang('退出登录')} </strong> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="row J_mainContent" id="content-main">
+            <iframe id="J_iframe" width="100%" height="95%" src="{:url('Index/main')}" frameborder="0"
+                    data-id="index_v1.html" seamless></iframe>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+</div>
+{include file="admin@layout/bottom"}
+<audio id='audioPlay' src='' hidden='true' muted="true">
+<script type="text/javascript">
+    //顶部菜单栏目
+    $(".navbar-module a").click(function () {
+        $(this).addClass("on");
+        $(this).siblings().removeClass('on');
+    });
+
+    $(document).ready(function () {
+        //默认设置当前加载地址
+        var iframeUrl = localStorage.getItem('iframeUrl');
+        if (typeof (iframeUrl) != "undefined" && iframeUrl != null) {
+        } else {
+            iframeUrl = "{:url('Index/main')}";
+        }
+        //阻止F5刷新
+        document.onkeypress = function (e) {
+            if (e.keyCode == 116) {
+                e.preventDefault(); //组织默认刷新
+                iframe.src = iframeUrl;
+            }
+        }
+        //刷新时设置当前点击页面数据
+        if (typeof (iframeUrl) != "undefined") {
+            that = $("a[href='" + iframeUrl + "']");
+            //that.parent('li').addClass('active');
+            that.parents('ul.nav').addClass('in');
+            that.parents('ul.nav').parent('li').addClass('active');
+            $('#J_iframe').attr('src', iframeUrl);//重新设置获取的url，实现刷新显示当前页面
+        }
+
+        //保存点击=>记录当前链接地址
+        $(".J_menuItem").on('click', function () {
+            var itemUrl = $(this).attr('href');
+            localStorage.setItem('iframeUrl', itemUrl);
+            $(".J_menuItem").removeClass('active')
+            $(this).addClass('active');
+        });
+        //点击任何事件开启语音提醒
+        document.body.addEventListener('mousedown', function () {
+            var audio = document.getElementById("audioPlay");
+            audio.muted = false;
+            //audio.play();
+            log('取消静音效果')
+        }, false);
+    });
+
+</script>

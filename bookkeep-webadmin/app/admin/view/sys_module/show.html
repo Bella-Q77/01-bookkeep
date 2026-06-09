@@ -1,0 +1,107 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <H5>{$page_title}</H5>
+                        <div class="ibox-tools"><a href="javascript:void(0);" class="btn btn-xs btn-default btn-help-detail"  data-type="cst_customer"> <i class="fa fa-question-circle"> {:lang('help')}</i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <form id="pagerForm" method="post" class="form-inline searchForm">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('search')}</button></span>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-warning ajaxSearchForm resetForm"><i class="fa fa-recycle"></i> {:lang('resetting')}</button></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <lqf_link><a class="btn btn-info ajax-open"  data-url="{:url('SysModule/add')}"><i class="fa fa-plus"></i> {:lang('generate module')}</a></lqf_link>
+                                <lqf_link><a  class="btn btn-default btn-outline ajax-open" data-url="{:url('SysModule/upload')}"><i class="fa fa-upload"></i> {:lang('import module')}</a></lqf_link>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <a href="javascript:void(0);" class="btn btn-default btn-outline btn-field-set" data-id="{$page_title|default=''}"> <i class="fa fa-columns"></i> {:lang('display columns')}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content table-responsive">
+                        <table class="table table-hover sorttable ajax-list-table" data-url="{:url('SysModule/show_json')}"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                                <th width="120">{:lang('title')}</th>
+                                <th width="80">{:lang('name')}</th>
+                                <th width="300">{:lang('description')}</th>
+                                <th width="80" class="text-center">{:lang('version')}</th>
+                                <th width="60" >{:lang('sort')}</th>
+                                <th width="50" class="text-center">{:lang('enable')}</th>
+                                <th width="100" class="text-center">{:lang('operate')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot class="ibox-content">
+                            <tr>
+                                <td colspan="8" align="center"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i <data.length;i++) {
+    visible='';
+    if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['title']%></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['intro']%></td>
+        <td class="text-center"><%=data[i]['version']%></td>
+        <td class="text-center"><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort" data-url="{:url('SysModule/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5"></td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"   data-url="{:url('SysModule/set_visible',array('name'=>'visible'))}"  data-id="<%=data[i]['id']%>" <%=visible%> >
+        </td>
+        <td class="text-center">
+            <lqf_link><a  class="ajax-open" data-url="{:url('SysModule/edit',array('name'=>'visible'))}"  data-ids="{'id':'<%=data[i]['id']%>'}" >{:lang('modify')}</a> </lqf_link>
+            <% for(var j=0;j<data[i]['status_arr']['action'].length;j++) { %>
+            <lqf_link>
+                <a class="<%=data[i]['status_arr']['action'][j]['class']%>"
+                   data-ids="{'id':'<%=data[i]['id']%>'}"
+                   href="<%=data[i]['status_arr']['action'][j]['url']%>">
+                    <font color="<%=data[i]['status_arr']['action'][j]['color']%>"><%=data[i]['status_arr']['action'][j]['name']%></font>
+                </a>
+            </lqf_link>
+            <% } %>
+<!--            <lqf_link><a  class="ajax-get ajaxload" data-url="{:url('SysModule/backup')}"  data-ids="{'id':'<%=data[i]['id']%>'}" >{:lang('backup')}</a> </lqf_link>-->
+            <lqf_link><a  class="ajax-get ajaxload" data-url="{:url('SysModule/synctable')}"  data-ids="{'id':'<%=data[i]['id']%>'}" >{:lang('同步数据')}</a> </lqf_link>
+            <lqf_link><a  class="ajax-get ajaxload" data-url="{:url('SysModule/syncmenu')}"  data-ids="{'id':'<%=data[i]['id']%>'}" >{:lang('同步栏目')}</a> </lqf_link>
+
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

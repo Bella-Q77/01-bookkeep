@@ -1,0 +1,104 @@
+<div class="wrapper wrapper-content ">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-1">
+                <p class="form-control-static">{:lang('statistical date')}：</p>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" name="bill_date" class="form-control stat-workbench-date daterange-prev" value="{$rangedate|default=''}">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-info stat-workbench-btn">{:lang('query statistics')}</button>
+            </div>
+        </div>
+    </div>
+    <!--销售订单统计-->
+    <div class="row workbench-ajax mystatbase m-t-md" data-url="{:url('Workbench/index')}" data-type="mystatbase">
+        <lqf_link>
+            <a href="{:url('dmsb/DmsSellOrder/show')}">
+                <div class="col-sm-3">
+                    <div class="widget style1 navy-bg">
+                        <div class="row vertical-align">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cubes fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <span> {:lang('order quantity')} </span>
+                                <h2 class="font-bold sell_order_nums">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </lqf_link>
+        <lqf_link>
+            <a href="{:url('dmsb/DmsSellOrder/show')}">
+                <div class="col-sm-3">
+                    <div class="widget style1 yellow-bg">
+                        <div class="row vertical-align">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cube fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <span> {:lang('order amount')} </span>
+                                <h2 class="font-bold sell_order_money">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </lqf_link>
+        <lqf_link>
+            <a href="{:url('dmsb/CstCustomer/show')}">
+                <div class="col-sm-3">
+                    <div class="widget style1 lazur-bg">
+                        <div class="row vertical-align">
+                            <div class="col-xs-3">
+                                <i class="fa fa-retweet fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <span> {:lang('number of customers')} </span>
+                                <h2 class="font-bold customer_nums">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </lqf_link>
+        <lqf_link>
+            <a href="{:url('dmsb/DmsRebate/show')}">
+                <div class="col-sm-3">
+                    <div class="widget style1 red-bg ">
+                        <div class="row vertical-align">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cogs fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <span> {:lang('commission')} </span>
+                                <h2 class="font-bold sell_order_rebate_money">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </lqf_link>
+    </div>
+
+    <!--销售订单统计-->
+    <div class="row m-t-md workbench-ajax statsellorder" data-url="{:url('Workbench/index')}" data-type="statsellorder" data-gid="statsellorder">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <h4>{:lang('sales statistics')}</h4>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox-content">
+                            <div id="workbench-statsellorder" data-type="bar" class="statistics-box" style="height: 500px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--加载数据模板-->
+{include file="workbench/js_function"/}

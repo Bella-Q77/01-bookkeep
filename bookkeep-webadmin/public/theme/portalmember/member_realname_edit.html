@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>实名认证_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010805" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/MemberRealname/edit')}" class="tit on"> 实名认证</a></span>
+                <span><a href="{:url('portalmember/MemberRealname/info')}" class="tit"> 需提供的资料</a></span>
+                <span class="fr"><a href="#" class="blue btn-history ">返回</a></span>
+                <span class="help"></span>
+            </div>
+            <div class="tabcontent">
+                <div class="help-box">
+                    您的实名认证状态：
+                    {if condition="$info.status eq '1'"}
+                    <font class="blue">已实名认证</font>
+                    {else /}
+                    <font class="red">还未实名认证</font>
+                    {/if}
+                </div>
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/MemberRealname/edit')}" method="post" autocomplete="off">
+                        <input type="hidden"  name="id" value="{$info.id|default='0'}">
+                        <input type="hidden"  name="member_id" value="{$member.id|default='0'}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>真实名称</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control" value="{$info.name}">
+                                    <span class="help-block">【必填】您的学校品牌，或个人讲师品牌</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label> 认证类型</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <select name="real_type">
+                                        <option value="1" {notempty name="info.real_type" } {if condition="$info.real_type eq '1'"} selected {/if}   {/notempty}>个人</option>
+                                        <option value="2" {notempty name="info.real_type" } {if condition="$info.real_type eq '2'"} selected {/if}   {/notempty}>企业</option>
+                                    </select>
+                                    <span class="help-block">个人 与 企业 在权益上没有区别，仅在宣传页显示有区别：个人标记为(个人)，企业标记为(企业)。</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label> 证件类型</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <select name="cert_type">
+                                        <option value="身份证" {notempty name="info.cert_type" } {if condition="$info.cert_type eq '身份证'"} selected {/if}   {/notempty}>身份证</option>
+                                        <option value="营业执照" {notempty name="info.cert_type" } {if condition="$info.cert_type eq '营业执照'"} selected {/if}   {/notempty}>营业执照</option>
+                                    </select>
+                                    <span class="help-block">认证类型为（个人）提供身份证，认证类型（企业）选择营业执照</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>证件号码</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="cert_code" class="form-control" value="{$info.cert_code}">
+                                    <span class="help-block">输入身份证或营业执照编号</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>材料上传</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {assign name="cert_pic" value="$info.cert_pic|default=''" /}
+                                    {:hook('File', ['addons_model' =>'portalmember' ,'name' => 'cert_pic', 'value' => $cert_pic, 'type' => 'imgs'])}
+                                    <span class="help-block">认证需提供的资料,请看下方详细说明</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">保存修改</button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span class="yellow">个人认证需提供的资料</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>1. 认 证 单：个人认证单（点此下载）</li>
+                    <li>2. 身份证明：个人身份证的正反面，在上面加文字注明（仅供培训达人认证用）</li>
+                    <li>3. 品牌授权（没有可以不提供）；有品牌授权的，则授权对象为个人；</li>
+                    <li>以上资料均需要 拍照或扫描 成图片格式。</li>
+                </div>
+            </div>
+            <div class="tabtitle">
+                <span class="yellow">机构认证需提供的资料</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>1. 认 证 单：机构认证单（点此下载）</li>
+                    <li>2. 身份证明：营业执照 或 办学许可证 或 信用代码证，在上面加文字注明（仅供培训达人认证用）
+                    <li>3. 品牌授权（没有可以不提供）；有品牌授权的，则授权对象为机构；</li>
+                    <li>以上资料均需要 拍照或扫描 成图片格式。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

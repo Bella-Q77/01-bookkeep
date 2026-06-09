@@ -1,0 +1,19 @@
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('SysUser/userRules')}">
+        <input type="hidden" name="id" value="{$id}" />
+        <div class="ibox-content bg-success">
+            {:lang('用户权限菜单必须勾选')}：{:lang('系统首页')}，{:lang('我的主页')}
+        </div>
+        <div class="ibox-content">
+            <div class="menu-tree-checkbox">
+                {$list}
+            </div>
+        </div>
+       
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

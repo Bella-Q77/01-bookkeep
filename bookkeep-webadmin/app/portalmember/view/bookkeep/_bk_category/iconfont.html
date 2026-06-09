@@ -1,0 +1,581 @@
+<link href="__STATIC__/module/bookkeep/iconfont/iconfont.css?v=3.3.6" rel="stylesheet">
+<style>
+    .iconfont-page{
+        display: none;
+    }
+    .icon_lists {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        list-style: none; /* 去掉li前面的默认点 */
+        padding-left: 0;   /* 去掉默认的padding */
+        margin: 0;         /* 去掉默认的margin */
+    }
+
+    .icon_lists .icon{font-weight: bold;font-size: 28px;}
+    .iconfont-box .dib {
+        cursor: pointer;
+        transition: all 0.3s;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 4px;
+        flex: 0 0 18%; /* 固定宽度为20%左右，留出margin空间 */
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .iconfont-box .dib:hover {
+        background-color: #f0f0f0;
+    }
+
+    .iconfont-box .dib.selected {
+        background-color: #e6f7ff;
+        border: 2px solid #1890ff;
+        border-radius: 4px;
+        padding: 8px; /* 调整内边距以补偿边框 */
+    }
+</style>
+<div class="iconfont-page">
+
+    <div class="iconfont-box">
+        <ul class="icon_lists dib-box">
+            <li class="dib">
+                <span class="icon iconfont icon-zhuanzhang"></span>
+                <div class="name">
+                    转账
+                </div>
+                <div class="code-name">.icon-zhuanzhang
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-tupian"></span>
+                <div class="name">
+                    图片
+                </div>
+                <div class="code-name">.icon-tupian
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-sop_fruits"></span>
+                <div class="name">
+                    sop_fruits
+                </div>
+                <div class="code-name">.icon-sop_fruits
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-shuiguo"></span>
+                <div class="name">
+                    fruit-copy
+                </div>
+                <div class="code-name">.icon-shuiguo
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-delete"></span>
+                <div class="name">
+                    delete
+                </div>
+                <div class="code-name">.icon-delete
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-delete2"></span>
+                <div class="name">
+                    delete
+                </div>
+                <div class="code-name">.icon-delete2
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-huluobu"></span>
+                <div class="name">
+                    蔬菜
+                </div>
+                <div class="code-name">.icon-huluobu
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-shujuxian"></span>
+                <div class="name">
+                    technology_usb-cable
+                </div>
+                <div class="code-name">.icon-shujuxian
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-shouqijianpan"></span>
+                <div class="name">
+                    收起键盘
+                </div>
+                <div class="code-name">.icon-shouqijianpan
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-shijin"></span>
+                <div class="name">
+                    纸巾
+                </div>
+                <div class="code-name">.icon-shijin
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-plus"></span>
+                <div class="name">
+                    plus
+                </div>
+                <div class="code-name">.icon-plus
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-wushuju"></span>
+                <div class="name">
+                    无数据
+                </div>
+                <div class="code-name">.icon-wushuju
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-arrow-right"></span>
+                <div class="name">
+                    arrow-down-copy
+                </div>
+                <div class="code-name">.icon-arrow-right
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-arrow-left"></span>
+                <div class="name">
+                    arrow-down-copy
+                </div>
+                <div class="code-name">.icon-arrow-left
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-arrow-down"></span>
+                <div class="name">
+                    arrow-down
+                </div>
+                <div class="code-name">.icon-arrow-down
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-riliriqi2"></span>
+                <div class="name">
+                    日历 日期2
+                </div>
+                <div class="code-name">.icon-riliriqi2
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-quanbufenlei"></span>
+                <div class="name">
+                    全部分类
+                </div>
+                <div class="code-name">.icon-quanbufenlei
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-icon"></span>
+                <div class="name">
+                    提示
+                </div>
+                <div class="code-name">.icon-icon
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-setting"></span>
+                <div class="name">
+                    设置
+                </div>
+                <div class="code-name">.icon-setting
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-owner_set"></span>
+                <div class="name">
+                    个性化
+                </div>
+                <div class="code-name">.icon-owner_set
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-close"></span>
+                <div class="name">
+                    close
+                </div>
+                <div class="code-name">.icon-close
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-rmb"></span>
+                <div class="name">
+                    人民币
+                </div>
+                <div class="code-name">.icon-rmb
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-cart"></span>
+                <div class="name">
+                    购物车
+                </div>
+                <div class="code-name">.icon-cart
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-juhui"></span>
+                <div class="name">
+                    聚会
+                </div>
+                <div class="code-name">.icon-juhui
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-biji-copy"></span>
+                <div class="name">
+                    笔记
+                </div>
+                <div class="code-name">.icon-biji-copy
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-feiji"></span>
+                <div class="name">
+                    飞机
+                </div>
+                <div class="code-name">.icon-feiji
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-dianhua"></span>
+                <div class="name">
+                    电话
+                </div>
+                <div class="code-name">.icon-dianhua
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-jujia1"></span>
+                <div class="name">
+                    居家
+                </div>
+                <div class="code-name">.icon-jujia1
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-hongbao"></span>
+                <div class="name">
+                    红包
+                </div>
+                <div class="code-name">.icon-hongbao
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-jianzhi"></span>
+                <div class="name">
+                    兼职
+                </div>
+                <div class="code-name">.icon-jianzhi
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-jiaotong"></span>
+                <div class="name">
+                    交通
+                </div>
+                <div class="code-name">.icon-jiaotong
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-lingshi"></span>
+                <div class="name">
+                    零食
+                </div>
+                <div class="code-name">.icon-lingshi
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-yule"></span>
+                <div class="name">
+                    娱乐
+                </div>
+                <div class="code-name">.icon-yule
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-zhufang"></span>
+                <div class="name">
+                    住房
+                </div>
+                <div class="code-name">.icon-zhufang
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-gongyi01"></span>
+                <div class="name">
+                    公益
+                </div>
+                <div class="code-name">.icon-gongyi01
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-tubiao-bingtu"></span>
+                <div class="name">
+                    图表-饼图
+                </div>
+                <div class="code-name">.icon-tubiao-bingtu
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-canyin"></span>
+                <div class="name">
+                    餐饮
+                </div>
+                <div class="code-name">.icon-canyin
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-bangongyongpin"></span>
+                <div class="name">
+                    办公用品
+                </div>
+                <div class="code-name">.icon-bangongyongpin
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-gongziqiarenzheng"></span>
+                <div class="name">
+                    工资卡认证
+                </div>
+                <div class="code-name">.icon-gongziqiarenzheng
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-Txu"></span>
+                <div class="name">
+                    T恤
+                </div>
+                <div class="code-name">.icon-Txu
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-qingdianhejuhui-"></span>
+                <div class="name">
+                    庆典和聚会-27
+                </div>
+                <div class="code-name">.icon-qingdianhejuhui-
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-huazhuangjing"></span>
+                <div class="name">
+                    化妆镜
+                </div>
+                <div class="code-name">.icon-huazhuangjing
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-zhangdan"></span>
+                <div class="name">
+                    账单
+                </div>
+                <div class="code-name">.icon-zhangdan
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-yiliao"></span>
+                <div class="name">
+                    医疗
+                </div>
+                <div class="code-name">.icon-yiliao
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-kuaidi1"></span>
+                <div class="name">
+                    快递
+                </div>
+                <div class="code-name">.icon-kuaidi1
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-yulebao"></span>
+                <div class="name">
+                    娱乐宝
+                </div>
+                <div class="code-name">.icon-yulebao
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-licai"></span>
+                <div class="name">
+                    理财
+                </div>
+                <div class="code-name">.icon-licai
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-qiche"></span>
+                <div class="name">
+                    001汽车-4
+                </div>
+                <div class="code-name">.icon-qiche
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-jujiashenghuo"></span>
+                <div class="name">
+                    居家生活
+                </div>
+                <div class="code-name">.icon-jujiashenghuo
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-weixiu"></span>
+                <div class="name">
+                    维修
+                </div>
+                <div class="code-name">.icon-weixiu
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-xuexi"></span>
+                <div class="name">
+                    学习
+                </div>
+                <div class="code-name">.icon-xuexi
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-tubiaozhizuomoban-70"></span>
+                <div class="name">
+                    ylab-quote
+                </div>
+                <div class="code-name">.icon-tubiaozhizuomoban-70
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-sport"></span>
+                <div class="name">
+                    骑行-01
+                </div>
+                <div class="code-name">.icon-sport
+                </div>
+            </li>
+
+            <li class="dib">
+                <span class="icon iconfont icon-zhangbenzhangdanjizhangzhangbu"></span>
+                <div class="name">
+                    账簿
+                </div>
+                <div class="code-name">.icon-zhangbenzhangdanjizhangzhangbu
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("form").find("input[name='category_icon']").click(function () {
+            var inputElement = $(this);
+            layer.open({
+                type: 1,
+                title: '选择图标',
+                area: ['800px', '600px'],
+                content: $('.iconfont-page').html(),
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    // 获取选中的图标
+                    var selectedIcon = layero.find('.iconfont-box .selected').find('.code-name').text();
+                    if (selectedIcon) {
+                        // 去掉图标名称前面的点号
+                        var iconClass = selectedIcon.replace(/^\./, '');
+                        inputElement.val(iconClass);
+                    }
+                    layer.close(index);
+                },
+                cancel: function (index) {
+                    layer.close(index);
+                }
+            });
+
+            // 为图标添加点击事件
+            $('.iconfont-box li').off('click').on('click', function () {
+                // 移除其他图标的选中状态
+                $('.iconfont-box li').removeClass('selected');
+                // 添加当前图标的选中状态
+                $(this).addClass('selected');
+                // 可以添加样式来标识选中的图标
+                $(this).css('background-color', '#e6f7ff');
+                $('.iconfont-box li:not(.selected)').css('background-color', '');
+
+                // 点击图标后自动关闭弹窗并设置值
+                setTimeout(function() {
+                    var selectedIcon = $('.iconfont-box .selected').find('.code-name').text();
+                    if (selectedIcon) {
+                        var iconClass = selectedIcon.replace(/^\./, '');
+                        inputElement.val(iconClass);
+                    }
+                    layer.close($('.layui-layer').attr('times'));
+                }, 100);
+            });
+        });
+    });
+
+</script>
+

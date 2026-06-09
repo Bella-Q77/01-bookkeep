@@ -1,0 +1,130 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{$page_title}</h5>
+                    <div class="ibox-tools">
+                        <a href="javascript:void(0);" class="btn btn-xs btn-default btn-help-detail"  data-type="cst_clue">
+                            <i class="fa fa-question-circle"> {:lang('help')}</i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-12 m-b-xs">
+                                <div class="input-group text-left">
+                                    <select  name="bus_type" class="chosen-select">
+                                        <option value="">{:lang('select message type')}</option>
+                                        {volist name='type_list' id='vo'}
+                                        <option value="{$vo['type']}">{$vo['name']}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                  <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('search')}</button>
+                                  </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12 m-b-xs">
+                            <lqf_link>
+                                <a class="btn btn-info btn-outline ajax-goto" data-url="{:url('SysMsgType/show')}"><i class="fa fa-wrench"></i> {:lang('message settings')}</a>
+                            </lqf_link>
+                            <lqf_link>
+                                <a class="btn btn-info btn-outline ajax-get-more" data-url="{:url('SysMsg/del')}"><i class="fa fa-remove"></i> {:lang('batch delete')}</a>
+                            </lqf_link>
+                            <lqf_link>
+                                <a class="btn btn-info btn-outline ajax-get-more" data-url="{:url('SysMsg/set_deal')}"><i class="fa fa-thumb-tack"></i> {:lang('set as processing')}</a>
+                            </lqf_link>
+                            <lqf_link>
+                                <a class="btn btn-info btn-outline ajax-get-more" data-url="{:url('SysMsg/send_msg')}"><i class="fa fa-send"></i> {:lang('send')}</a>
+                            </lqf_link>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive sticky-table">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('SysMsg/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100"><span>{:lang('reminder type')}</span></th>
+                            <th width="200"><span>{:lang('reminder message')}</span></th>
+                            <th width="100" class="text-center"><span>{:lang('reminder time')}</span></th>
+                            <th width="140" class="text-center"><span>{:lang('reminder method')}</span></th>
+                            <th width="80" class="text-center"><span>{:lang('remaining times')}</span></th>
+                            <th width="80" class="text-center"><span>{:lang('push count')}</span></th>
+                            <th width="80" class="text-center"><span>{:lang('push time')}</span></th>
+                            <th width="80" class="text-center"><span>{:lang('set as processing')}</span></th>
+                            <th width="80" class="text-center">{:lang('operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <table class="table ajax-list-table table-page-bar">
+                        <tfoot>
+                        <tr>
+                            <td align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <%
+    for(var i=0;i<data.length;i++) {
+    var deal_status='';if(data[i]['deal_status']=='1') deal_status='checked';
+    var sms='';if(data[i]['remind_sms']=='1') sms='checked';
+    var sys='';if(data[i]['remind_sys']=='1') sys='checked';
+    var email='';if(data[i]['remind_email']=='1') email='checked';
+    var weixin='';if(data[i]['remind_weixin']=='1') weixin='checked';
+    %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['bus_type_name']%></td>
+        <td>
+            <a href="<%=data[i]['bus_url']%>" class="ajax-open">
+                <%=data[i]['bus_name']%>
+            </a>
+        </td>
+        <td class="text-center"><%=data[i]['remind_time']%></td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox" data-url="{:url('SysMsg/set_visible',array('name'=>'remind_sms'))}"  data-id="<%=data[i]['id']%>" <%=sms%> > {:lang('mobile phone')}
+            <input name="visible" class="ajax-checkbox" type="checkbox" data-url="{:url('SysMsg/set_visible',array('name'=>'remind_sys'))}"  data-id="<%=data[i]['id']%>" <%=sys%> > {:lang('system')}
+            <input name="visible" class="ajax-checkbox" type="checkbox" data-url="{:url('SysMsg/set_visible',array('name'=>'remind_email'))}"  data-id="<%=data[i]['id']%>" <%=email%> > {:lang('email')}
+            <input name="visible" class="ajax-checkbox" type="checkbox" data-url="{:url('SysMsg/set_visible',array('name'=>'remind_weixin'))}"  data-id="<%=data[i]['id']%>" <%=weixin%> > {:lang('wechat')}
+        </td>
+        <td class="text-center"><%=data[i]['remind_nums']%></td>
+        <td class="text-center"><%=data[i]['send_nums']%></td>
+        <td class="text-center"><%=data[i]['send_time']%></td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox" data-url="{:url('SysMsg/set_visible',array('name'=>'deal_status'))}"  data-id="<%=data[i]['id']%>" <%=deal_status%> >
+        </td>
+        <td  class="text-center">
+            <lqf_link><a class="ajax-open" data-url="{:url('SysMsg/edit')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('modify')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('SysMsg/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('delete')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

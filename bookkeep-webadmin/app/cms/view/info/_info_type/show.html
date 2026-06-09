@@ -1,0 +1,186 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    栏目管理
+                    <div class="ibox-tools"><a class="refresh-tree">重新加载</a></div>
+                </div>
+                <div class="ibox-content" style="">
+                    <div id="left-tree" data-url="{:url('info.InfoType/get_list_tree')}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"><h5>{$page_title}列表</h5></div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="pid" value="{$pid|default='0'}">
+                            <div class="col-sm-3 m-b-xs">
+                                <a class="btn btn-default refresh-tree"> <i class="fa fa-refresh"> </i>刷新</a>
+                                <lqf_link><a class="btn btn-info ajax-open add-btn"
+                                             data-url="{:url('info.InfoType/add')}"
+                                             data-title="用户"><i class="fa fa-plus"></i>添加</a></lqf_link>
+                            </div>
+                            <div class="col-sm-9 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control" value="">
+                                </div>
+                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-primary ajaxSearchForm"><i
+                                                            class="fa fa-search"></i> 搜索</button>
+                                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table"
+                           data-url="{:url('info.InfoType/show_json')}">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="22">编号</th>
+                            <th width="100">名称</th>
+                            <th width="100">类型</th>
+                            <th width="80">模块</th>
+                            <th width="60">排序</th>
+                            <th width="60">启用</th>
+                            <th width="80">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="11" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible='';
+    if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><a class="ajax-goto" href="{:url('info.InfoType/show')}" data-ids="{'pid':'<%=data[i]['id']%>'}"><%=data[i]['typename']%></a>
+        </td>
+        <td><%=data[i]['ispart_text']%></td>
+        <td><%=data[i]['channel_text']%></td>
+        <td><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort"
+                   data-url="{:url('info.InfoType/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>"
+                   size="5">
+        </td>
+        <td>
+            <input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('info.InfoType/set_visible',array('name'=>'visible'))}" data-id="<%=data[i]['id']%>"
+            <%=visible%> >
+        </td>
+        <td>
+            <p>
+                <lqf_link><a class="ajax-open" data-url="{:url('info.InfoType/add')}"
+                             data-ids="{'pid':'<%=data[i]['id']%>'}">添加下级</a></lqf_link>
+                <lqf_link><a class="ajax-open" data-url="{:url('info.InfoType/edit')}"
+                             data-ids="{'id':'<%=data[i]['id']%>'}">修改</a></lqf_link>
+                <lqf_link><a class="ajax-del confirm" data-url="{:url('info.InfoType/del')}"
+                             data-ids="{'id':'<%=data[i]['id']%>'}">删除</a></lqf_link>
+            </p>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        window.onload = onLoad();
+
+        //页面加载
+        function onLoad() {
+
+            var target = $('#left-tree').attr('data-url');
+            $.get(target).success(function (jsonData) {
+                //渲染树
+                $('#left-tree').treeview({
+                    data: jsonData,
+                    levels: 1,
+                    showTags: false,//显示右边tags
+                    showCheckbox: false,//是否显示多选
+                    multiSelect: false,
+                    showBorder: false,
+                    onNodeSelected: function (event, node) {
+                        //设置新增时的父节点
+                        $('.searchForm').find("input[name='pid']").val(node.id);
+                        $('.add-btn').attr('data-id', node.id);
+                        turnPage(1);
+                    }
+                });
+            }, "json");
+            turnPage(1);//页面加载时初始化分页
+        }
+
+
+        //刷新加载-添加
+        $("body").on("click", ".refresh-tree", function () {
+            $('.searchForm').find("input[name='pid']").val('0');
+            onLoad();
+            turnPage(1);
+        });
+
+        /*-----页面pannel内容区高度自适应 start-----*/
+        $(window).resize(function () {
+            setCenterHeight();
+        });
+        setCenterHeight();
+
+        function setCenterHeight() {
+            var height = $(window).height();
+            var centerHight = height - 240;
+            $(".right_centent").height(centerHight).css("overflow", "auto");
+        }
+
+        /*-----页面pannel内容区高度自适应 end-----*/
+    });
+
+
+</script>
+<link href="https://cdn.bootcdn.net/ajax/libs/jquery-contextmenu/2.4.5/jquery.contextMenu.css" rel="stylesheet">
+<!-- Script -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery-contextmenu/2.4.5/jquery.contextMenu.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery-contextmenu/2.4.5/jquery.ui.position.min.js"></script>
+<script>
+    $(function () {
+        //注册右键菜单的项与动作
+        $('#left-tree').contextMenu({
+            selector: 'li', // 选择器，为某一类元素绑定右键菜单
+            callback: function (key, options) {
+                var m = "clicked: " + key + " on " + $(this).text() + $(this).attr('id');
+                window.console && console.log(m) || alert(m);
+            },
+            items: {
+                "edit": {name: "Edit", icon: "edit"},
+                "cut": {name: "Cut", icon: "cut"},
+                "copy": {name: "Copy", icon: "copy"},
+                "paste": {name: "Paste", icon: "paste"},
+                "delete": {name: "Delete", icon: "delete"},
+                "sep1": "---------",
+                "quit": {
+                    name: "Quit", icon: function ($element, key, item) {
+                        return 'context-menu-icon context-menu-icon-quit';
+                    }
+                }
+            }
+        });
+    });
+</script>

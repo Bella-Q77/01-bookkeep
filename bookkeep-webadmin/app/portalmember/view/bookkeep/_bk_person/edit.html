@@ -1,0 +1,31 @@
+<div class="ibox-title">{:lang('修改成员')}</div>
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('bookkeep.BkPerson/edit')}">
+        <input type="hidden" name="id" value="{$info.id|default='0'}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('成员名称')}</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text" value="{$info.name|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('排序')}</label>
+            <div class="col-sm-10">
+                <input name="sort" class="form-control" type="text" placeholder="" value="{$info.sort|default='0'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('备注说明')}</label>
+            <div class="col-sm-10">
+                <textarea name="remark" class="form-control" rows="5"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

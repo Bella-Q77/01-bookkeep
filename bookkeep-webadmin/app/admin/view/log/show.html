@@ -1,0 +1,81 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="ibox-tab">
+                        <a class="on" href="{:url('log/show')}">{:lang('行为日志')}</a>
+                        <a href="{:url('SysLoginLog/show')}">{:lang('登录日志')}</a>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-3 m-b-xs">
+                                <lqf_link><a class="btn btn-danger confirm ajax-del" data-url="{:url('Log/clear')}"><i
+                                        class="fa fa-cog fa-spin"></i> {:lang('clear records')}</a></lqf_link>
+                            </div>
+                            <div class="col-sm-9 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="create_time" class="form-control w50 daterange-prev" placeholder="{:lang('creation time')}">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                  <span class="input-group-btn">
+                                  <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('search')}</button>
+                                  </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('log/show_json')}">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100">{:lang('名称')}</th>
+                            <th width="200">{:lang('描述')}</th>
+                            <th width="100">{:lang('操作人员')}</th>
+                            <th width="100">{:lang('ip')}</th>
+                            <th width="150">{:lang('地址')}</th>
+                            <th width="100" class="text-center">{:lang('创建时间')}</th>
+                            <th width="80" class="text-center">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="8" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i
+    <data.length;i++) { %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['describe']%></td>
+        <td><%=data[i]['username']%></td>
+        <td><%=data[i]['ip']%></td>
+        <td><%=data[i]['url']%></td>
+        <td class="text-center"><%=data[i]['create_time']%></td>
+        <td class="text-center">
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('log/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

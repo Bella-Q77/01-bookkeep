@@ -1,0 +1,147 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{:lang("system announcement")}</h5>
+                </div>
+                <div class="ibox-content page-list-container" data-list-table="oanotify">
+                    <table class="table table-hover ajax-list-table" data-type="oanotify"
+                           data-url="{:url('admin/SysNotify/main_json',array('owner_user_id'=>$sys_user_info.id))}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="100"><span>{:lang('title')}</span></th>
+                            <th width="50"><span>{:lang('creator')}</span></th>
+                            <th width="80"><span>{:lang('creation time')}</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox" data-list-table="sysmsg">
+                <div class="ibox-title">
+                    <h5>{:lang("我的消息")}</h5>
+                </div>
+                <div class="ibox-content page-list-container"  data-list-table="sysmsg">
+                    <table class="table table-hover ajax-list-table" data-type="sysmsg"
+                           data-url="{:url('admin/SysMsg/show_json',array('deal_user_id'=>$sys_user_info.id,'deal_status'=>0))}"
+                           width="100%">
+                        <thead>
+                            <th width="80" orderField="bus_type" class="sort-filed"><span>{:lang('reminder type')}</span></th>
+                            <th width="200"><span>{:lang('reminder message')}</span></th>
+                            <th width="80" orderField="deal_time" class="sort-filed"><span>{:lang('processing time')}</span></th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {notempty name='sys_config.is_grant'}
+    {neq name='sys_config.is_grant' value="1"}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{:lang("system information")}</h5>
+                </div>
+                <div class="ibox-content collapse in" id="demo">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <td width="20%">{:lang("current version")}</td>
+                            <td>{$info['lqf_version']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("operating system")}</td>
+                            <td>{$info['os']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("operating environment")}</td>
+                            <td>{$info['software']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("mysql version")}</td>
+                            <td>{$info['mysql_version']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("php version")}</td>
+                            <td>{$info['php_version']}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{:lang("product information")}</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <tbody>
+
+                        <tr>
+                            <td width="20%">{:lang("product name")}</td>
+                            <td>{$info['product_name']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("product design and team")}</td>
+                            <td>{$info['author']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("official website")}</td>
+                            <td><a target="_blank" href="http://{$info['website']}">{$info['website']}</a></td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("qq communication group")}</td>
+                            <td>{$info['qun']}</td>
+                        </tr>
+                        <tr>
+                            <td>{:lang("development manual")}</td>
+                            <td>{$info['document']}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/neq}
+    {/notempty}
+
+
+</div>
+<script id="tableListTpl-oanotify" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><a class="ajax-open" data-url="{:url('SysNotify/detail')}"  data-ids="{'id':'<%=data[i]['id']%>'}"><%=data[i]['name']%></a></td>
+        <td><%=data[i]['create_user_name']%></td>
+        <td><%=data[i]['create_time']%></td>
+    </tr>
+    <% } %>
+</script>
+
+<script id="tableListTpl-sysmsg" type="text/html">
+    <% for(var i=0;i<data.length;i++) {  %>
+    <tr>
+        <td><%=data[i]['bus_type_name']%></td>
+        <td>
+            <a href="<%=data[i]['bus_url']%>" class="ajax-open">
+                <%=data[i]['bus_name']%>
+            </a>
+        </td>
+        <td><%=data[i]['deal_time']%></td>
+
+    </tr>
+    <% } %>
+</script>

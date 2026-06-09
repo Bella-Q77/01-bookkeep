@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>图片中心_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2021010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 图片管理</a></span>
+                <span class="fr"><a href="{:url('portalmember/memberPicture/add')}" class="yellow ">上传图片</a></span>
+                <span class="help"></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        您的账号可以上传 <b class="yellow">{$member.level.upload_img}</b> 张图片,您已上传  <b class="blue">{$totals}</b> 张图片
+                    </div>
+                </div>
+                <ul class="base-info-content list">
+                    <ul class="imglist clearfix">
+                    {notempty name='list'}
+                        {volist name='list' id='vo'}
+                        <li class="clearfix">
+                            <div class="pic"><img src="{$vo.path|get_picture_url2}"></div>
+                            <div class="txt row">
+                                <div class="t1 col-6">
+                                    {if condition="$vo.status eq '1'"}
+                                    <font class="blue">已审核</font>
+                                    {elseif condition="$vo.status eq '2'" /}
+                                    <font class="red">被拒绝</font>
+                                    {else/}
+                                    <font class="yellow">待审核</font>
+                                    {/if}
+
+                                </div>
+                                <div class="t2 col-6 text-right"><a class="ajax-get" href="{:url('portalmember/memberPicture/del',array('id'=>$vo.id))}">删除</a></div>
+                            </div>
+                        </li>
+                        {/volist}
+                    {/notempty}
+                    </ul>
+                </div>
+                <div class="pagelist">
+                    {$pages}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

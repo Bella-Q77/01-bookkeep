@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>信息发布_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020011206" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on">课程自助推广</a></span>
+                <span class="fr"><a href="#" class="blue btn-history">返回</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        <li>投放位置：电脑版和手机版（同步展示）。</li>
+                        <li>1.<span class="blue"> [{$info.city_name|default=''}</span>]城市首页(推荐)(排名随机) </li>
+                        <li>2. <span class="blue"> {$info.city_name|default=''} + {$info.type_name2|default=''} </span>类别页面置顶靠前(排名随机)。</li>
+                    </div>
+                </div>
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/Info/istop')}" method="post" autocomplete="off">
+                        <input type="hidden" name="id" value="{$info.id|default='0'}">
+                        <input type="hidden" name="day_price" value="{$info.day_price|default='2'}">
+                        <input type="hidden" name="member_id" value="{$member.id|default='0'}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>信息编号：</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group"> {$info.id|default=''}</div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>课程标题：</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group"> {$info.title|default=''}</div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>推广状态：</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group">
+                                    {if condition="$info.istop eq '0'"}
+                                    <font class="yellow">未推广</font>
+                                    {elseif condition="$info.istop eq '1'"/}
+                                    <font class="red">待付款</font>
+                                    {elseif condition="$info.istop eq '2'"/}
+                                    <font class="blue">推广中</font>
+                                    {/if}
+                                </div>
+                            </div>
+                        </li>
+
+                        {if condition="($info.istop eq '1') OR ($info.istop eq '2')"/}
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>推广信息：</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group">
+                                    从 {$info.start_date|default=''} 到 {$info.stop_date|default=''}
+                                    共计：{$info.istop_money|default='0'}元
+                                </div>
+                            </div>
+                        </li>
+                        {/if}
+
+                        {if condition="$info.istop neq '2'"}
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>投放价格：</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group">2元/天</div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>开始日期：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="start_date" id="start_date" class="form-control" placeholder="选择推广开始日期." value="{$info.days|default=''}">
+                                    <span class="help-block">选择推广开始时间</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>推广天数：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <select name="days" class="form-control istop_days">
+                                        <option value="7">一周（7天）</option>
+                                        <option value="15">二周（15天）</option>
+                                        <option value="30">一个月（30天）</option>
+                                        <option value="60">二个月（60天）</option>
+                                        <option value="90">三个月（90天）</option>
+                                    </select>
+                                    <span class="help-block">输入推广天数</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>合计费用：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <span class="info_money yellow"></span>
+                                    <span class="help-block">合计费用=天*单价</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-save btn-red ajax-post" target-form="target-post-form">申请开通去支付</button>
+                                </div>
+                            </div>
+                        </li>
+                        {/if}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span class="yellow">自助推广说明</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>1. 电脑版自助推广仅限支付宝在线支付。</li>
+                    <li>2. 推广支付成功后将无法退款，推广期间信息无法修改或删除。（可以修改封面图）</li>
+                    <li>3. 已设为推广的信息，在推广时间未开始前，将无法在查询列表显示。</li>
+                    <li>4. 进入推广支付后，将自动计算折扣后的价格，以最终支付金额为准。</li>
+                    <li>5. 点击“支付宝支付”并确定后，即表示您已阅读并同意以上条款。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+{include file="info_js_fun" /}
+</body>
+</html>

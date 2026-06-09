@@ -1,0 +1,111 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-title">扩展项目</div>
+                <div class="ibox-content">
+                    <ul class="items list-group">
+                        {volist name='item_list' id='vo'}
+                        <li class="list-group-item"><a class="item" data-id="{$vo.id}" data-cid="{$vo.channel_id}">{$vo.name}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="ibox">
+                <div class="ibox-title item-list-title">详细列表</div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="channel_id" id="channel_id" value="{$channel_id}">
+                            <input type="hidden" name="arcext_id" id="arcext_id" value="">
+                            <input type="hidden" name="archives_id" id="archives_id" value="{$archives_id}">
+                            <div class="col-sm-4 m-b-xs">
+                                <a href="?" class="btn btn-default"> <i class="fa fa-refresh"> 刷新</i></a>
+                                <lqf_link><a id="arcext_id_add" class="btn btn-info ajax-open" data-url="{:url('Arcext/ext_add')}" data-ids="" data-title="添加文章"><i class="fa fa-plus"></i>添加</a></lqf_link>
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i  class="fa fa-search"></i> 搜索</button></span>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Arcext/show_item_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="50"><span>ID号</span></th>
+                            <th><span>名称</span></th>
+                            <th width="80"><span>排序</span></th>
+                            <th width="100"><span>发布时间</span></th>
+                            <th width="80">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i
+    <data.length;i++) { %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><%=data[i]['title']%></td>
+        <td><%=data[i]['sort']%></td>
+        <td><%=data[i]['pubdate']%></td>
+        <td>
+            <p>
+                <lqf_link><a class="ajax-open" data-url="{:url('Arcext/ext_edit')}" data-ids="{'id':'<%=data[i]['id']%>','arcext_id':'<%=data[i]['arcext_id']%>'}" data-title="修改">修改</a></lqf_link>
+                <lqf_link><a class="ajax-del confirm" data-url="{:url('Arcext/ext_del')}" data-ids="{'id':'<%=data[i]['id']%>','arcext_id':'<%=data[i]['arcext_id']%>'}">删除</a></lqf_link>
+            </p>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("body").on("click", ".item", function () {
+            arcext_item($(this));
+            turnPage(1);
+        });
+
+       var  dobj=$(".items a:first-child");
+        if(dobj!='undefined'){
+            arcext_item(dobj);
+        }
+    });
+
+    function arcext_item(obj) {
+        var arcext_id=obj.attr('data-id');
+        var title=obj.html();
+        $(".item-list-title").html(title+'信息列表');
+        $('#arcext_id').val(arcext_id);
+        var archives_id=$('#archives_id').val();
+        var ids='{\'arcext_id\':\''+arcext_id+'\',\'archives_id\':\''+archives_id+'\'}';
+        $("#arcext_id_add").attr('data-ids',ids);
+        if(arcext_id!=undefined){
+            turnPage(1);
+        }
+    }
+
+</script>

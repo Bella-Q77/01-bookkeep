@@ -1,0 +1,35 @@
+<header id="header">
+    <div class="navbox">
+        <h2 id="mnavh"><span class="navicon"></span></h2>
+        <div class="logo"><a href="/">07FLY-CMS</a></div>
+        <nav>
+            <ul id="starlist">
+                <li><a href="/index.php" id='selected'>首页</a></li>
+                {fly:channel type='top' currentstyle='active' }
+                <li class="menu"><a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a>
+                    {fly:notempty name='$field.nodes'}
+                    <ul class="sub">
+                        {fly:channel name='$field.nodes' id='field2' row='10'}
+                        <li><a href="{$field2.typeurl}" class="dropdown-item ">{$field2.typename}</a></li>
+                        {/fly:channel}
+                    </ul>
+                    <span></span>
+                    {/fly:notempty}
+                    </li>
+                {/fly:channel}
+            </ul>
+        </nav>
+        <div class="searchico"></div>
+    </div>
+</header>
+<div class="searchbox">
+    <div class="search">
+        {fly:searchform type='default'}
+        <form name="formsearch" action="{$field.action}">
+            <input name="keywords" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" type="text">
+            <input name="submit" class="input_submit" value="搜索" type="submit">
+        </form>
+        {/fly:searchform}
+    </div>
+    <div class="searchclose"></div>
+</div>

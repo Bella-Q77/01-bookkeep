@@ -1,0 +1,27 @@
+<footer>
+    <div class="box">
+        <div class="wxbox">
+            <ul>
+                <li><img src="{$template_dir}static/picture/weixin.jpg"><span>微信公众号</span></li>
+            </ul>
+        </div>
+        <div class="endnav">
+            <p><b>站点声明：</b></p>
+            <p>07FLY-CMS是一个基于用户需求开发的系统，用户需求不断改变，我们竭力跟着并改变。</p>
+            <p>使用07FLY-CMS你可以用它十分钟搭建一个企业网站，后台简单易用。可通过插件库支持更多功能，如阿里短信或小程序等第三方扩展。</p>
+            <p>网站上所显示的信息或资料的为演示测试数据，仅供学习与参考，请勿用于商业用途，否则产生的一切后果将由您自己承担！</p>
+            <p>{fly:global name='web_copyright'}</p>
+        </div>
+    </div>
+    <a href="#">
+        <div class="top"></div>
+    </a></footer>
+<script type="text/javascript" src="{$template_dir}static/js/theia-sticky-sidebar.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.rbox').theiaStickySidebar({
+            // Settings
+            additionalMarginTop: 30
+        });
+    });
+</script>

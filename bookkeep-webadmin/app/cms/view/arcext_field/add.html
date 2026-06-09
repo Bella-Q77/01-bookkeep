@@ -1,0 +1,70 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('arcextField/add')}">
+        <input type="hidden" name="main_table" id="main_table" value="{$info.maintable}">
+        <input type="hidden" name="ext_table" id="ext_table" value="{$info.addtable}">
+        <input type="hidden" name="arcext_id" id="arcext_id" value="{$info.id}">
+        <input type="hidden" name="channel_id" id="channel_id" value="{$info.channel_id}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表单提示文字</label>
+            <div class="col-sm-8">
+                <input name="show_name" class="form-control" type="text" placeholder="请输名称" required/>
+                <span class="help-block m-b-none">发布内容时显示的提示文字</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">字段名称</label>
+            <div class="col-sm-8">
+                <input name="field_name" class="form-control" type="text" placeholder="请输名称" required/>
+                <span class="help-block m-b-none">只能用英文字母或数字，数据表的真实字段名</span></div>
+        </div>
+        <div class="form-group text-left">
+            <label class="col-sm-2 control-label">数据类型</label>
+            <div class="col-sm-8">
+                <select data-placeholder="选择数据类型..." name="field_type" class="chosen-select type-chosen-select"
+                        style="width: 200px;" tabindex="2">
+                    {volist name='typelist' id='vo'}
+                    <option value="{$key}">{$vo['name']}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">默认值</label>
+            <div class="col-sm-8">
+                <textarea name="default_value" class="form-control"></textarea>
+                <span class="help-block m-b-none">如果定义数据类型为select、radio、checkbox时，此处填写被选择的项目(用“,”分开，如“男,女,人妖”)。</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">最大值</label>
+            <div class="col-sm-8">
+                <input name="maxlength" class="form-control" type="text" value="250" required/>
+                <span class="help-block m-b-none">文本数据必须填写，大于255为text类型</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">字段备注</label>
+            <div class="col-sm-8">
+                <input name="desc" class="form-control" type="text" />
+                <span class="help-block m-b-none">字段备注</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-sm-8">
+                <input name="sort" class="form-control" type="text" placeholder="排序" value="100"/>
+                <span class="help-block m-b-none"></span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">启用</label>
+            <div class="col-sm-8">
+                <div class="checkbox i-checks">
+                    <input type="checkbox" name="visible" value="1" checked/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,188 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="toast"></div>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">{:lang('upgrade package list')}</div>
+                <div class="ibox-content">
+                    <table class="table table-hover upgrade-list"
+                           data-url="{:url('upgrade/lists',array('action'=>'getdatalist'))}" width="100%">
+                        <tbody>
+                        {notempty name='list'}
+                        {volist name='list' id='vo'}
+                        <tr>
+                            <td width="100">{:lang('update package files')}:{$vo.version}</td>
+                            <td width="200">{:lang('status')}:{$vo.status}</td>
+                            <td width="100">{$vo.operate}</td>
+                            <td width="100"><a class="ajax-open" data-url="{:url('upgrade/info')}"
+                                               data-ids="{'version':'{$vo.version}'}"
+                                               data-calback="javascript:void(0);">{:lang('the content of this update')}</a></td>
+                        </tr>
+                        {/volist}
+                        {/notempty}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="upgrade-text text-left"></div>
+                <div class="ibox-title text-danger"><h5>{:lang('upgrading carries risks and requires caution in operation')}！</h5></div>
+                <div class="ibox-content">
+                    <p>{:lang('download the list of available updated files from center server')}...</p>
+                    <p>{:lang('usage of update package')}.</p>
+                    <p class="text-danger">{:lang('upgrading carries certain risks')}.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="panel-box" style="display: none;">
+    <div class="ibox-content">
+        <div class="spiner-example">
+            <div class="sk-spinner sk-spinner-three-bounce">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-box-ajax" style="display: none;">
+    <div class="ibox-content">
+        <div class="spiner-example">
+            <div class="sk-spinner sk-spinner-three-bounce">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //点击下载
+    $("body").on("click", ".down", function () {
+        var target = $(this).attr('data-url');
+        var ver = $(this).attr('data-ver');
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: {'version': ver},
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+                layer.msg('{:lang(\'download the upgrade program\')}...', {
+                    icon: 16,
+                    time: 100000,
+                    shade: [0.5, '#000', true]
+                });
+            },
+            success: function (data) {
+                if (data.code == '1') {
+                    layer.msg("{:lang('download successful')}", {icon: 1, time: 1000, shade: 0}, function () {
+                        getUpgradeList();
+                    });
+                } else {
+                    layer.msg(data.msg, {icon: 5});
+                }
+            }, complete: function () {
+            }
+        });
+    });
+
+    //点击升级
+    $("body").on("click", ".execute", function () {
+        var step = 1;
+        var target = $(this).attr('data-url');
+        var version = $(this).attr('data-ver');
+        var title = '{:lang("data upgrade")}...';
+        $('.upgrade-text').append('<div class="ibox-title">{:lang("upgrade log")}：</div>');
+        upgrade(target, step, title, version);
+    });
+
+    //升级函数
+    function upgrade(url, step, title, version) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {'step': step, 'version': version},
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+                layer.msg(title,
+                    {
+                        time: 100000,
+                        icon: 16,
+                        shade: [0.5, '#000', true]
+                    }
+                );
+            },
+            success: function (data) {
+                if (data.code == '1') {
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000, //2秒关闭（如果不配置，默认是3秒）,
+                        shade: [0.5, '#000', true]
+                    }, function () {
+                        $('.upgrade-text').append('<p style="padding-left: 15px;">' + data.msg + '</p>');
+                        if (data.step != '-1') {
+                            upgrade(data.url, data.step, data.title, data.version);
+                        }
+                    });
+                } else {
+                    $('.upgrade-text').append('<p style="padding-left: 15px;">' + data.msg + '</p>');
+                    layer.msg(data.msg, {icon: 5, shade: 0.01});
+                }
+            }
+        });
+    }
+
+    getUpgradeList();
+
+    function getUpgradeList() {
+        var target = $(".upgrade-list").attr('data-url');
+        var layermsg='';
+        $.ajax({
+            type: "GET",
+            url: target,
+            data: '',
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+                layermsg=layer.msg("{:lang('data processing in progress, please wait')}",
+                    {
+                        time: 100000,
+                        icon: 16,
+                        shade: [0.5, '#000', true]
+                    }
+                );
+            },
+            success: function (data) {
+                if (data.length > 0) {
+                    var view="{:url('upgrade/info')}";
+                    var html ='';
+                    $.each(data,function (index,row){
+
+                        var ids="{'version':'"+row.version+"'}";
+
+                        html +='<tr>';
+
+                        html +='<td width="100">{:lang(\'update package files\')}：'+row.version+'</td>';
+                        html +='<td width="200">{:lang(\'status\')}：'+row.status+'</td>';
+                        html +='<td width="100">'+row.operate+'</td>';
+                        html +='<td width="100"><a class="ajax-open" data-url="'+view+'" data-ids="'+ids+'" data-calback="javascript:void(0);">{:lang(\'the content of this update\')}</a></td>';
+
+                        html +='</tr>';
+
+                    });
+                    $(".upgrade-list tbody").html(html);
+                }
+            }, complete: function () {
+                layer.close(layermsg);
+            }
+        });
+
+    }
+
+</script>

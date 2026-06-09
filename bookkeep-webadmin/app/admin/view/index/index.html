@@ -1,0 +1,186 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$page_title|default=''}{$sys_config.main_title|default=''}-Powered by 07FLY pro</title>
+    <meta name="keywords" content="{$sys_config.seo_keywords|default=''}">
+    <meta name="description" content="{$sys_config.seo_description|default=''}">
+    <link rel="shortcut icon" href="__STATIC__/img/favicon.png">
+    <link href="__STATIC__/module/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/datapicker/datetimepicker.min.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/animate.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/07fly.css?v=1.1.0" rel="stylesheet">
+    <!-- 全局js -->
+    <script src="__STATIC__/module/admin/js/jquery.min.js?v=2.1.4"></script>
+    <script src="__STATIC__/module/admin/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__STATIC__/module/admin/js/plugins/layer/layer.min.js"></script>
+    <script type="text/javascript">
+        var pjax_mode = "{$pjax_mode|default=''}";
+        var static_root = "{$static_root|default=''}";
+    </script>
+</head>
+<body class="fixed-sidebar gray-bg " style="overflow:hidden">
+<div id="wrapper">
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close"><i class="fa fa-times-circle"></i></div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="profile-element">
+                        <a class="dropdown-toggle J_menuItem" href="{:url('admin/Index/main')}">
+                            <span class="clear">
+                                <span class="block m-t-xs" style="font-size:18px;">
+                                    <img src="__STATIC__/img/logo.png" width="30">
+                                    <strong class="font-bold">{$sys_config.main_title}</strong>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="logo-element"><img src="__STATIC__/img/logo.png" width="30"></div>
+                </li>
+                <li class="line dk"></li>
+                {$menu_view}
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row  black-bg">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2" href="#" title="展示收起侧栏">
+                        <i class="fa fa-outdent"></i>
+                    </a>
+                </div>
+                <div class="navbar-module">
+                    {$sys_config.top_links|default=''}
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <!--人工客服-->
+                    {if condition="$sys_config.is_grant eq '0'"}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-weixin"></i>{:lang('manual customer service')}
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <img src="__STATIC__/module/admin/img/lxwx.jpg" width="100%">
+                            </li>
+
+                        </ul>
+                    </li>
+                    {/if}
+                    {$sys_config.top_links_right|default=''}
+                    <!--语言包-->
+                    {notempty name="language_list"}
+                    <li class="dropdown msg-icon">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-language "></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            {volist name="language_list" id="vo"}
+                            <li>
+                                <a href="{:url('index/chgLanguage',array('lang'=>$vo.language_tag))}" class="ajax-get"
+                                   data-calback="window.location.reload();">
+                                    {:lang($vo.name)}
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            {/volist}
+                        </ul>
+                    </li>
+                    {/notempty}
+                    <!--{:lang("system announcement")}-->
+                    <li class="dropdown msg-icon">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell "></i> <span class="label label-danger msg-icon-nums">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="{:url('admin/SysMsg/show_my')}" class="J_menuItem">
+                                    <div>
+                                        <i class="fa fa-qq fa-fw"></i> <span class="msg-icon-my">0</span>{:lang('系统消息')}
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{:url('admin/SysNotifyUser/show')}" class="J_menuItem">
+                                    <div>
+                                        <i class="fa fa-volume-up fa-fw"></i> <span class="msg-icon-noti">0</span>{:lang('系统公告')}
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--修改详细-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            {$sys_user_info['realname']} <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a data-url="{:url('SysUser/editInfo',array('id'=>$sys_user_info['id']))}"
+                                   class="ajax-open" title="{:lang('personal data')}" width="800" height="500">
+                                    <div><i class="fa fa-envelope fa-fw"></i> {:lang('个人资料')}</div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{:url('SysUser/editPwd',array('id'=>$sys_user_info['id']))}" class="ajax-open"
+                                   title="{:lang('personal data')}" width="600" height="400">
+                                    <div><i class="fa fa-qq fa-fw"></i> {:lang('修改密码')}</div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{:url('Login/clearCache')}" class="ajax-get ajaxload">
+                                <div><i class="fa fa-refresh fa-fw"></i> {:lang('清理缓存')}</div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            {if condition="($sys_user_info.open_id == '')"}
+                            <li>
+                                <a href="#" class="qrcode-bind-weixin" width="600" height="400">
+                                    <div><i class="fa fa-wechat fa-fw"></i> {:lang('扫码绑定微信')}</div>
+                                </a>
+                            </li>
+                            {else/}
+                            <li>
+                                <a href="{:url('Login/login_wx_unbind',array('id'=>$sys_user_info['id']))}"
+                                   class="ajax-get" data-calback="window.location.reload();" width="600" height="400">
+                                    <div class="text-danger"><i class="fa fa-remove fa-fw"></i> {:lang('微信解绑')}</div>
+                                </a>
+                            </li>
+                            {/if}
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a class="ajax-get" href="{:url('Login/logout')}" data-calback="window.location.reload();">
+                                        <strong>{:lang('退出登录')}</strong> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!--右侧窗口数据-->
+        <div class="row J_mainContent" id="content-main">
+            <iframe id="J_iframe" width="100%" height="95%" src="{:url('admin/Index/main')}" frameborder="0"
+                    data-id="index_v1.html" seamless></iframe>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+</div>
+{include file="layout/bottom"}
+{include file="index/function"}

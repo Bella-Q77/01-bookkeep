@@ -1,0 +1,26 @@
+<div class="wrapper wrapper-content">
+    <div class=" detail-tabs">
+        <div class="">
+            <ul class="nav nav-tabs m-b-lg">
+                {volist name='group_list' id='vo'}
+                <li {notempty name="key" } {if condition="$key eq $groupid " } class="active" {/if} {/notempty}>
+                <a href="{:url('website/setting',array('groupid'=>$key))}">{$vo}</a></li>
+                {/volist}
+                <li><a href="{:url('website/show')}">配置列表</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="ibox-content">
+                    <form class="form-horizontal" method="post" action="{:url('Website/setting')}">
+                        {$html}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                {include file="admin@layout/save_btn"}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

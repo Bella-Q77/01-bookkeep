@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>品牌修改_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 宣传资料</a></span>
+                <span class="fr"><a href="#" class="blue btn-history ">返回</a></span>
+                <span class="help">* 以下信息将显示在您发布的每条信息中，建议填写完整。</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/Member/company_edit')}" method="post" autocomplete="off">
+                        <input type="hidden"  name="id" value="{$info.id|default='0'}">
+                        <input type="hidden"  name="member_id" value="{$member.id|default='0'}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>招生范围</label></div>
+                            <div class="base-info-content-r ">
+                                <div class="form-group">
+                                    <select name="category_id">
+                                        {notempty name='typelist'}
+                                        {volist name='typelist' id='vo'}
+                                        <option value="{$vo.id}">{$vo.typename}</option>
+                                        {/volist}
+                                        {/notempty}
+                                    </select>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label> 所在省市</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {:hook('RegionSelect', ['addons_model' =>'portalmember' ,'name' => 'id', 'province' => $info.province_id,'city' => $info.city_id, 'county' => $info.county_id])}
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>宣传名称</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control" value="{$info.name}">
+                                    <span class="help-block">【必填】您的学校品牌，或个人讲师品牌</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>宣传LOGO</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="hidden" name="litpic" id="litpic" value="">
+                                    <div id="litpic-show">
+                                        {notempty name='info.litpic'}
+                                        <img src="{$info.litpic|get_picture_url2='portalmember'}" width="150" height="100">
+                                        {/notempty}
+                                    </div>
+                                    <a type="button" class="btn btn-info ajax-open" data-url="{:url('portalmember/MemberPicture/lookup',array('img_id'=>'litpic','img_html'=>'litpic-show'))}">选择图片</a>
+                                    <span class="help-block">宣传LOGO图片的质量将直接影响：信息审核 和 查询排名</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>您的称谓</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="linkman" class="form-control" value="{$info.linkman}">
+                                    <span class="help-block">方便学员与您联系</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>联系电话</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="tel" class="form-control" value="{$info.tel}">
+                                    <span class="help-block">手机或座机，座机请加区号，格式：01088888888。</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>所在地址</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="address" class="form-control" value="{$info.address}">
+                                    <span class="help-block">详细到：市、区、路、号。格式：北京市朝阳区XXX路XX楼</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>微 信 号</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="weixin" class="form-control" value="{$info.weixin}">
+                                    <span class="help-block">【推荐填写】仅限输入一个微信号,方便学员与您联系</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>聊天ＱＱ：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="qicq" class="form-control" value="{$info.qicq}">
+                                    <span class="help-block">【推荐填写】仅限输入一个QQ号,方便学员与您联系</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>学校介绍</label></div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <textarea name="intro" class="form-control">{$info.intro|default=''}</textarea>
+                                    {:hook('ArticleEditor', ['name' => 'intro','type'=>'simple','addons_model'=>'portalmember'])}
+                                    <span class="help-block">详细介绍学校信息，让学员更加了解学校的实力及品牌</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">保存修改</button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span>帐号注销</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>若您需要删除在培训达人的所有信息包含账号，请参照以下步骤发送短信即可。</li>
+                    <li>1. 已认证或缴费的账号，需要先提交账号降级申请书。</li>
+                    <li>2. 请删除此账号内已发布的所有课程信息（无法恢复）。</li>
+                    <li>3. 请使用手机 18030402705 发送短信到 185 7281 0090 内容为：请注销在培训达人的账号18030402705，已知悉注销后无法恢复。</li>
+                    <li>4. 短信发送后72小时内即可完成账号注销，注销后60天内此手机号将无法再在培训达人注册或登录，60天后可重新注册。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>找学员-会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2021010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/InfoAskfor/show_find')}" class="tit on">找学员</a></span>
+                <span><a href="{:url('portalmember/InfoAskfor/show')}" class="tit"> 我的学员</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        您目前帐号积分：<b class="yellow">{$member.member_integral}</b>
+                        <p>找学员信息需要扣除相应积分,升级成VIP可以折扣</p>
+                    </div>
+
+                <div class="help-box">
+                    <form class="target-post-form" action="{:url('portalmember/InfoAskfor/show_find')}" method="post" autocomplete="off">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-2">
+                                    <select name="type_id" class="typeSelect">
+                                        <option value="">全部分类</option>
+                                        {volist name='$typelist' id='vo'}
+                                        <option value="{$vo.id}" {notempty name="type_id" } {if condition="$type_id eq $vo.id "} selected {/if}{/notempty}>{$vo.typename}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <select name="province_id" class="typeSelect">
+                                        <option value="">全国</option>
+                                        {volist name='$privonce' id='vo'}
+                                        <option value="{$vo.id}" {notempty name="province_id" } {if condition="$province_id eq $vo.id "} selected {/if}{/notempty}>{$vo.shortname}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" name="keywords" class="form-control" placeholder="课程关键字" value="{$keywords}">
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group text-right">
+                                        <button type="submit" class="btn btn-info" target-form="target-post-form">搜学员</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                </div>
+                <div class="base-info-content">
+                    <div class="tablelist clearfix">
+                        <div class="thead">
+                            <div class="row">
+                                <div class="col-2">地区</div>
+                                <div class="col-2">意向课程</div>
+                                <div class="col-1">姓名</div>
+                                <div class="col-2">手机</div>
+                                <div class="col-2">微信/QQ</div>
+                                <div class="col-1">日期</div>
+                                <div class="col-2 text-center">操作</div>
+                            </div>
+                        </div>
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="col-2">{$vo.privonce_name} {$vo.city_name}</div>
+                                <div class="col-2 blue">{$vo.typename}</div>
+                                <div class="col-1">{$vo.linkman}</div>
+                                <div class="col-2">{$vo.mobile}</div>
+                                <div class="col-2">{$vo.weixin}&nbsp;</div>
+                                <div class="col-1">{$vo.create_time|strtotime|time_friend}</div>
+                                <div class="col-2 text-center">
+                                    <a href="{:url('portalmember/InfoAskfor/find',array('id'=>$vo.id))}" class="btn ajax-get">查看</a>
+                                </div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <div class="pagelist">
+                        {$pages}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>充值说明</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>1. 积分充值比率：1元充值1个积分。0.01支付仅供测试用，不增加积分</li>
+                    <li>2. 仅限1的整数倍充值，小数点后面的金额无法充值。</li>
+                    <li>3. 充值积分无法退还，建议小额充值，消费完再续充。</li>
+                    <li>4. 每个账号每24小时最多可充值5次。</li>
+                    <li>5. 目前仅支持【微信】在线充值。</li>
+                    <li>6. 点击“购买”并确定后，即表示您已阅读并同意以上条款。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

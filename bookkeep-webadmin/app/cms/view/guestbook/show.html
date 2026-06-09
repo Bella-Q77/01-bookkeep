@@ -1,0 +1,68 @@
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-3 m-b-xs">
+                                <lqf_link><a class="btn btn-info ajax-open"  data-url="{:url('Guestbook/add')}" data-title="添加" width="600" height="400"><i class="fa fa-plus"></i>添加</a></lqf_link>
+                            </div>
+                            <div class="col-sm-9 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> 搜索</button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Guestbook/show')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="22" orderField="by_name" class="sort-filed"><span>ID</span></th>
+                            <th width="150" orderField="by_name" class="sort-filed"><span>表单名称</span></th>
+                            <th width="100" orderField="by_nid" class="sort-filed"><span>标识</span></th>
+                            <th width="100" orderField="by_maintable" class="sort-filed"><span>主表</span></th>
+                            <th width="100" orderField="by_addtable" class="sort-filed"><span>附加表名</span></th>
+                            <th width="80" class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><a class="ajax-goto" data-url="{:url('Guestbook/ext_list')}"  data-ids="{'gid':'<%=data[i]['id']%>'}"><%=data[i]['name']%></a></td>
+        <td><%=data[i]['nid']%></td>
+        <td><%=data[i]['maintable']%></td>
+        <td><%=data[i]['addtable']%></td>
+        <td class="text-center">
+                <lqf_link><a class="ajax-open" data-url="{:url('Guestbook/edit')}"  data-ids="{'id':'<%=data[i]['id']%>'}" title="修改" width="600" height="400"><i class="fa fa-edit"></i>修改</a></lqf_link>
+                <lqf_link><a class="ajax-del confirm" data-url="{:url('Guestbook/del')}" data-ids="{'id':'<%=data[i]['id']%>'}" title="删除"><i class="fa fa-remove ">删除</i></a></lqf_link>
+                <lqf_link><a class="ajax-goto" data-url="{:url('GuestbookField/show')}" data-ids="{'id':'<%=data[i]['id']%>'}" title="字段管理"><i class="fa fa-tablet">字段</i></a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);//页面加载时初始化分页
+    });
+</script>
