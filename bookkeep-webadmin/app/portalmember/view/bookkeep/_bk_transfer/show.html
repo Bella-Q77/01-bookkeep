@@ -1,0 +1,111 @@
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <div class="row">
+                    <form id="pagerForm" method="post" class="form-inline searchForm">
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <label class="btn btn-sm btn-info btn-outline active">
+                                        <input type="radio" value="month" name="period_type" checked>{:lang('本月')}
+                                    </label>
+                                    <label class="btn btn-sm btn-info btn-outline">
+                                        <input type="radio" value="year" name="period_type">{:lang('本年')}
+                                    </label>
+                                    <label class="btn btn-sm btn-info btn-outline">
+                                        <input type="radio" value="diy" name="period_type">{:lang('自定义')}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" name="period_date"
+                                       class="form-control stat-workbench-date"
+                                       value="{$rangedate|default=''}">
+                            </div>
+                            <div class="input-group">
+                                <input type="text" name="keywords" placeholder="{:lang('关键字搜索')}"
+                                       class="form-control">
+                            </div>
+                            <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm">
+                                            <i class="fa fa-search"></i> {:lang('查询')}</button>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-info btn-sm ajax-open"
+                                            width="800" height="600"
+                                            data-url="{:url('bookkeep.BkTransfer/add')}">
+                                        <i class="fa fa-plus"></i> {:lang('转账')}</button>
+                                </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ibox-content m-t-xs table-responsive">
+                <table class="table table-hover sorttable ajax-list-table"
+                       data-url="{:url('bookkeep.BkTransfer/show_json')}" data-callback="getListStatTotal();"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                        <th width="100"><span>{:lang('日期')}</span></th>
+                        <th width="100"><span>{:lang('转出账户')}</span></th>
+                        <th width="100"><span>{:lang('输入账户')}</span></th>
+                        <th width="100"><span>{:lang('转账金额')}</span></th>
+                        <th width="200"><span>{:lang('备注')}</span></th>
+                        <th width="80" class="text-center">{:lang('操作')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <table class="table ajax-list-table table-page-bar">
+                    <tfoot>
+                    <tr>
+                        <td align="center"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {%>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['transfer_date']%></td>
+        <td><%=data[i]['from_account_name']%></td>
+        <td><%=data[i]['to_account_name']%></td>
+        <td><%=data[i]['amount']%></td>
+        <td><%=data[i]['remark']%></td>
+        <td class="text-center">
+            <lqf_link>
+                <a class="ajax-open"
+                   data-url="{:url('bookkeep.BkTransfer/edit')}"
+                   width="800" height="600"
+                   data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a>
+            </lqf_link>
+            <lqf_link><a class="ajax-del confirm"
+                         data-url="{:url('bookkeep.BkTransfer/del')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<!--加载数据模板-->
+{include file="bookkeep/_bk_stat/js_function"/}
+
+<script>
+    $(document).ready(function () {
+        autoFillStatDate();
+        $('form input[name="period_type"]').on('change', function () {
+            autoFillStatDate();
+        });
+    });
+</script>

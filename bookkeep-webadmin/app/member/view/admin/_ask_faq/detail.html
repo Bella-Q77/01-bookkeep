@@ -1,0 +1,150 @@
+<div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-10">
+                    <h3>{:lang('标题')}：{$info.name}</h3>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="font-bold detail-tit">{:lang('提问人员')}</div>
+                    {$info.member_info.username}
+                </div>
+                <div class="col-sm-2">
+                    <div class="font-bold detail-tit">{:lang('创建时间')}</div>
+                    {$info.create_time}
+                </div>
+            </div>
+            <div class="row m-t-lg">
+                <div class="col-sm-12 ">
+                    <div class="font-bold detail-tit">{:lang('问题内容')}</div>
+                    <p class="well">{$info.content}</p>
+                </div>
+            </div>
+
+            <!--点评记录-box--start--->
+            <div class="row m-t-lg">
+                <div class="col-sm-12">
+                    <div class="tabs-container detail-tabs">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="?#tab-0" data-toggle="tab">{:lang('回复列表')}</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-0" class="tab-pane active">
+                                <div class="p-xs">
+                                    <button class="btn btn-xs btn-info ajax-open " type="button"
+                                            data-url="{:url('admin.AskComment/add')}"
+                                            data-ids="{'bus_id':'{$info.id}','bus_type':'ask_faq','receive_user_id':'{$info.member_id}'}"
+                                            data-title="添加回复"
+                                            data-calback="getReplyData();"
+                                            width="500" height="300">
+                                        <i class="fa fa-plus"></i> {:lang('添加回复')}
+                                    </button>
+                                </div>
+                                <!--展示记录--list--start-->
+                                <div class="row">
+                                    <div class="col-lg-12 reply-list-box"
+                                         data-url="{:url('admin.AskComment/show_json',array('bus_id'=>$info.id,'bus_type'=>'ask_faq'))}">
+
+                                    </div>
+                                </div>
+                                <!--展示记录--list--end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--头像-->
+            <canvas id="head_canvas_default" style="display:none"></canvas>
+            <script type="text/javascript">
+                //加载点评记录
+                function getReplyData() {
+                    var target = $('.reply-list-box').attr("data-url");
+                    var html='';
+                    $.ajax({
+                        type: "POST",
+                        url: target,
+                        data: {},
+                        dataType: "json",
+                        async: false,
+                        success: function (resultJson) {
+                            var data=resultJson.data;
+                            html ='<div class="social-footer">';
+                            log(data);
+                            $.each(data,function(key,row) {
+                                var str = row.comment_user_name;
+                                var avatar = textToImg(str);
+
+                                //评论回复列表
+                                var replyHtml='';
+                                if(row.reply_list!=''){
+                                    $.each(row.reply_list,function(key2,row2) {
+                                        var str2 = row2.reply_user_name;
+                                        var avatar2 = textToImg(str2);
+                                        var href2='data-url="{:url(\'admin.AskCommentReply/add\')}"  data-ids="{\'comment_id\':\'' + row2.comment_id + '\',\'receive_user_id\':\'' + row2.reply_user_id + '\'}" data-title="回复评论" data-calback="getReplyData();" width="400" height="300" ';
+                                        replyHtml +='' +
+                                            '<div class="social-comment">\n' +
+                                            '   <a class="ajax-open pull-left" '+href2+'>\n' +
+                                            '       <img alt="image" src="'+avatar2+'">\n' +
+                                            '   </a>\n' +
+                                            '   <div class="media-body">\n' +
+                                            '       <a class="ajax-open" '+href2+'>'+ row2.reply_user_name +'</a>\n' +
+                                            '       <small class="text-muted">'+ row2.create_time +'</small><br>\n' +
+                                            '       <p class="">回复<a href="#">'+row2.receive_user_name+'</a> :'+ row2.content +'</p>\n' +
+                                            '       </div>\n' +
+                                            '</div>\n' ;
+                                    });
+                                }
+
+                                //评论列表
+                                var href='data-url="{:url(\'admin.AskCommentReply/add\')}"  data-ids="{\'comment_id\':\'' + row.id + '\'}" data-title="修改" data-calback="getReplyData();" width="400" height="300"';
+                                html +='\n'+
+                                    '                <div class="social-comment">\n' +
+                                    '                    <a class="pull-left ajax-open" '+href+'>\n' +
+                                    '                        <img alt="image" src="'+avatar+'">\n' +
+                                    '                    </a>\n' +
+                                    '                    <div class="media-body">\n' +
+                                    '                        <a class="ajax-open" '+href+'>'+ row.comment_user_name +'</a>\n' +
+                                    '                        <small class="text-muted">'+ row.create_time +'</small><br>\n' +
+                                    '                        <p class="">'+ row.content +'</p>\n' +
+                                    '                    </div>\n' +
+                                    '                    '+replyHtml+'\n' +
+                                    '                </div>\n'+
+                                    '                <div class="row">\n' +
+                                    '                    <div class="col-sm-12 text-right"><p style="padding-right: 10px;">\n' +
+                                    '                       <a class="ajax-open" '+href+'><button class="btn btn-white btn-xs"><i class="fa fa-comments"></i>{:lang('评论')}</button></a>\n' +
+                                    '                       <a class="ajax-del" data-url="{:url(\'admin.AskComment/del\')}"  data-ids="{\'id\':\'' + row.id + '\'}" data-title="修改" data-calback="getReplyData();"><button class="btn btn-white btn-xs"><i class="fa fa-remove"></i>{:lang('删除')}</button></a>\n' +
+                                    '                    </p></div>\n' +
+                                    '                </div>\n';
+
+                            });
+                            html +='</div>';
+                            $('.reply-list-box').html(html);
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            </script>
+            <!--点评记录-box--end--->
+        </div>
+    </div>
+
+<!-- Fancy box -->
+<script src="__STATIC__/module/admin/js/plugins/fancybox/jquery.fancybox.js"></script>
+<link href="__STATIC__/module/admin/js/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.fancybox').fancybox({
+            openEffect: 'none',
+            closeEffect: 'none'
+        });
+        getReplyData();
+    });
+</script>
+

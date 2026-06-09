@@ -1,0 +1,258 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+		}
+	},
+	"pages": [
+		{
+			"path": "pages/dashboard/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			},
+			"enableShareAppMessage": true,
+			"enableShareTimeline": true
+		},
+		{
+			"path": "pages/record/index",
+			"style": {
+				"navigationBarTitleText": "账单",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/record/add",
+			"style": {
+				"navigationBarTitleText": "添加记录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/statistics/index",
+			"style": {
+				"navigationBarTitleText": "统计",
+				"navigationStyle": "custom"
+			},
+			"enableShareAppMessage": true,
+			"enableShareTimeline": true
+		},
+		{
+			"path": "pages/budget/index",
+			"style": {
+				"navigationBarTitleText": "预算管理",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/assets/index",
+			"style": {
+				"navigationBarTitleText": "资产管理",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/books/index",
+			"style": {
+				"navigationBarTitleText": "账本管理",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/books/detail",
+			"style": {
+				"navigationBarTitleText": "账本设置",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/category/index",
+			"style": {
+				"navigationBarTitleText": "分类管理",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/assets/detail",
+			"style": {
+				"navigationBarTitleText": "账户明细",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/assets/edit",
+			"style": {
+				"navigationBarTitleText": "编辑账户",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/statistics/trend",
+			"style": {
+				"navigationBarTitleText": "收支趋势",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/discover/index",
+			"style": {
+				"navigationBarTitleText": "发现",
+				"navigationStyle": "custom"
+			},
+			"enableShareAppMessage": true,
+			"enableShareTimeline": true
+		},
+		{
+			"path": "pages/record/detail",
+			"style": {
+				"navigationBarTitleText": "账单详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/tools/mortgage",
+			"style": {
+				"navigationBarTitleText": "房贷计算器",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/tools/currency",
+			"style": {
+				"navigationBarTitleText": "汇率换算",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/tools/tax",
+			"style": {
+				"navigationBarTitleText": "税费计算",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/tools/saving",
+			"style": {
+				"navigationBarTitleText": "存储计划",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/index",
+			"style": {
+				"navigationBarTitleText": "会员中心",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/avatar",
+			"style": {
+				"navigationBarTitleText": "修改头像",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/faq",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/faqdetail",
+			"style": {
+				"navigationBarTitleText": "意见详细",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/setting/index",
+			"style": {
+				"navigationBarTitleText": "个人设置",
+				"navigationStyle": "custom"
+			}
+		},{
+			"path": "pages/member/setting/profile",
+			"style": {
+				"navigationBarTitleText": "个人资料",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/setting/password",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/member/setting/notification",
+			"style": {
+				"navigationBarTitleText": "消息通知",
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#07C160",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+
+		"list": [
+			{
+				"pagePath": "pages/dashboard/index",
+				"text": "首页",
+				"iconPath": "static/tabbar/index.png",
+				"selectedIconPath": "static/tabbar/indexA.png"
+			},
+			{
+				"pagePath": "pages/statistics/index",
+				"text": "统计",
+				"iconPath": "static/tabbar/stat.png",
+				"selectedIconPath": "static/tabbar/statA.png"
+			},
+			{
+				"pagePath": "pages/discover/index",
+				"text": "发现",
+				"iconPath": "static/tabbar/msg.png",
+				"selectedIconPath": "static/tabbar/msgA.png"
+			},
+			{
+				"pagePath": "pages/member/index",
+				"text": "我的",
+				"iconPath": "static/tabbar/mine.png",
+				"selectedIconPath": "static/tabbar/mineA.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#07C160",
+		"backgroundColor": "#F8F8F8"
+	}
+}

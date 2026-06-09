@@ -1,0 +1,14 @@
+{$fly.field.typename}
+
+{fly:list  pagesize='5' empty='暂时没有数据'}
+
+<p   {eq name='mod' value='0'} style="background: #f1a417;" {/eq} >
+【<a href="{$field.typeurl}"> {$field.typename}</a>】<a href='{$field.arcurl}' >{$field.title}</a>
+{$field.create_time|strtotime|date="y-m-d",###}
+</p>
+<!--<img src="{$field.litpic}" width="100">-->
+<!--<p>{$key} - {$i}</p>-->
+<hr>
+{/fly:list}
+
+{fly:pagelist listitem='index,pre,pageno,next,end,info' listsize=‘2’/}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员注册_{$webconfig.web_name}</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010801" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="static/js/modernizr.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--top begin-->
+{include file="header_nologin" /}
+<!--top end-->
+<div class="member-login">
+    <div class="box">
+        <div class="login-enter">
+            <h3>会员注册</h3>
+            <form class="target-post-form" action="{:url('portalmember/Login/reg')}" method="post">
+            <div class="form-box" method="post">
+                 <div class="form-group">
+                     <label>注册帐号</label>
+                     <input type="text" name="username" class="form-control" placeholder="输入您的注册帐号">
+                 </div>
+                 <div class="form-group">
+                     <label>注册密码</label>
+                     <input type="password" name="password" class="form-control" placeholder="输入您的注册密码">
+                 </div>
+                 <div class="form-group">
+                     <label>密码确认</label>
+                     <input type="password" name="password_confirm" class="form-control" placeholder="输入再次您的注册密码">
+                 </div>
+                 <div class="form-group">
+                     <button  type="submit"  class="btn btn-red btn-save ajax-post" target-form="target-post-form">确认注册</button>
+                 </div>
+                 <div class="row text-center grey">
+                     我有帐号直接<a href="{:url('portalmember/Login/login')}" class="blue">登录</a> |  <a href="#" class="grey">忘记密码？</a>
+                 </div>
+             </div>
+            </form>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+</body>
+</html>
+<script>
+    /*-----页面pannel内容区高度自适应 start-----*/
+    $(window).resize(function () {
+        setCenterHeight();
+    });
+
+    setCenterHeight();
+
+    function setCenterHeight() {
+        var height = $(window).height();
+        var centerHight = height - 190;
+        $(".member-login").height(centerHight).css("overflow", "auto");
+    }
+</script>

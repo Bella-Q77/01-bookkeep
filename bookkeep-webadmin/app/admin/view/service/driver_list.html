@@ -1,0 +1,57 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="box-body table-responsive">
+                        <table class="table  table-hover">
+                            <thead>
+                            <tr>
+                                <th>{:lang('name')}</th>
+                                <th>{:lang('drive')}</th>
+                                <th>{:lang('description')}</th>
+                                <th>{:lang('version')}</th>
+                                <th class="text-center">{:lang('operate')}</th>
+                            </tr>
+                            </thead>
+                            {notempty name='list'}
+                            <tbody>
+                            {volist name='list' id='vo'}
+                            <tr>
+                                <td>{$vo.driver_name}</td>
+                                <td>{$vo.driver_class}</td>
+                                <td>{$vo.driver_describe}</td>
+                                <td>{$vo.version}</td>
+                                <td class="text-center">
+                                    {eq name="vo['is_install']" value="1"}
+                                    <lqf_link><a
+                                            href="{:url('driverInstall', array('service_class' => input('service_name'), 'driver_class' => $vo['driver_class']))}"
+                                            class=""><i class="fa fa-edit"></i> {:lang('set up')}</a></lqf_link>
+                                    <lqf_link><a class="confirm ajax-get"
+                                                href="{:url('driverUninstall', array('service_class' => input('service_name'), 'driver_class' => $vo['driver_class']))}"><i
+                                            class="fa fa-remove"></i> {:lang('uninstall')}</a></lqf_link>
+                                    {else/}
+                                    <lqf_link><a
+                                            href="{:url('driverInstall', array('service_class' => input('service_name'), 'driver_class' => $vo['driver_class']))}"
+                                            class=""><i class="fa fa-refresh"></i> {:lang('install')}</a></lqf_link>
+                                    {/eq}
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                            {else/}
+                            <tbody>
+                            <tr class="odd">
+                                <td colspan="6" class="text-center" valign="top">{:config('empty_list_describe')}</td>
+                            </tr>
+                            </tbody>
+                            {/notempty}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

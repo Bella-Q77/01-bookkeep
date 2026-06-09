@@ -1,0 +1,203 @@
+<script>
+    $(document).ready(function () {
+        // 只在表单内的输入框中 回车提交
+        $('.form-horizontal input').on('keypress', function (e) {
+            if (e.which === 13) { // 回车键
+                e.preventDefault(); // 阻止默认行为
+                var form = $(this).closest('form');
+                ajaxTransferAddSubmit(form)
+            }
+        });
+        // 点击表单提交处理
+        $('.form-horizontal').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            ajaxTransferAddSubmit(form)
+        });
+
+        // 自动加载列表数据
+        $('.addlist-table-list').each(function () {
+            ajaxTransferList($(this));
+        });
+
+        // 为查询按钮添加点击事件
+        $('.addlist-form .btn-primary').on('click', function () {
+            ajaxTransferList();
+        });
+
+        // 或者直接监听 radio 变化
+        $('.addlist-form .btn-group input[name="period_type"]').on('change', function() {
+            ajaxTransferList();
+        });
+        // 也可以为回车键添加支持
+        $('.addlist-form input[name="keywords"]').on('keypress', function (e) {
+            if (e.which === 13) { // 回车键
+                e.preventDefault(); // 阻止默认行为
+                ajaxTransferList();
+            }
+        });
+
+        // 监听标签页切换事件
+        $('.nav-tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var targetType = $(this).data('type');
+            if (targetType !== undefined) {
+                updateTransferType(targetType);
+            }
+        });
+        // 初始化时根据当前激活的标签页设置type值
+        var activeTab = $('.nav-tabs li.active a[data-toggle="tab"]');
+        if (activeTab.length > 0) {
+            var initialType = activeTab.data('type');
+            if (initialType !== undefined) {
+                updateTransferType(initialType);
+            }
+        }
+    });
+
+    /**
+     * 更新分类搜索URL中的type参数
+     * @param {string} typeValue - 新的type值
+     */
+    function updateTransferType(typeValue) {
+        $('input[name="type"]').val(typeValue);
+        $('input[name="category_id"]').val('');
+        $('input[name="category_name"]').val('');
+    }
+
+
+    function ajaxTransferAddSubmit(form) {
+
+        //var form = $(this);
+        var submitBtn = form.find('button[type="submit"]');
+        var originalBtnText = submitBtn.html();
+
+        // 收集表单数据（包含所有字段）
+        var formData = {
+            // 必填字段
+            type: $('input[name="type"]').val(),
+            amount: $('input[name="amount"]').val(),
+            category_id: $('input[name="category_id"]').val(),
+            account_id: $('input[name="account_id"]').val(),
+            transaction_date: $('input[name="transaction_date"]').eq(0).val(), // 时间字段
+
+            // 其他字段（非必填）
+            category_name: $('input[name="category_name"]').val(),
+            account_name: $('input[name="account_name"]').val(),
+            person_id: $('input[name="person_id"]').val(),
+            person_name: $('input[name="person_name"]').val(),
+            shop_id: $('input[name="shop_id"]').val(),
+            shop_name: $('input[name="shop_name"]').val(),
+            project_id: $('input[name="project_id"]').val(),
+            project_name: $('input[name="project_name"]').val(),
+            reamrk: $('input[name="reamrk"]').val()
+        };
+
+        // 必填字段验证
+        if (!formData.amount) {
+            layer.msg('金额不能为空', {icon: 2});
+            return;
+        }
+
+        if (!formData.category_id) {
+            layer.msg('分类不能为空', {icon: 2});
+            return;
+        }
+
+        if (!formData.account_id) {
+            layer.msg('账户不能为空', {icon: 2});
+            return;
+        }
+
+        if (!formData.transaction_date) {
+            layer.msg('时间不能为空', {icon: 2});
+            return;
+        }
+
+        // 禁用提交按钮，防止重复提交
+        submitBtn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> 提交中...');
+
+        // AJAX 提交
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                if (response.code === 1) {
+                    // 提交成功
+                    layer.msg(response.msg || '保存成功', {icon: 1});
+                   ajaxTransferList();
+                } else {
+                    // 提交失败
+                    layer.msg(response.msg || '保存失败', {icon: 2});
+                }
+            },
+            error: function (xhr, status, error) {
+                layer.msg('网络错误，请稍后重试', {icon: 2});
+            },
+            complete: function () {
+                // 恢复提交按钮状态
+                submitBtn.prop('disabled', false).html(originalBtnText);
+            }
+        });
+    }
+
+    function ajaxTransferList() {
+
+        var form = $('.addlist-form');
+        var table = $(".addlist-table-list");
+        var url = table.attr("data-url");
+        var params = form.serialize();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: params,
+            dataType: 'json',
+            success: function (response) {
+                if (response.code === 1) {
+                    var data = response.data;
+                    $(".income-money").html(data.income_total_amount);
+                    $(".expense-money").html(data.expense_total_amount);
+                    $(".balance-money").html(data.balance_total_amount);
+
+                    var datalist = response.data.list;
+                    var trHtml = '';
+
+                    $.each(datalist, function (index, item) {
+                        var textColor = '';
+                        if (item.type == '1') {
+                            textColor = 'text-success';
+                        } else if (item.type == '-1') {
+                            textColor = 'text-danger';
+                        }
+                        trHtml += '<tr>';
+                        trHtml += '<td>' + item.id + '</td>';
+                        trHtml += '<td>' + item.transaction_date + '</td>';
+                        trHtml += '<td>' + item.category_name + '</td>';
+                        trHtml += '<td class="' + textColor + '">' + item.amount + '</td>';
+                        trHtml += '<td>' + item.account_name + '</td>';
+                        trHtml += '<td>' + item.person_name + '</td>';
+                        trHtml += '<td>' + item.shop_name + '</td>';
+                        trHtml += '<td>' + item.project_name + '</td>';
+                        trHtml += '<td>' + item.remark + '</td>';
+                        trHtml += '<td class="text-center">';
+                        trHtml += '    <lqf_link><a class="ajax-open" data-url="{:url(\'bookkeep.BkTransfer/edit\')}"  ' +
+                            'data-ids="{\'id\':\'' + item.id + '\'}"  ' +
+                            'data-calback="javascript:ajaxTransferList();" width="800" height="600">{:lang("修改")}</a></lqf_link>';
+                        trHtml += '    <lqf_link><a class="ajax-del" data-url="{:url(\'bookkeep.BkTransfer/del\')}"  data-ids="{\'id\':\'' + item.id + '\'}"  data-calback="javascript:ajaxTransferList();">{:lang("删除")}</a></lqf_link>';
+                        trHtml += '</td>';
+                        trHtml += '</tr>';
+                    });
+                    table.find('tbody').html(trHtml);
+                } else {
+                    // 提交失败
+                    layer.msg(response.msg || '保存失败', {icon: 2});
+                }
+            },
+            error: function (xhr, status, error) {
+                layer.msg('网络错误，请稍后重试', {icon: 2});
+            }
+        });
+    }
+</script>
+

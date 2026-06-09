@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>积分充值_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/MemberProductIntegral/show')}" class="tit"> 积分充值</a></span>
+                <span><a href="{:url('portalmember/MemberProductIntegral/rules')}" class="tit"> 积分规则</a></span>
+                <span><a href="{:url('portalmember/MemberIntegral/show')}" class="tit on"> 积分明细</a></span>
+                <span><a href="{:url('portalmember/MemberOrder/show')}" class="tit"> 支付明细</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        您目前帐号积分：{$member.member_integral}
+                    </div>
+                </div>
+                <div class="base-info-content">
+                    <div class="tablelist clearfix">
+                        <div class="thead">
+                            <div class="row">
+                                <div class="col-3">时间</div>
+                                <div class="col-2">变动积分</div>
+                                <div class="col-2">当前积分</div>
+                                <div class="col-5">备注</div>
+                            </div>
+                        </div>
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="col-3">{$vo.create_time}</div>
+                                <div class="col-2">{$vo.integral}</div>
+                                <div class="col-2">{$vo.member_integral}</div>
+                                <div class="col-5">{$vo.cause}</div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>充值说明</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>1. 积分充值比率：1元充值1个积分。0.01支付仅供测试用，不增加积分</li>
+                    <li>2. 仅限1的整数倍充值，小数点后面的金额无法充值。</li>
+                    <li>3. 充值积分无法退还，建议小额充值，消费完再续充。</li>
+                    <li>4. 每个账号每24小时最多可充值5次。</li>
+                    <li>5. 目前仅支持【微信】在线充值。</li>
+                    <li>6. 点击“购买”并确定后，即表示您已阅读并同意以上条款。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

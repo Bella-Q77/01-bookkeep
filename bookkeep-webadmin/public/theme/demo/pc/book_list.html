@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>{$fly.field.typename}-{$fly.field.seotitle}-{fly:global name='web_name'/}</title>
+    <meta name="keywords" content="{$fly.field.keywords}"/>
+    <meta name="description" content="{$fly.field.description}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/templets/default/images/cpgwimages/favicon.ico"/>
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="{$template_dir}skin/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="{$template_dir}skin/css/animate.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{$template_dir}skin/css/owl.carouse.css"/>
+    <link rel="stylesheet" type="text/css" href="{$template_dir}skin/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="{$template_dir}skin/css/responsive.css"/>
+    <script src="{$template_dir}skin/js/jquery-1.11.0.min.js"></script>
+    <script src="{$template_dir}skin/js/wow.min_1.js"></script>
+    <script src="{$template_dir}skin/js/owl.carousel.min.js"></script>
+    <script src="{$template_dir}skin/js/page.js"></script>
+</head>
+<body>
+{fly:include file="07fly/pc/head"}
+<div class="page">
+    <div class="rowFluid">
+        <div class="span12">
+            <div class="main">
+                <div class="z_banner">
+                    <div class="rowFluid">
+                        <div class="span12">
+                            <div class="container">
+                                <h3 class="z_banner_title">互联网+时代 你还没准备?</h3>
+                                <div class="z_banner_text">高逼格，你也可以拥有，帮助企业实现市场营销、销售、服务的流程化以及公司管理的自动化</div>
+                            </div>
+                            <ul class="platform_advantage_bg_z">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="support_type">
+                    <div class="container">
+                        <div class="case_show_content booklist">
+                            {fly:booklist pagesize ='10'}
+                            <div class="store-list wow fadeInUp span4 col-xm-6 col-sm-12">
+                                <div class="store-box doc">
+                                    <a href="{$field.bookurl}" target="_blank">
+                                        <div class="store-pic"><img src="{$field.litpic}"  alt="{$field.title}"/></div>
+                                        <h3 class="store-title">{$field.title}</h3>
+                                    </a>
+                                    <div class="doc-text">{$field.description|msubstr=0,150,false}</div>
+                                    <div class="doc-btn" style="">
+                                        {fly:notempty name='field.appurl'}
+                                        <a href="{$field.appurl}" title="{$field.title}应用主页" class="all_button gree" target="_blank">应用主页</a>
+                                        {/fly:notempty}
+                                        <a href="{$field.bookurl}" title="{$field.title}详细" class="all_button" target="_blank">查看文档</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {/fly:booklist}
+                        </div>
+                        <div class="know_more wow fadeInUp">
+                            <div class="know_more_text">了解更多CRM服务或加盟事宜，敬请联系</div>
+                            <a target="_blank" class="all_button" href="http://wpa.qq.com/msgrd?v=3&uin={fly:global name='web_qq'/}&site=qq&menu=yes" title="定制CRM咨询">定制咨询</a> <a target="_blank" class="all_button"
+                                                                                                                                                                                  href="http://wpa.qq.com/msgrd?v=3&uin={fly:global name='web_qq'/}&site=qq&menu=yes"
+                                                                                                                                                                                  title="CRM合作咨询咨询">合作咨询</a></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{fly:include file="07fly/pc/footer"/}
+</body>
+</html>

@@ -1,0 +1,244 @@
+<div class="wrapper wrapper-content ">
+
+    <div class="ibox-content">
+        <div class="row">
+            <form id="pagerForm" method="post" class="form-inline">
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div data-toggle="buttons" class="btn-group">
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="week" name="period_type">{:lang('周预算')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline active">
+                                <input type="radio" value="month" name="period_type" checked>{:lang('月预算')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="quarter" name="period_type">{:lang('季预算')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="year" name="period_type">{:lang('年预算')}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 text-right">
+                    <lqf_link>
+                        <a class="btn btn-info add-budget-amount"
+                           data-url="{:url('bookkeep.BkBudget/add')}" width="800" height="600"
+                           data-title="{:lang('设置预算')}"> <i class="fa fa-plus"></i> {:lang('设置预算')}</a>
+                    </lqf_link>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div>
+                    <h4>预算概览</h4>
+                    <h2><span class="budget-amount"></span></h2>
+                    <div class="progress progress-striped">
+                        <div style="width: 0%;" class="progress-bar "></div>
+                        <div class="progress-text">0%</div>
+                    </div>
+                    <div class="row m-t-md">
+                        <div class="col-sm-6">
+                            <small class="stats-label">{:lang('已使用')}: <span
+                                    class="budget-used-amount"></span></small>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <small class="stats-label">{:lang('剩余')}: <span
+                                    class="budget-remain-amount"></span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox-content m-t-md">
+        <div class="row">
+            <div class="col-sm-10"><h4>分类预算</h4></div>
+            <div class="col-sm-2 text-right">
+                <lqf_link>
+                    <a class="btn btn-default btn-outline add-budget-amount" data-url="{:url('bookkeep.BkBudget/addCategory')}"
+                       width="800" height="600" data-title="{:lang('添加')}"> <i class="fa fa-plus"></i> {:lang('添加分类预算')}</a>
+                </lqf_link>
+            </div>
+        </div>
+    </div>
+    <div class="ibox-content table-responsive">
+        <table class="table table-hover budget-category-table-list"
+               data-url="{:url('bookkeep.BkBudget/show')}"
+               width="100%">
+            <thead>
+            <tr>
+                <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                <th width="100"><span>{:lang('分类名称')}</span></th>
+                <th width="80"><span>{:lang('预算金额')}</span></th>
+                <th width="80"><span>{:lang('已用')}</span></th>
+                <th width="80"><span>{:lang('剩余')}</span></th>
+                <th width="200"><span>{:lang('使用进度')}</span></th>
+                <th width="80" class="text-center">{:lang('操作')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ajaxLoadBudgetData();
+
+        // 添加周期类型变化监听
+        $("input[name='period_type']").change(function () {
+            ajaxLoadBudgetData();  // 刷新数据
+        });
+
+        $(".stat-workbench-date").daterangepicker({
+            format: 'YYYY-MM-DD',
+            singleDatePicker: false,
+            showDropdowns: true,
+            minDate: '2015-01-01',
+            maxDate: '2025-01-01',
+            startDate: moment().subtract(1, 'months'),
+            endDate: moment(),
+            locale: {
+                applyLabel: '确定',
+                cancelLabel: '取消',
+                fromLabel: '起始时间',
+            }
+        })
+
+        $(".add-budget-amount").click(function () {
+            var url = $(this).attr("data-url");
+            var width = $(this).attr("width");
+            var height = $(this).attr("height");
+            var period_type = $("input[name='period_type']:checked").val();
+            var url = url + "?period_type=" + period_type;
+            console.log(url)
+            layer.open({
+                type: 2,
+                title: '',
+                shadeClose: true,
+                shade: 0.8,
+                area: [width, height],
+                content: url,
+                end: function () {
+                    // 在这里执行弹窗关闭后的操作
+                    ajaxLoadBudgetData();
+                }
+            });
+        })
+
+
+    });
+
+    function ajaxLoadBudgetData() {
+        var object = $(".budget-category-table-list");
+        var target = object.attr("data-url");
+        var listtype = object.attr("data-type");
+        var searchData = $('form.form-inline').serialize();
+        var chartsData = '';
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: searchData,
+            dataType: 'json',
+            beforeSend: function () {
+                layer.msg('加载数据',
+                    {
+                        time: 500,
+                        icon: 16,
+                        shade: 0.1
+                    }
+                );
+            },
+            success: function (jsonData) {
+                log('加载数据：');
+                if (jsonData.code == 1) {
+                    var data = jsonData.data;
+                    $(".budget-amount").html(data.budget_amount);
+                    $(".budget-used-amount").html(data.budget_used_amount);
+                    $(".budget-remain-amount").html(data.budget_remain_amount);
+                    // 直接使用返回的比例设置进度条
+                    if (data.budget_used_rate !== undefined) {
+                        var percent = parseFloat(data.budget_used_rate);
+                        // 限制最大100%
+                        //percent = Math.min(percent, 100);
+                        $(".progress-bar").css('width', percent + '%');
+                        $(".progress-text").html(percent + '%');
+
+                        var categoryList = jsonData.data.budget_category_list;
+                        log(categoryList);
+                        var categoryListHtml = categoryBudgetListHtml(categoryList);
+                        console.log(categoryListHtml)
+                        $(".budget-category-table-list tbody").html(categoryListHtml);
+                    }
+                } else {
+                    layer.msg(jsonData.msg, {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            },
+            complete: function () {
+                // 清除加载提示
+                //layer.closeAll('dialog');
+            },
+            error: function () {
+                layer.msg('数据加载失败', {
+                    icon: 5,
+                    shade: 0.01
+                });
+            }
+        });
+    }
+
+    // 生成分类预算列表
+    function categoryBudgetListHtml(categoryList) {
+        var html = '';
+        $.each(categoryList, function (index, item) {
+            // 计算进度条宽度
+            var percent = parseFloat(item.budget_used_rate) || 0;
+            // 根据进度设置颜色类
+            var progressBarClass = 'progress-bar';
+            if (percent <= 60) {
+                progressBarClass += ' progress-bar-success'; // 绿色
+            } else if (percent <= 100) {
+                progressBarClass += ' progress-bar-warning'; // 黄色
+            } else {
+                progressBarClass += ' progress-bar-danger'; // 红色
+            }
+            var budgetProcess = '' +
+                '<small>当前进度： ' + percent + '%</small>' +
+                '<div class="progress progress-mini">' +
+                '   <div style="width: ' + percent + '%;" class="' + progressBarClass + '"></div>' +
+                '</div>';
+
+            html += '<tr class="budget-category-list-item">';
+            html += '<td width="22"><input type="checkbox" name="ids[]" value="' + item.id + '"></td>';
+            html += '<td width="100">' + item.category_name + '</td>';
+            html += '<td width="80">' + item.amount + '</td>';
+            html += '<td width="100">' + item.budget_used_amount + '</td>';
+            html += '<td width="80">' + item.budget_remain_amount + '</td>';
+            html += '<td width="80">' + budgetProcess + '</td>';
+            html += '<td width="80" class="text-center">';
+            html += '<a data-calback="javascript:ajaxLoadBudgetData();" class="ajax-open" data-url="{:url(\'bookkeep.BkBudget/edit\')}" data-id="' + item.id + '" width="800" height="600">{:lang(\'编辑\')}</a> ';
+            html += '<a data-calback="javascript:ajaxLoadBudgetData();" class="ajax-del" data-url="{:url(\'bookkeep.BkBudget/del\')}" data-id="' + item.id + '">{:lang(\'删除\')}</a>';
+            html += '</td>';
+            html += '</tr>';
+        })
+        return html;
+    }
+</script>

@@ -1,0 +1,119 @@
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <input type="text" name="period_date"
+                                           class="form-control stat-workbench-date daterange-prev"
+                                           value="{$rangedate|default=''}">
+                                </div>
+                                <div class="input-group">
+                                    <div class="suggest-search-box">
+                                        <div class="input-group account-suggest">
+                                            <input type="hidden" name="account_id" value="{$history.account_id|default=''}">
+                                            <input type="text" name="account_name"
+                                                   value="{$history.account_name|default=''}"
+                                                   class="form-control suggest-input" placeholder="{:lang('选择账户')}"
+                                                   data-url="{:url('Comm/suggest_search',array('datatype'=>'account','type'=>'-1'))}"
+                                                   searchFields="keywords" value="{$info.account_name|default=''}"
+                                                   target-group="account-suggest"
+                                                   target-name='{"account_id":"id","account_name":"name"}'>
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('关键字搜索')}"
+                                           class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm">
+                                            <i class="fa fa-search"></i> {:lang('查询')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox">
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table"
+                           data-url="{:url('BkTransaction/show_json')}" data-callback="getListStatTotal();"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100"><span>{:lang('日期')}</span></th>
+                            <th width="100"><span>{:lang('分类')}</span></th>
+                            <th width="200"><span>{:lang('金额')}</span></th>
+                            <th width="80"><span>{:lang('账户')}</span></th>
+                            <th width="80"><span>{:lang('成员')}</span></th>
+                            <th width="80"><span>{:lang('商家')}</span></th>
+                            <th width="80"><span>{:lang('项目')}</span></th>
+                            <th width="80"><span>{:lang('备注')}</span></th>
+                            <th width="80" class="text-center">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="10" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible=''; if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['transaction_date']%></td>
+        <td><%=data[i]['category_name']%></td>
+        <td>
+            <%if(data[i]['type']=='1'){%>
+            <label class="text-success"><%=data[i]['amount']%></label>
+            <%}else{%>
+            <label class="text-danger"><%=data[i]['amount']%></label>
+            <%}%>
+
+        </td>
+        <td><%=data[i]['account_name']%></td>
+        <td><%=data[i]['person_name']%></td>
+        <td><%=data[i]['shop_name']%></td>
+        <td><%=data[i]['project_name']%></td>
+        <td><%=data[i]['remark']%></td>
+        <td class="text-center">
+            <lqf_link>
+                <a class="ajax-open"
+                         data-url="{:url('BkTransaction/edit')}"
+                         width="800" height="600" data-calback="getListStatTotal();"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a>
+            </lqf_link>
+            <lqf_link><a class="ajax-del confirm"
+                         data-url="{:url('BkTransaction/del')}"
+                         data-calback="getListStatTotal();"
+                         data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>

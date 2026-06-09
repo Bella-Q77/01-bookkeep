@@ -1,0 +1,43 @@
+<div class="ibox-title">{:lang('添加分类')}</div>
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('bookkeep.BkCategory/add')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('分类名称')}</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text"/>
+                <span class="help-block m-b-none"></span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('收支类型')}</label>
+            <div class="col-sm-10">
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="type1" value="1" name="type" checked>
+                    <label for="type1"> {:lang('收入分类')}</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="type-1" value="-1" name="type">
+                    <label for="type-1"> {:lang('支出分类')}</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('图标')}</label>
+            <div class="col-sm-10">
+                <input name="category_icon" class="form-control" type="text" value="{$info.category_icon|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('排序')}</label>
+            <div class="col-sm-10">
+                <input name="sort" class="form-control" type="text" placeholder="" required/>
+                <span class="help-block m-b-none"></span></div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>
+{include file="bookkeep/_bk_category/iconfont"}

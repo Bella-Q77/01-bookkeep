@@ -1,0 +1,58 @@
+<div class="ibox-title">{:lang('添加预算')}</div>
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('bookkeep.BkBudget/addCategory')}">
+        <input type="hidden" name="period_type" value="{$period_type|default='month'}"/>
+        <div class="form-group category-suggest">
+            <label class="col-sm-2 control-label">{:lang('预算分类')}</label>
+            <div class="col-sm-10">
+                <div class="suggest-search-box">
+                    <div class="input-group category-suggest">
+                        <input type="hidden" name="category_id" value="{$category_id|default=''}">
+                        <input type="text" name="category_name" value="{$category_name|default=''}"
+                               class="form-control suggest-input" placeholder="{:lang('选择分类')}"
+                               data-url="{:url('Comm/suggest_search',array('datatype'=>'category','type'=>'-1'))}"
+                               searchFields="keywords" value="{$info.category_name|default=''}"
+                               target-group="category-suggest"
+                               target-name='{"category_id":"id","category_name":"name"}'>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('预算金额')}</label>
+            <div class="col-sm-10">
+                <input name="amount" class="form-control" type="text" value="0.00"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('开始周期')}</label>
+            <div class="col-sm-10">
+                <input name="start_date" class="form-control datepicker" type="text" placeholder="" required/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('结束周期')}</label>
+            <div class="col-sm-10">
+                <input name="end_date" class="form-control datepicker" type="text" placeholder="" required/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+</script>

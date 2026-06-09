@@ -1,0 +1,56 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('Arctype/edit_moban')}">
+        {volist name='list' id='vo'}
+        <input type="hidden" name="rowlist[id][]" value="{$vo['id']}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{$vo.typename}</label>
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input name="rowlist[typename][]" class="form-control" type="text" value="{$vo['typename']|default=''}" placeholder="栏目名称"/>
+                        <span class="help-block m-b-none"></span>
+                    </div>
+                    <div class="col-sm-3">
+                        <input name="rowlist[temp_index][]" class="form-control" type="text" value="{$vo['temp_index']|default=''}" placeholder="封面模板"/>
+                        <span class="help-block m-b-none"></span>
+                    </div>
+                    <div class="col-sm-3">
+                        <input name="rowlist[temp_list][]" class="form-control" type="text" value="{$vo['temp_list']|default=''}" placeholder="列表模板"/>
+                        <span class="help-block m-b-none"></span>
+                    </div>
+                    <div class="col-sm-3">
+                        <input name="rowlist[temp_article][]" class="form-control" type="text" value="{$vo['temp_article']|default=''}" placeholder="文章模板"/>
+                        <span class="help-block m-b-none"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input name="rowlist[seotitle][]" class="form-control" type="text" value="{$vo['seotitle']|default=''}" placeholder="栏目标题"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input name="rowlist[keywords][]" class="form-control" type="text" value="{$vo['keywords']|default=''}" placeholder="栏目关键词"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <textarea class="form-control" name="rowlist[description][]" rows="5" placeholder="栏目描述">{$vo['description']|default=''}</textarea>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        {/volist}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+</script>

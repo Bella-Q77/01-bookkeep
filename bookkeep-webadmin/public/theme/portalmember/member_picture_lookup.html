@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>图片中心_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+    <script src="{$template_member_dir}static/js/layer/layer.min.js"></script>
+    <script src="{$template_member_dir}static/js/laydate/laydate.js"></script>
+</head>
+<body>
+<!--top end-->
+<div class="box">
+    <div class="right-col img-lookup">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 图片管理</a></span>
+                <span class="fr"><a href="{:url('portalmember/memberPicture/add')}" class="yellow ">上传图片</a></span>
+                <span class="help">* 图片格式仅限于 .jpg | .jpeg | .png | .bmp。</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info-content list">
+                    <ul class="imglist clearfix">
+                        {notempty name='list'}
+                        {volist name='list' id='vo'}
+                        <li class="clearfix">
+                            <div class="pic"><img src="{$vo.path|get_picture_url2}"></div>
+                            <div class="txt row">
+                                <div class="t1 col-6">
+                                    {if condition="$vo.status eq '1'"}
+                                    <font class="blue">已审核</font>
+                                    {elseif condition="$vo.status eq '2'" /}
+                                    <font class="red">被拒绝</font>
+                                    {else/}
+                                    <font class="yellow">待审核</font>
+                                    {/if}
+                                </div>
+                                <div class="t2 col-6 text-right">
+                                    <a href="#" class="change_img_val" data-val="{$vo.path}" data-url="{$vo.path|get_picture_url2}">确认选择</a>
+                                </div>
+                            </div>
+                        </li>
+                        {/volist}
+                        {/notempty}
+                    </ul>
+                </div>
+                <div class="pagelist">
+                    {$pages}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //获取窗口索引关闭窗口
+        var list_add_index = parent.layer.getFrameIndex(window.name);
+        //设置选中产品
+        $("body").on("click", ".change_img_val", function () {
+            var url=$(this).attr('data-url');
+            var val=$(this).attr('data-val');
+            var img="<img src='"+url+"' width='150' height='100'>"
+            parent.$("#{$img_id}").val(val);
+            parent.$("#{$img_html}").html(img);
+            layer.msg('选择成功', {icon: 1});
+            setTimeout(function () {
+                parent.layer.close(list_add_index);
+            }, 800);
+        });
+    });
+</script>

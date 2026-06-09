@@ -1,0 +1,53 @@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //分类选择
+        var type_id = "{$info['type_id']|default='0'}";
+        var type_id2 = "{$info['type_id2']|default='0'}";
+        var get_options_url = '{:url("portalmember/InfoType/get_type_list")}';
+
+        function changeType(parent_id = 0, select_id = 0) {
+            $.get(get_options_url, {parent_id: parent_id, select_id: select_id, level: 1}, function (result) {
+                $(".typeSelect").html(result.data);
+            });
+        }
+
+        function changeType2(parent_id = 0, select_id = 0) {
+            $.get(get_options_url, {parent_id: parent_id, select_id: select_id, level: 2}, function (result) {
+                $(".type2Select").html(result.data);
+            });
+        }
+
+        changeType(0, type_id);
+        changeType2(type_id, type_id2);
+
+        $("body").on("change", ".typeSelect", function () {
+            changeType2($(".typeSelect").val());
+        });
+
+
+        //选择计算天数*单价
+
+        $(".istop_days").each(function () {
+            get_days_money($(this));
+        })
+
+        $("body").on("change", ".istop_days", function () {
+            get_days_money($(this));
+        });
+
+        function get_days_money(obj) {
+            var days=obj.val();
+            var price=obj.parents('form').find("input[name='day_price']").val();
+            var money=Number(days)*Number(price);
+            obj.parents('form').find(".info_money").html(money);
+            log(money);
+        }
+        laydate.render({
+            elem: '#start_date' //指定元素
+        });
+    });
+
+
+</script>

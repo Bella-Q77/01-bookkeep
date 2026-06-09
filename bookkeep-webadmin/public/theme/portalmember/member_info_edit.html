@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>品牌修改_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 基本资料</a></span>
+                <span class="fr"><a href="#" class="blue btn-history">返回</a></span>
+                <span class="help">* 以下信息用于登录或接收网站通知，不公开显示</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/Member/member_info_edit')}" method="post" autocomplete="off">
+                        <input type="hidden" name="username" value="{$member.username}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>用户呢称</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="nickname" class="form-control" value="{$member.nickname}">
+                                    <span class="help-block">会员中心显示</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>绑定手机</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="mobile" class="form-control" value="{$member.mobile}">
+                                    <span class="help-block">用于登录或接收网站通知，不公开显示</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>绑定邮箱</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    <input type="text" name="email" class="form-control" value="{$member.email}">
+                                    <span class="help-block">用于登录或接收网站通知，不公开显示</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>所在地区</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {:hook('RegionSelect', ['addons_model' =>'portalmember' ,'name' => 'id', 'province' => $member.province_id, 'city' =>$member.city_id , 'county' => $member.county_id  ])}
+                                    <span class="help-block">用于登录或接收网站通知，不公开显示</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">保存修改</button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span>帐号注销</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>若您需要删除在{$webconfig.web_name}的所有信息包含账号，请参照以下步骤发送短信即可。</li>
+                    <li>1. 已认证或缴费的账号，需要先提交账号降级申请书。</li>
+                    <li>2. 请删除此账号内已发布的所有信息（无法恢复）。</li>
+                    <li>3. 请使用手机 {$member.mobile} 发送短信到 {$webconfig.web_mobile} 内容为：请注销在{$webconfig.web_name}的账号{$member.mobile}，已知悉注销后无法恢复。</li>
+                    <li>4. 短信发送后72小时内即可完成账号注销，注销后60天内此手机号将无法再在{$webconfig.web_name}注册或登录，60天后可重新注册。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+</body>
+</html>

@@ -1,0 +1,247 @@
+<script src="__STATIC__/module/admin/js/plugins/echarts/echarts.js"></script>
+<script>
+    // 列表加载
+    $(document).ready(function () {
+
+        $("body").on("change", ".ibox-title select", function () {
+            var fun = $(this).attr('data-calback');
+            if (fun != null) {
+                eval(fun);
+            }
+        })
+
+        $("body").on("click", ".stat-workbench-btn", function () {
+            getBaseTotal();//lims基础数据数量统计
+
+            getSellOrderStat();//销售类型统计
+
+            getMyBaseTotal();//默认的个人看板
+        })
+
+
+        getBaseTotal();//lims基础数据数量统计
+        getSellOrderStat();//销售类型统计
+        getMyBaseTotal();//默认的个人看板
+
+        // getStoreStat();
+        // getDeptStat();
+        // getStatus4CategoryStat();
+        // getRepairStatusStat();
+
+
+    })
+    //lims基础数据数量统计=>默认的个人看板
+    function getMyBaseTotal() {
+        var object = $(".workbench-ajax.mystatbase");
+        var rangedate = $(".stat-workbench-date").val();//日期范围
+        var target = object.attr("data-url");
+        var listtype = object.attr("data-type");
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: {'listtype': listtype, 'rangedate': rangedate},
+            dataType: 'json',
+            beforeSend: function () {
+                layer.msg('{:lang("loading data")}',
+                    {
+                        time: 1000,
+                        icon: 16,
+                        shade: 0.2
+                    }
+                );
+            },
+            success: function (jsonData) {
+                jsonData = null2zero(jsonData);
+                $.each(jsonData, function (key, row) {
+                    object.find("." + key).html(row);
+                })
+
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                layer.msg('数据加载失败', {
+                    icon: 5,
+                    shade: 0.01
+                });
+            }
+        });
+    }
+
+    //lims基础数据数量统计
+    function getBaseTotal() {
+        var object = $(".workbench-ajax.statbase");
+        var rangedate = $(".stat-workbench-date").val();//日期范围
+        var target = object.attr("data-url");
+        var listtype = object.attr("data-type");
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: {'listtype': listtype, 'rangedate': rangedate},
+            dataType: 'json',
+            beforeSend: function () {
+                layer.msg('加载数据',
+                    {
+                        time: 1000,
+                        icon: 16,
+                        shade: 0.2
+                    }
+                );
+            },
+            success: function (jsonData) {
+                jsonData = null2zero(jsonData);
+                $.each(jsonData, function (key, row) {
+                    object.find("." + key).html(row);
+                })
+
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                layer.msg('数据加载失败', {
+                    icon: 5,
+                    shade: 0.01
+                });
+            }
+        });
+    }
+
+    //按销售类型统计统计
+    function getSellOrderStat() {
+
+        var object = $(".workbench-ajax.statsellorder");
+        var rangedate = $(".stat-workbench-date").val();//日期范围
+        var target = object.attr("data-url");
+        var listtype = object.attr("data-type");
+        var chartsData = '';
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: {'listtype': listtype, 'rangedate': rangedate},
+            dataType: 'json',
+            beforeSend: function () {
+                layer.msg('加载数据',
+                    {
+                        time: 1000,
+                        icon: 16,
+                        shade: 0.2
+                    }
+                );
+            },
+            success: function (jsonData) {
+                chartsData = null2zero(jsonData);
+
+                // 基于准备好的dom，初始化echarts实例
+                var id = "workbench-" + listtype;
+                var type = 'bar';
+                loadChart(id, chartsData, type);
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                layer.msg('数据加载失败', {
+                    icon: 5,
+                    shade: 0.01
+                });
+            }
+        });
+    }
+
+    //统计图模板加载
+    function loadChart(id, chartsData, type) {
+        var myChart = echarts.init(document.getElementById(id));
+        switch (type) {
+            case 'bar':
+                option = {
+                    title: {
+                        text: chartsData.title.text
+                    },
+                    legend: {
+                        data: chartsData.legend,
+                    },
+                    // color: ['#ffdf25', '#36a9ce', '#d0e17d'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '0%',
+                        right: '0%',
+                        bottom: '10%',
+                        top: '30%',
+                        containLabel: true
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {show: false},
+                            data: chartsData.xaxis
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: chartsData.series
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+                break;
+            //饼状图
+            case 'pie':
+                option = {
+                    title: {
+                        text: chartsData.title.text,
+                        subtext: chartsData.title.subtext,
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        top: '50'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            // name: 'Access From',
+                            type: 'pie',
+                            radius: '50%',
+                            data: chartsData.series.data,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+                break;
+        }//end switch
+    }
+
+
+</script>

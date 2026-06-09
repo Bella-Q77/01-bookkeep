@@ -1,0 +1,199 @@
+<audio id='audioPlay' src='' hidden='true' muted="true"></audio>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //顶部菜单栏目
+        $(".navbar-module a").click(function () {
+            $(this).addClass("on");
+            $(this).siblings().removeClass('on');
+        });
+
+        //默认设置当前加载地址
+        var iframeUrl = localStorage.getItem('iframeUrl');
+        if (typeof (iframeUrl) != "undefined" && iframeUrl != null) {
+        } else {
+            iframeUrl = "{:url('Index/main')}";
+        }
+        //阻止F5刷新
+        document.onkeypress = function (e) {
+            if (e.keyCode == 116) {
+                e.preventDefault(); //组织默认刷新
+                iframe.src = iframeUrl;
+            }
+        }
+        //刷新时设置当前点击页面数据
+        if (typeof (iframeUrl) != "undefined") {
+            that = $("a[href='" + iframeUrl + "']");
+            //that.parent('li').addClass('active');
+            that.parents('ul.nav').addClass('in');
+            that.parents('ul.nav').parent('li').addClass('active');
+            $('#J_iframe').attr('src', iframeUrl);//重新设置获取的url，实现刷新显示当前页面
+        }
+
+        //保存点击=>记录当前链接地址
+        $(".J_menuItem").on('click', function () {
+            var itemUrl = $(this).attr('href');
+            localStorage.setItem('iframeUrl', itemUrl);
+            $(".J_menuItem").removeClass('active')
+            $(this).addClass('active');
+        });
+
+        //点击任何事件开启语音提醒
+        document.body.addEventListener('mousedown', function () {
+            var audio = document.getElementById("audioPlay");
+            audio.muted = false;
+            //audio.play();
+            log('取消静音效果')
+        }, false);
+
+        $(".qrcode-bind-weixin").click(function () {
+            bind_scene_qrcode_create();//刷新登录二维码
+        });
+    });
+
+    //声音播放插件
+    var playSound = function () {
+        var borswer = window.navigator.userAgent.toLowerCase();
+        var num = Math.floor(Math.random() * 4) + 1;
+        var src = "__STATIC__/module/admin/img/" + num + ".wav";
+        var audio = document.getElementById("audioPlay");
+        $("audio").attr('src', src);
+        log('播放当前地址');
+        log(src);
+        audio.play();
+    }
+    //提示通知插件
+    var playNotice = function (id, title, content, url = '') {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "20000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        //点击事件
+        toastr.options.onclick = function () {
+            layer.open({
+                type: 2,
+                title: '{:lang("view notifications")}',
+                shadeClose: true,
+                fixed: false, //不固定
+                area: ['90%', '90%'],
+                content: url
+            });
+        };
+        toastr.info(content, title);
+    }
+    //提示通知插件
+    var runSysMsg = function () {
+        var target = "{:url('admin/rpc.CronJob/sys_msg_plug',array('deal_user_id'=>$sys_user_info.id))}";
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: '',
+            dataType: 'json',
+            success: function (jsonData) {
+                $(jsonData.data).each(function (index, item) {
+                    playNotice(item.id, '{:lang("system reminder")}', item.bus_name, item.bus_url);
+                });
+                if (jsonData.data.length > 0) {
+                    $(".msg-icon-my").text(jsonData.data.length);
+                    playSound();
+                    getMsgNums();
+                }
+            }
+        });
+    }
+    //提示公告插件
+    var runSysNotify = function () {
+        var target = "{:url('admin/rpc.CronJob/sys_notify_plug',array('owner_user_id'=>$sys_user_info.id,'read_state'=>0))}";
+        var detail = "{:url('admin/rpc.CronJob/sys_notify_plug')}";
+        $.ajax({
+            type: 'POST',
+            url: target,
+            data: {"status": "-1"},
+            dataType: 'json',
+            success: function (jsonData) {
+                $(jsonData.data).each(function (index, item) {
+                    playNotice(item.id, '{:lang("system announcement")}', item.name, detail + '?id=' + item.id);
+                });
+                if (jsonData.data.length > 0) {
+                    $(".msg-icon-noti").text(jsonData.data.length);
+
+                    playSound();
+                    getMsgNums();
+                }
+            }
+        });
+    }
+    function getMsgNums() {
+        var my = $(".msg-icon-my").text();
+        var noti = $(".msg-icon-noti").text();
+        var nums = Number(my) + Number(noti);
+        $(".msg-icon-nums").text(nums);
+    }
+    //获取登录的二维码
+    function bind_scene_qrcode_create() {
+        var target = "{:url('admin/Login/bind_scene_qrcode_create')}";
+        console.log(target);
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: '',
+            dataType: "json",
+            success: function (rtnJsonData) {
+                if (rtnJsonData.code != '1') {
+                    layer.msg(rtnJsonData.msg, {icon: 2, time: 2000, shade: [0.5, '#000', true]}, function () {
+                        // window.location.reload();
+                    });
+                    return;
+                }
+                var html = '<img src="' + rtnJsonData.qrcode_url + '" data-id="' + rtnJsonData.scene + '" style="width:98%;height:98%;">';
+                layer.open({
+                    type: 1,
+                    title: '微信二维码绑定',
+                    area: ['400px', '400px'],
+                    content: html,
+                })
+            },
+            complete: function () { //执行完之后执行
+                time1 = window.setInterval("bind_scene_qrcode_chk()", 5000);
+            },
+        });//end ajax post
+    }
+
+    //检查登录二维码
+    function bind_scene_qrcode_chk() {
+        var target = "{:url('admin/Login/bind_scene_qrcode_chk')}";
+        console.log(target);
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: '',
+            dataType: "json",
+            success: function (rtnJsonData) {
+                if (rtnJsonData.code == '1') {
+                    layer.msg(rtnJsonData.msg, {icon: 1, time: 2000, shade: [0.5, '#000', true]}, function () {
+                        window.location.reload();
+                    });
+                }
+            },
+            complete: function () { //执行完之后执行
+            },
+        });//end ajax post
+    }
+
+    //setInterval("func()", 60000);
+    setInterval("runSysNotify()", 1000 * 60 * 5);
+    setInterval("runSysMsg()", 1000 * 60 * 10);
+    runSysNotify();
+    runSysMsg();
+</script>

@@ -1,0 +1,123 @@
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="ibox-tab">
+                        <a class='ajax-goto {if condition="$listtype eq 'selfson' "}  on {/if}'  data-url="{:url('CstComment/show',array('listtype'=>'selfson'))}">{$page_title|default=''}</a>
+                        <a class="ajax-goto {if condition="$listtype eq 'self' "}  on {/if}"  data-url="{:url('CstComment/show',array('listtype'=>'self'))}">{:lang('我的跟进')}</a>
+                        <a class="ajax-goto {if condition="$listtype eq 'son' "}  on {/if}"  data-url="{:url('CstComment/show',array('listtype'=>'son'))}">{:lang('下属跟进')}</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="listtype" value="{$listtype}">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <input type="text" name="link_rangedate" class="form-control w50 daterange-btn" placeholder="选择最近联系时间">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="next_rangedate" class="form-control w50 daterange-btn" placeholder="选择下次跟进时间">
+                                </div>
+                                <div class="input-group text-left">
+                                    <select  name="salemode" class="chosen-select chosen-select-typetag" style="width: 200px;">
+                                        <option value="">{:lang('跟进方式')}</option>
+                                        {volist name='dict.salemode' id='vo'}
+                                        <option value="{$vo['name']}">{$vo['name']}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="input-group text-left">
+                                    <select  name="salestage" class="chosen-select chosen-select-typetag" style="width: 200px;">
+                                        <option value="">{:lang('当前阶段')}</option>
+                                        {volist name='dict.salestage' id='vo'}
+                                        <option value="{$vo['name']}">{$vo['name']}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('搜索')}</button></span>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-warning ajaxSearchForm resetForm"><i class="fa fa-recycle"></i> {:lang('重置')}</button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <lqf_link><a class="btn btn-info ajax-open"  data-url="{:url('CstComment/add')}"><i class="fa fa-plus"></i> {:lang('添加')}</a></lqf_link>
+                            <lqf_link><a  class="btn btn-default btn-outline ajax-goto" target-form="form-inline" data-url="{:url('CstComment/download')}"><i class="fa fa-download"></i>{:lang('导出')}</a></lqf_link>
+                        </div>
+                        <div class="col-sm-2 text-right">
+                            <a href="javascript:void(0);" class="btn btn-default btn-outline btn-field-set" data-id="{$page_title|default=''}"> <i class="fa fa-columns"></i> {:lang('列')}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('CstComment/show_json')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="140" orderField="link_time" class="sort-filed"><span>{:lang('联系时间')}</span></th>
+                            <th width="80"><span>{:lang('跟进')}</span></th>
+                            <th width="120"><span>{:lang('客户名称')}</span></th>
+                            <th width="150"><span>{:lang('沟通内容')}</span></th>
+                            <th width="140" orderField="by_next" class="sort-filed"><span>{:lang('下次跟进')}</span></th>
+                            <th width="100" orderField="by_salestage" class="sort-filed"><span>{:lang('当前阶段')}</span></th>
+                            <th width="100"><span>{:lang('跟进人员')}</span></th>
+                            <th width="80">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+        visible='';
+        if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['link_time']%></td>
+        <td><%=data[i]['salemode']%></td>
+        <td>
+            <a class="ajax-open" data-url="{:url('CstCustomer/detail')}"  data-ids="{'id':'<%=data[i]['customer_id']%>'}" data-title="详细">
+            <%=data[i]['customer_name']%>
+            </a>
+        </td>
+        <td><%=data[i]['link_body']%></td>
+        <td><%=data[i]['next_time']%></td>
+        <td><%=data[i]['salestage']%></td>
+        <td><%=data[i]['create_user_name']%></td>
+        <td>
+            <lqf_link><a class="ajax-open" data-url="{:url('CstComment/edit')}"  data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('CstComment/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

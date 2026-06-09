@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我的广告_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/MemberAdv/show')}" class="tit">购买广告</a></span>
+                <span><a href="{:url('portalmember/MemberAdvDis/show')}" class="tit on">我的广告</a></span>
+                <span><a href="{:url('portalmember/MemberOrder/show')}" class="tit"> 支付明细</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        <p>1、待支付，表示已经预约申请了广告位，但还未支付广告费用</p>
+                        <p>2、待审核，表示已经支付广告费用，等待管理管理的审核</p>
+                        <p>3、待上架，表示管理员审核通过，因广告位有其它商家广告还未到期，排序等待广告上架</p>
+                        <p>4、展示中，表示广告已经在相应的广告位置展示</p>
+                        <p>5、已到期，表示购买广告位时间已经结束，投放广告将被下架</p>
+                    </div>
+                </div>
+                <div class="base-info-content">
+                    <div class="tablelist order clearfix">
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="row tit">
+                                    <div class="col-10">{$vo.create_time} <span class="h3">广告名称：{$vo.name}</span> </div>
+                                    <div class="col-2 text-right">
+                                        <a href="{:url('portalmember/MemberAdvDis/del',array('id'=>$vo.id))}" class="btn btn-del ajax-get">删除</a>
+                                    </div>
+                                </div>
+                                <div class="row txt">
+                                    <div class="col-4">
+                                        <p>{$vo.title}</p>
+                                        <p>{$vo.links}</p>
+                                    </div>
+                                    <div class="col-3">购买周期：{$vo.period}天<br><p>{$vo.start_date} 到 {$vo.stop_date}</p> </div>
+                                    <div class="col-2"><span>支付总额：￥{$vo.money}元</span> </div>
+                                    <div class="col-1 text-center"><span>{$vo.status_info.html}</span> </div>
+                                    <div class="col-2 text-center">
+                                        {if condition="$vo.status eq '0'"}
+                                        <a href="{:url('portalmember/memberOrder/pay',array('id'=>$vo.order_id))}" class="btn btn-buy">去支付</a>
+                                        {/if}
+                                    </div>
+                                </div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>购买说明</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>1. 积分充值比率：1元充值1个积分。0.01支付仅供测试用，不增加积分</li>
+                    <li>2. 仅限1的整数倍充值，小数点后面的金额无法充值。</li>
+                    <li>3. 充值积分无法退还，建议小额充值，消费完再续充。</li>
+                    <li>4. 每个账号每24小时最多可充值5次。</li>
+                    <li>5. 目前仅支持【微信】在线充值。</li>
+                    <li>6. 点击“购买”并确定后，即表示您已阅读并同意以上条款。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

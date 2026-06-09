@@ -1,0 +1,73 @@
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="gid" value="{$gid}">
+                            <div class="col-sm-3 m-b-xs">
+                                <a class="btn btn-default btn-history" ><i class="fa fa-history"></i> 返回</a>
+                                <lqf_link><a  class="btn btn-default btn-outline ajax-goto export"  target-form="form-inline" data-url="{:url('Guestbook/ext_list_down')}"><i class="fa fa-download"></i>导出</a></lqf_link>
+                            </div>
+                            <div class="col-sm-9 m-b-xs text-right">
+                                <div class="input-group">留言时间</div>
+                                <div class="input-group">
+                                    <input type="text" name="bdate" class="form-control w50 datepicker" placeholder="选择开始时间">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="edate" class="form-control w50 datepicker" placeholder="选择结束时间">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> 搜索</button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Guestbook/ext_list')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="50"><span>ID</span></th>
+                            <th width="120"><span>手机</span></th>
+                            <th><span>内容</span></td>
+                            <th width="300">回复</th>
+                            <th width="150">时间</th>
+                            <th width="120" class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><%=data[i]['mobile']%></td>
+        <td><%:=data[i]['extcontent']%></td>
+        <td><%:=data[i]['reply']%></td>
+        <td><%=data[i]['create_time']%></td>
+        <td class="text-center">
+                <lqf_link><a class="ajax-open" data-url="{:url('Guestbook/ext_reply')}"  data-ids="{'id':'<%=data[i]['id']%>','gid':'<%=data[i]['gid']%>'}" data-title="回复">回复</a></lqf_link>
+                <lqf_link><a class="ajax-del confirm" data-url="{:url('Guestbook/ext_del')}" data-ids="{'id':'<%=data[i]['id']%>','gid':'<%=data[i]['gid']%>'}">删除</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);//页面加载时初始化分页
+    });
+</script>

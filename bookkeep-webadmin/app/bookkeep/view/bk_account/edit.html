@@ -1,0 +1,71 @@
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('BkAccount/edit')}">
+        <input type="hidden" name="id" value="{$info.id|default='0'}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户名称')}</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text" value="{$info.name|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户类型')}</label>
+            <div class="col-sm-10">
+                <select name="account_type" class="form-control">
+                    <option value="bank" {eq name="info.account_type" value="bank"} selected{/eq}>{:lang('银行账户')}</option>
+                    <option value="cash" {eq name="info.account_type" value="cash"} selected{/eq}>{:lang('现金账户')}</option>
+                    <option value="credit" {eq name="info.account_type" value="credit"} selected{/eq}>{:lang('信用账户')}</option>
+                    <option value="virtual" {eq name="info.account_type" value="virtual"} selected{/eq}>{:lang('虚拟账户')}</option>
+                </select>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户余额')}</label>
+            <div class="col-sm-10">
+                <input name="balance" class="form-control" type="text" placeholder="" value="{$info.balance|default='0.00'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('币种')}</label>
+            <div class="col-sm-10">
+                <input name="currency" class="form-control" type="text" placeholder="" value="{$info.currency|default='CNY'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('开户银行')}</label>
+            <div class="col-sm-10">
+                <input name="bank_name" class="form-control" type="text" placeholder="" value="{$info.bank_name|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('银行卡号')}</label>
+            <div class="col-sm-10">
+                <input name="bank_card_no" class="form-control" type="text" placeholder="" value="{$info.bank_card_no|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('排序')}</label>
+            <div class="col-sm-10">
+                <input name="sort" class="form-control" type="text" placeholder="" value="{$info.sort|default='0'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('备注说明')}</label>
+            <div class="col-sm-10">
+                <textarea name="remark" class="form-control" rows="3">{$info.remark|default=''}</textarea>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

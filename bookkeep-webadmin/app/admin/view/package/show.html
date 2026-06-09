@@ -1,0 +1,79 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-info ajax-open"  data-url="{:url('Package/addsys')}"><i class="fa fa-plus"></i>{:lang('系统打包')}</a>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <div class="row">
+                                <form id="pagerForm" method="post" class="form-inline searchForm">
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('search')}</button></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-btn"> <button type="button" class="btn btn-warning ajaxSearchForm resetForm"><i class="fa fa-recycle"></i> {:lang('resetting')}</button></span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Package/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="80">{:lang('模块标题')}</th>
+                            <th width="80">{:lang('module name')}</th>
+                            <th width="200">{:lang('模块描述')}</th>
+                            <th width="80">{:lang('服务商')}</th>
+                            <th width="60">{:lang('version')}</th>
+                            <th width="50">{:lang('operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i <data.length;i++) {
+    visible='';
+    if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['title']%></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['intro']%></td>
+        <td><%=data[i]['author']%></td>
+        <td><%=data[i]['version']%></td>
+        <td>
+            <lqf_link><a  class="ajax-open" data-url="{:url('Package/addpack')}"  data-ids="{'id':'<%=data[i]['id']%>'}" >{:lang('打包')}</a> </lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

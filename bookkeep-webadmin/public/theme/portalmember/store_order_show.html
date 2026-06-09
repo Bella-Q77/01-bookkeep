@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我购买的插件_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020012804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/StoreOrder/show')}" class="tit on">我购买的插件</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="lable-group-info">
+                        <a href="{:url('portalmember/StoreOrder/show',array('class'=>'nopay'))}" class="{notempty name='class'} {if condition="$class eq 'nopay' "} on {/if} {/notempty}"  >未支付</a>
+                        <a href="{:url('portalmember/StoreOrder/show',array('class'=>'pay'))}"  class="{notempty name='class'} {if condition="$class eq 'pay' "} on {/if} {/notempty}" >已支付</a>
+                    </div>
+                </div>
+                <div class="base-info-content">
+
+                    <div class="tablelist clearfix">
+                        <div class="thead">
+                            <div class="row">
+                                <div class="col-3">订单号</div>
+                                <div class="col-2">插件名称</div>
+                                <div class="col-1">支付金额</div>
+                                <div class="col-3 text-center">免费升级截止时间</div>
+                                <div class="col-1 text-center">状态</div>
+                                <div class="col-2 text-right">操作</div>
+                            </div>
+                        </div>
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="col-3">{$vo.order_code}</div>
+                                <div class="col-2"><a href="{:url('index/Store/view',array('sid'=>$vo.store_id))}" class="blue">{$vo.name}</a></div>
+                                <div class="col-1">￥{$vo.order_amount}元</div>
+                                <div class="col-3 text-center">{$vo.create_time|strtotime|date='Y-m-d',###} 到 {$vo.expire_time|strtotime|date='Y-m-d',###}</div>
+                                <div class="col-1 text-center">{$vo.payment_info.html}</div>
+                                <div class="col-2 text-right">
+                                    {if condition="$vo.payment_status eq '0'"}
+                                    <a href="{:url('portalmember/StoreOrder/del',array('id'=>$vo.id))}" class="btn btn-del ajax-get">删除</a>
+                                    {/if}
+
+                                    {if condition="$vo.payment_status eq '0'"}
+                                    <a href="{:url('portalmember/StoreOrder/pay',array('id'=>$vo.id))}"class="btn btn-buy">去支付</a>
+                                    {/if}
+                                </div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+
+
+                    <!--<div class="tablelist order clearfix">
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+
+                                <div class="row tit">
+                                    <div class="col-10">订单号：{$vo.order_code}</div>
+                                    <div class="col-2 text-right">
+                                        {if condition="$vo.payment_status eq '0'"}
+                                        <a href="{:url('portalmember/StoreOrder/del',array('id'=>$vo.id))}" class="btn btn-del ajax-get">删除</a>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="row txt">
+                                    <div class="col-3">
+                                        <a href="{:url('index/Store/view',array('sid'=>$vo.store_id))}" class="blue">{$vo.name}</a>
+                                    </div>
+                                    <div class="col-4">
+                                        <p>购买时间：{$vo.create_time}</p>
+                                        <p>到期时间：{$vo.expire_time}</p>
+
+                                    </div>
+                                    <div class="col-2"><span>支付总额：￥{$vo.order_amount}元</span> </div>
+                                    <div class="col-1 text-center"><span>{$vo.payment_info.html}</span> </div>
+                                    <div class="col-2 text-center">
+                                        {if condition="$vo.payment_status eq '0'"}
+                                        <a href="{:url('portalmember/StoreOrder/pay',array('id'=>$vo.id))}"class="btn btn-buy">去支付</a>
+                                        {/if}
+                                    </div>
+                                </div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>-->
+                    <div class="pagelist">
+                        {$pages}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>温馨提示:</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>1.在你使用07FLY插件前请仔细阅读《07FLY应用插件授权协议》。</li>
+                    <li>2.07FLY付费插件禁止分享、转售或复制给他人使用，如有发现保留追究法律责任的权利。</li>
+                    <li>3.标准授权仅支持自营项目使用，禁止用于外包，高级授权支持自营项目、外包项目使用，你可以在授权有效期内补差价将标准授权升级到高级授权。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>
