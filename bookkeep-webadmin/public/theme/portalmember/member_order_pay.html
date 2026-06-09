@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>订单支付_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 订单详细</a></span>
+                <span class="fr"><a href="#" class="blue btn-history">返回</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/MemberOrder/pay')}" method="post" autocomplete="off">
+                        <input type="hidden" name="id" value="{$info.id}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>订单编号：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {$info.order_code}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>支付金额：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group yellow">
+                                    {$info.order_amount}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>购买产品：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {$info.name}
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">微信支付</button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span> 付款方式</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>转账请务必在留言/备注栏填：</li>
+                    <li class="red"> 培训达人 + {$member.username} + 订单</li>
+                    <li> (不然无法核实)</li>
+                    <li>工作时间4小时内完成核实，其它时间24小时内完成核实。</li>
+                    </li>
+                    <li>其它客服系统将陆续支持，若您使用的客服系统不在此列表中，请向客服QQ建议</li>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span class="blue">转帐支付</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info help-box">
+                    <li>
+                        <p class="blue">1、支付宝(收款人：18030402705)</p>
+                        <p class="blue">2、微信(收款人：18030402705)</p>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+</body>
+</html>

@@ -1,0 +1,167 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="ibox">
+                <div class="ibox-title"><h5>{$page_title}</h5>
+                    <div class="ibox-tools"><a class="refresh-tree">{:lang('refresh')}</a></div>
+                </div>
+                <div class="ibox-content no-padding right_centent" style="">
+                    <div id="left-tree" data-url="{:url('SysMenu/get_list_tree')}"> </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">{$page_title}</div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="pid" value="">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn btn-warning refresh-tree"> <i class="fa  fa-reply-all"> </i>{:lang('return')}</a>
+                                <lqf_link>
+                                    <a class="btn btn-info ajax-open add-btn" data-url="{:url('SysMenu/add')}" data-title="用户">
+                                        <i class="fa fa-plus"></i>{:lang('add')}
+                                    </a>
+                                </lqf_link>
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">{:lang('bulk operation')}<span
+                                            class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <lqf_link><li><a data-url="{:url('SysMenu/move')}" class="ajax-open-more">{:lang('batch move')}</a></li></lqf_link>
+                                        <lqf_link><li><a data-url="{:url('SysMenu/copy')}" class="ajax-open-more">{:lang('bulk copy')}</a></li></lqf_link>
+                                        <li class="divider"></li>
+                                        <lqf_link><li><a data-url="{:url('SysMenu/del')}" class="ajax-get-more text-danger" >{:lang('delete')}</a></li></lqf_link>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> {:lang('search')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('SysMenu/show_json')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="60">{:lang('number')}</th>
+                            <th width="80">{:lang('menu name')}</th>
+                            <th width="80">{:lang('menu icons')}</th>
+                            <th width="150">{:lang('menu url')}</th>
+                            <th width="100">{:lang('module name')}</th>
+                            <th width="80">{:lang('sort')}</th>
+                            <th width="60" class="text-center">{:lang('menu')}</th>
+                            <th width="60" class="text-center">{:lang('enable')}</th>
+                            <th width="120" class="text-center">{:lang('operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="8" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible='';if(data[i]['visible']=='1') visible='checked';
+    is_menu='';if(data[i]['is_menu']=='1') is_menu='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td>
+            <input type="text" name="name"  value="<%=data[i]['name']%>" class="form-control ajax-field" data-url="{:url('SysMenu/set_field',array('name'=>'name'))}" data-id="<%=data[i]['id']%>" size="10">
+        </td>
+        <td>
+            <input type="text" name="icon"  value="<%=data[i]['icon']%>" class="form-control ajax-field" data-url="{:url('SysMenu/set_field',array('name'=>'icon'))}" data-id="<%=data[i]['id']%>" size="10">
+        </td>
+        <td>
+            <input type="text" name="url" value="<%=data[i]['url']%>" class="form-control ajax-field" data-url="{:url('SysMenu/set_field',array('name'=>'url'))}" data-id="<%=data[i]['id']%>" size="10">
+        </td>
+        </td>
+        <td>
+            <input type="text" name="module" value="<%=data[i]['module']%>" class="form-control ajax-field" data-url="{:url('SysMenu/set_field',array('name'=>'module'))}" data-id="<%=data[i]['id']%>" size="10">
+        </td>
+        <td><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control ajax-sort" data-url="{:url('SysMenu/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5"></td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"   data-url="{:url('SysMenu/set_visible',array('name'=>'is_menu'))}"  data-id="<%=data[i]['id']%>" <%=is_menu%> >
+        </td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"   data-url="{:url('SysMenu/set_visible',array('name'=>'visible'))}"  data-id="<%=data[i]['id']%>" <%=visible%> >
+        </td>
+        <td class="text-center">
+            <a href="javascript:void(0)" class="get-son-list" data-id="<%=data[i]['id']%>">{:lang('lower level')}</a>
+            <lqf_link><a class="ajax-get" data-url="{:url('SysMenu/copy_one')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('copy')}</a></lqf_link>
+            <lqf_link><a class="ajax-open" data-url="{:url('SysMenu/edit')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('modify')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('SysMenu/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('delete')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //BindEvent();
+        window.onload=onLoad();
+        function onLoad() {
+            $('.searchForm').find("input[name='pid']").val('');
+            var target = $('#left-tree').attr('data-url');
+            $.get(target).success(function (jsonData) {
+                $('#left-tree').treeview({
+                    data: jsonData,
+                    levels: 1,
+                    showTags: false,
+                    showCheckbox: false,
+                    multiSelect: false,
+                    showBorder: false,
+                    onNodeSelected: function (event, node) {
+
+                        $('.searchForm').find("input[name='pid']").val(node.id);
+                        $('.add-btn').attr('data-id',node.id);
+
+                        $('.ajaxSearchForm').not('.resetForm').first().click();
+                    }
+                });
+            }, "json");
+            turnPage(1);
+        }
+
+        $("body").on("click", ".refresh-tree", function () {
+            onLoad();
+            turnPage(1);
+        });
+        $("body").on("click", ".get-son-list", function () {
+            var pid= $(this).attr('data-id');
+            $('.searchForm').find("input[name='pid']").val(pid);
+            $('.add-btn').attr('data-id',pid);
+
+            $('.ajaxSearchForm').not('.resetForm').first().click();
+        });
+        $(window).resize(function () {
+            setCenterHeight();
+        });
+        setCenterHeight();
+        function setCenterHeight() {
+            var height = $(window).height();
+            var centerHight = height - 240;
+            $(".right_centent").height(centerHight).css("overflow", "auto");
+        }
+    });
+</script>

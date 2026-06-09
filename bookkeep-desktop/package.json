@@ -1,0 +1,68 @@
+{
+  "name": "bookkeep-desktop",
+  "version": "1.0.0",
+  "description": "科科记账 - 桌面版记账应用",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win"
+  },
+  "keywords": [
+    "bookkeeping",
+    "accounting",
+    "electron"
+  ],
+  "author": "07FLY",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.bookkeep.desktop",
+    "productName": "科科记账",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/*.d.ts",
+      "!node_modules/.bin",
+      "!.editorconfig",
+      "!.gitattributes",
+      "!.github",
+      "!.gitignore",
+      "!.npmignore",
+      "!*.iml",
+      "!npm-debug.log",
+      "!yarn-debug.log",
+      "!yarn-error.log",
+      "!yarn.lock"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "科科记账"
+    }
+  }
+}

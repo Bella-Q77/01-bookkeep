@@ -1,0 +1,223 @@
+<script src="__STATIC__/module/admin/js/plugins/echarts/echarts.js"></script>
+<script>
+    // $(document).ready(function () {
+    //     autoFillStatDate();
+    //     $('form input[name="period_type"]').on('change', function () {
+    //         autoFillStatDate();
+    //     });
+    // });
+
+    // 根据选择的周期类型自动填充日期范围
+    // 根据选择的周期类型自动填充日期范围
+    function autoFillStatDate() {
+        var periodType = $('form input[name="period_type"]:checked').val();
+        var dateInput = $('form input[name="period_date"]');
+
+        // 如果没有选中的周期类型，使用默认值
+        if (!periodType) {
+            periodType = 'month'; // 默认使用月份
+        }
+
+        // 完全销毁之前的datepicker实例
+        try {
+            if (dateInput.data('datepicker')) {
+                dateInput.datepicker('destroy');
+            }
+            // 确保完全清除datepicker相关数据
+            dateInput.removeData('datepicker');
+            dateInput.off('.datepicker');
+
+            // 完全销毁daterangepicker实例
+            dateInput.data('daterangepicker').remove();
+
+        } catch (e) {
+           // console.log('销毁datepicker时出错:', e);
+        }
+
+        var datePickerConfig = {
+            language: "zh-CN",
+            autoclose: true,
+            clearBtn: true,
+            todayBtn: "linked",
+            todayHighlight: true,
+            format: "yyyy-mm-dd",
+            startView: 0,
+            minViewMode: 0,
+            maxViewMode: 2
+        };
+
+        switch (periodType) {
+            case 'week':
+                datePickerConfig.format = "yyyy-mm-dd";
+                datePickerConfig.startView = 0;
+                datePickerConfig.minViewMode = 0;
+                break;
+            case 'month':
+                datePickerConfig.format = "yyyy-mm";
+                datePickerConfig.startView = 1;
+                datePickerConfig.minViewMode = 1;
+                break;
+            case 'quarter':
+                datePickerConfig.format = "yyyy-mm";
+                datePickerConfig.startView = 1;
+                datePickerConfig.minViewMode = 1;
+                break;
+            case 'year':
+                datePickerConfig.format = "yyyy";
+                datePickerConfig.startView = 2;
+                datePickerConfig.minViewMode = 2;
+                break;
+            case 'diy':
+                daterangeinitPrev(dateInput);
+                break;
+        }
+        // 延迟初始化datepicker，确保DOM完全更新
+        setTimeout(function () {
+
+            dateInput.datepicker(datePickerConfig);
+
+            // 根据周期类型设置默认值
+            var now = new Date();
+            var defaultValue = '';
+            switch (periodType) {
+                case 'week':
+                    // 设置本周默认值，可以使用当前日期
+                    defaultValue = formatStatDate(now);
+                    break;
+                case 'month':
+                    // 设置本月默认值
+                    defaultValue = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0');
+                    break;
+                case 'quarter':
+                    // 设置本季度默认值（使用当前月份）
+                    defaultValue = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0');
+                    break;
+                case 'year':
+                    // 设置本年默认值
+                    defaultValue = now.getFullYear().toString();
+                case 'diy':
+                    break;
+            }
+            // 更新日期选择器的值
+            dateInput.datepicker('update', defaultValue);
+        }, 1);
+
+    }
+
+    // 日期选择器初始化
+    function daterangeinitPrev(object) {
+        object.daterangepicker({
+                "showDropdowns": true,
+                "linkedCalendars": false,
+                "autoUpdateInput": false,
+                ranges: {
+                    '今天': [moment(), moment()],
+                    '昨天': [moment().subtract(1, 'days'), moment().subtract(2, 'days')],
+                    '最近七天': [moment().subtract(6, 'days'), moment()],
+                    '最近30天': [moment().subtract(29, 'days'), moment()],
+                    '最近90天': [moment().subtract(89, 'days'), moment()],
+                    '本月': [moment().startOf('month'), moment().endOf('month')],
+                    '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    '今年': [moment().startOf('year'), moment().endOf('year')],
+                },
+                "locale": {
+                    cancelLabel: "清除",
+                },
+                startDate: moment(),
+                endDate: moment()
+            },
+            function (start, end, label) {
+                //label:通过它来知道用户选择的是什么，传给后台进行相应的展示
+                console.log(label)
+                if (label == '今天') {
+                    object.val(start.format('YYYY/MM/DD'));
+                } else if (label == '昨天') {
+                    object.val(start.format('YYYY/MM/DD'));
+                    //object.val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                } else {
+                    if (start != null && end != null) {
+                        object.val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                    } else {
+                        object.val(start.format('YYYY/MM/DD'));
+                    }
+                }
+            }
+        );
+        //清空日期
+        object.on('cancel.daterangepicker', function (ev, picker) {
+            object.val('');
+        });
+    }
+
+    // 格式化日期为 yyyy-mm-dd 格式
+    function formatStatDate(date) {
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+        var day = date.getDate().toString().padStart(2, '0');
+        return year + '/' + month + '/' + day;
+    }
+
+    // 添加下载为CSV格式的函数
+    function downloadTableAsCSV(tableId) {
+        var csv = [];
+        var rows = document.querySelectorAll("#" + tableId + " tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll("td, th");
+
+            for (var j = 0; j < cols.length; j++) {
+                // 清理数据中的逗号和换行符
+                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, "").replace(/(\s+)/gm, " ");
+                if (data.indexOf(',') !== -1) {
+                    data = '"' + data + '"';
+                }
+                row.push(data);
+            }
+
+            csv.push(row.join(","));
+        }
+
+        var csvString = csv.join("\n");
+        var blob = new Blob(["\uFEFF" + csvString], {type: "text/csv;charset=utf-8;"});
+        var link = document.createElement("a");
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "收支趋势数据.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // 添加下载为Excel格式的函数（实际为CSV格式，但文件扩展名为.xls）
+    function downloadTableAsExcel(tableId) {
+        var csv = [];
+        var rows = document.querySelectorAll("#" + tableId + " tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll("td, th");
+
+            for (var j = 0; j < cols.length; j++) {
+                // 清理数据中的逗号和换行符
+                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, "").replace(/(\s+)/gm, " ");
+                if (data.indexOf(',') !== -1) {
+                    data = '"' + data + '"';
+                }
+                row.push(data);
+            }
+
+            csv.push(row.join(","));
+        }
+
+        var csvString = csv.join("\n");
+        var blob = new Blob(["\uFEFF" + csvString], {type: "application/vnd.ms-excel;charset=utf-8;"});
+        var link = document.createElement("a");
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "收支趋势数据.xls");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>

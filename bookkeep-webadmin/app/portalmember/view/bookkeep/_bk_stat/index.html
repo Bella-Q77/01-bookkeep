@@ -1,0 +1,577 @@
+<div class="wrapper wrapper-content ">
+    <div class="ibox-content">
+        <div class="row">
+            <form id="pagerForm" method="post" class="form-inline">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div data-toggle="buttons" class="btn-group">
+                            <label class="btn btn-sm btn-info btn-outline active">
+                                <input type="radio" value="month" name="period_type" checked>{:lang('本月')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="year" name="period_type">{:lang('本年')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="diy" name="period_type">{:lang('自定义')}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="period_date"
+                               class="form-control stat-workbench-date"
+                               value="{$rangedate|default=''}">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        <button class="btn btn-primary stat-workbench-btn"> <i class="fa fa-search"></i> {:lang('查询')}</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--本月统计-->
+    <div class="row workbench-ajax statmonth"
+         data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'statmonth'))}" data-type="statmonth">
+        <div class="col-sm-4">
+            <div class="widget style1 navy-bg stat_month_income">
+                <div class="row vertical-align">
+                    <div class="col-xs-3">
+                        <i class="fa fa-cubes fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="title"> 本月收入 </span>
+                        <h2 class="font-bold">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="widget style1 yellow-bg stat_month_expense">
+                <div class="row vertical-align">
+                    <div class="col-xs-3">
+                        <i class="fa fa-cube fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="title"> 本月支出 </span>
+                        <h2 class="font-bold">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="widget style1 lazur-bg stat_month_balance">
+                <div class="row vertical-align">
+                    <div class="col-xs-3">
+                        <i class="fa fa-retweet fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="title"> 本月结余 </span>
+                        <h2 class="font-bold">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--预算使用-->
+    <div class="row workbench-ajax budgetuse"
+         data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'budgetuse'))}" data-type="budgetuse">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="title">预算概览</h4>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <a href="{:url('bookkeep.BkBudget/show')}" class="ajax-open btn btn-info btn-outline btn-xs">{:lang('预算管理')}</a>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div class="col-sm-12">
+                        <h2 class="m-t-xs"><span class="budget-amount"></span></h2>
+                        <div class="progress progress-striped">
+                            <div style="width: 0%;" class="progress-bar "></div>
+                            <div class="progress-text">0%</div>
+                        </div>
+                        <div class="row m-t-md">
+                            <div class="col-sm-6">
+                                <small class="stats-label">{:lang('已使用')}: <span
+                                        class="budget-used-amount"></span></small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <small class="stats-label">{:lang('剩余')}: <span
+                                        class="budget-remain-amount"></span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--收支趋势-->
+    <div class="row m-t-md workbench-ajax incomeexpensetrend"
+         data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'incomeexpensetrend'))}"
+         data-type="incomeexpensetrend" data-gid="incomeexpensetrend">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>收支趋势</h4>
+                    </div>
+                </div>
+                <div class="row m-t-xs">
+                    <div class="col-sm-12">
+                        <div class="ibox-content">
+                            <div id="workbench-incomeexpensetrend" data-type="line" class="statistics-box"
+                                 style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--支出分类,收入分类-->
+    <div class="row m-t-md">
+        <div class="col-sm-6">
+            <!--支出分类分析-->
+            <div class="ibox-content  workbench-ajax categoryexpense"
+                 data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'categoryexpense'))}"
+                 data-type="categoryexpense">
+                <h4>支出分类</h4>
+                <div id="workbench-categoryexpense" data-type="pie" class="statistics-box" style="height: 400px;"></div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <!--收入分类占比-->
+            <div class="ibox-content  workbench-ajax categoryincome"
+                 data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'categoryincome'))}"
+                 data-type="categoryincome">
+                <h4>收入分类</h4>
+                <div id="workbench-categoryincome" data-type="pie" class="statistics-box" style="height: 400px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!--加载数据模板-->
+{include file="bookkeep/_bk_stat/js_function"/}
+
+<script>
+    // 列表加载
+    $(document).ready(function () {
+
+        initAjaxBoxData();
+
+        // 或者直接监听 radio 变化
+        $('form input[name="period_type"]').on('change', function () {
+            autoFillStatDate();
+
+            var selectedPeriodType = $('form input[name="period_type"]:checked').val();
+            console.log('Selected period type:', selectedPeriodType);
+            initAjaxBoxData();
+        });
+
+        $("body").on("click", ".stat-workbench-btn", function (e) {
+            e.preventDefault();  // 阻止默认表单提交
+            initAjaxBoxData();
+        })
+
+        function initAjaxBoxData() {
+            getStatMonthTotal();//统计本月总资产
+            getStatBudgetData();//预算使用
+            getIncomeExpenseTrendStat();//统计收入支出趋势
+            getCategoryIncomeStat();//分类收入
+            getCategoryExpenseStat();//分类收入
+        }
+
+        // 统计本月总资产
+        function getStatMonthTotal() {
+            var object = $(".workbench-ajax.statmonth");
+            var target = object.attr("data-url");
+            var searchData = $('form').serialize();
+            $.ajax({
+                type: 'POST',
+                url: target,
+                data: searchData,
+                dataType: 'json',
+                beforeSend: function () {
+                    layer.msg('加载数据',
+                        {
+                            time: 1000,
+                            icon: 16,
+                            shade: 0.2
+                        }
+                    );
+                },
+                success: function (jsonData) {
+                    if (jsonData.code == 1) {
+                        var datalist = null2zero(jsonData.data);
+                        $.each(datalist, function (key, row) {
+                            object.find("." + key + " .title").html(row.text);
+                            object.find("." + key + " h2").html(row.cnt);
+                        })
+                    } else {
+                        layer.msg(jsonData.msg, {
+                            icon: 5,
+                            shade: 0.01
+                        });
+                    }
+
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    layer.msg('数据加载失败', {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            });
+        }
+
+        function getStatBudgetData() {
+            var object = $(".workbench-ajax.budgetuse");
+            var target = object.attr("data-url");
+            var listtype = object.attr("data-type");
+            var searchData = $('form.form-inline').serialize();
+            var chartsData = '';
+            $.ajax({
+                type: 'POST',
+                url: target,
+                data: searchData,
+                dataType: 'json',
+                beforeSend: function () {
+                    layer.msg('加载数据',
+                        {
+                            time: 1000,
+                            icon: 16,
+                            shade: 0.2
+                        }
+                    );
+                },
+                success: function (jsonData) {
+                    log('加载数据：');
+                    if (jsonData.code == 1) {
+                        var data = jsonData.data;
+                        object.find(".title").html(data.text);
+                        object.find(".budget-amount").html(data.budget_amount);
+                        object.find(".budget-used-amount").html(data.budget_used_amount);
+                        object.find(".budget-remain-amount").html(data.budget_remain_amount);
+
+                        // 直接使用返回的比例设置进度条
+                        if (data.budget_used_rate !== undefined) {
+                            var percent = parseFloat(data.budget_used_rate);
+                            //percent = Math.min(percent, 100);// 限制最大100%
+                            object.find(".progress-bar").css('width', percent + '%');
+                            object.find(".progress-text").html(percent + '%');
+
+                            // 根据进度设置颜色类
+                            var progressBarClass = 'progress-bar';
+                            if (percent <= 60) {
+                                progressBarClass += ' progress-bar-success'; // 绿色
+                            } else if (percent <= 100) {
+                                progressBarClass += ' progress-bar-warning'; // 黄色
+                            } else {
+                                progressBarClass += ' progress-bar-danger'; // 红色
+                            }
+                            object.find(".progress-bar").attr('class', progressBarClass);
+                        }
+
+                    } else {
+                        layer.msg(jsonData.msg, {
+                            icon: 5,
+                            shade: 0.01
+                        });
+                    }
+                },
+                complete: function () {
+                    // 清除加载提示
+                    layer.closeAll('dialog');
+                },
+                error: function () {
+                    layer.msg('数据加载失败', {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            });
+        }
+
+        // 统计收入支出趋势
+        function getIncomeExpenseTrendStat() {
+            var object = $(".workbench-ajax.incomeexpensetrend");
+            var target = object.attr("data-url");
+            var listtype = object.attr("data-type");
+            var searchData = $('form').serialize();
+            var chartsData = '';
+            $.ajax({
+                type: 'POST',
+                url: target,
+                data: searchData,
+                dataType: 'json',
+                beforeSend: function () {
+                    layer.msg('加载数据',
+                        {
+                            time: 1000,
+                            icon: 16,
+                            shade: 0.2
+                        }
+                    );
+                },
+                success: function (jsonData) {
+                    if (jsonData.code == 1) {
+                        chartsData = null2zero(jsonData.data);
+                        // 基于准备好的dom，初始化echarts实例
+                        var id = "workbench-" + listtype;
+                        var type = 'line';
+                        loadChart(id, chartsData, type);
+                    } else {
+                        layer.msg(jsonData.msg, {
+                            icon: 5,
+                            shade: 0.01
+                        });
+                    }
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    layer.msg('数据加载失败', {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            });
+        }
+
+        // 统计分类收入
+        function getCategoryIncomeStat() {
+            var object = $(".workbench-ajax.categoryincome");
+            var target = object.attr("data-url");
+            var listtype = object.attr("data-type");
+            var searchData = $('form').serialize();
+            var chartsData = '';
+            $.ajax({
+                type: 'POST',
+                url: target,
+                data: searchData,
+                dataType: 'json',
+                beforeSend: function () {
+                    layer.msg('加载数据',
+                        {
+                            time: 1000,
+                            icon: 16,
+                            shade: 0.2
+                        }
+                    );
+                },
+                success: function (jsonData) {
+                    if (jsonData.code == 1) {
+                        chartsData = null2zero(jsonData.data);
+                        // 基于准备好的dom，初始化echarts实例
+                        var id = "workbench-" + listtype;
+                        var type = $("#" + id).attr("data-type");
+                        loadChart(id, chartsData, type);
+                    } else {
+                        layer.msg(jsonData.msg, {
+                            icon: 5,
+                            shade: 0.01
+                        });
+                    }
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    layer.msg('数据加载失败', {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            });
+        }
+
+        // 统计分类支出
+        function getCategoryExpenseStat() {
+            var object = $(".workbench-ajax.categoryexpense");
+            var target = object.attr("data-url");
+            var listtype = object.attr("data-type");
+            var searchData = $('form').serialize();
+            var chartsData = '';
+            $.ajax({
+                type: 'POST',
+                url: target,
+                data: searchData,
+                dataType: 'json',
+                beforeSend: function () {
+                    layer.msg('加载数据',
+                        {
+                            time: 1000,
+                            icon: 16,
+                            shade: 0.2
+                        }
+                    );
+                },
+                success: function (jsonData) {
+                    if (jsonData.code == 1) {
+                        chartsData = null2zero(jsonData.data);
+                        // 基于准备好的dom，初始化echarts实例
+                        var id = "workbench-" + listtype;
+                        var type = $("#" + id).attr("data-type");
+                        loadChart(id, chartsData, type);
+                    } else {
+                        layer.msg(jsonData.msg, {
+                            icon: 5,
+                            shade: 0.01
+                        });
+                    }
+                },
+                complete: function () {
+
+                },
+                error: function () {
+                    layer.msg('数据加载失败', {
+                        icon: 5,
+                        shade: 0.01
+                    });
+                }
+            });
+        }
+
+        //统计图模板加载
+        function loadChart(id, chartsData, type) {
+            var myChart = echarts.init(document.getElementById(id));
+            switch (type) {
+                case 'line':
+                    var option = {
+                        title: {
+                            text: chartsData.title.text
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+
+                        legend: {
+                            data: chartsData.legend
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: chartsData.xaxis
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: chartsData.series
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                    break;
+                case 'bar':
+                    option = {
+                        title: {
+                            text: chartsData.title.text
+                        },
+                        legend: {
+                            data: chartsData.legend,
+                        },
+                        // color: ['#ffdf25', '#36a9ce', '#d0e17d'],
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '0%',
+                            right: '0%',
+                            bottom: '10%',
+                            top: '30%',
+                            containLabel: true
+                        },
+                        calculable: true,
+                        xAxis: [
+                            {
+                                type: 'category',
+                                axisTick: {show: false},
+                                data: chartsData.xaxis
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: chartsData.series
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                    log(option);
+                    break;
+                //饼状图
+                case 'pie':
+                    option = {
+                        title: {
+                            text: chartsData.title.text,
+                            subtext: chartsData.title.subtext,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            bottom: '50'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                mark: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        series: [
+                            {
+                                // name: 'Access From',
+                                type: 'pie',
+                                radius: '50%',
+                                data: chartsData.series.data,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    if (option && typeof option === 'object') {
+                        myChart.setOption(option);
+                    }
+                    break;
+            }//end switch
+        }
+    })
+</script>

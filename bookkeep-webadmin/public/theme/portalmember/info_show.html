@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>课程管理_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020013805" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/Info/show')}" class="tit on">课程管理</a></span>
+                <span><a href="{:url('portalmember/Info/rules')}" class="tit">审核规则</a></span>
+                <span><a href="{:url('portalmember/Info/rank')}" class="tit">排名规则</a></span>
+                <span><a href="{:url('portalmember/MemberOrder/show')}" class="tit"> 支付明细</a></span>
+                <span class="fr"><a href="{:url('portalmember/Info/add')}" class="tit yellow">+ 发布课程</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="lable-group-info">
+                        <a href="{:url('portalmember/Info/show',array('class'=>'all'))}" class="{notempty name='class'} {if condition="$class eq 'all' "} on {/if} {/notempty}" >发布中</a>
+                        <a href="{:url('portalmember/Info/show',array('class'=>'noaudit'))}" class="{notempty name='class'} {if condition="$class eq 'noaudit' "} on {/if} {/notempty}" >未审核</a>
+                        <a href="{:url('portalmember/Info/show',array('class'=>'reject'))}"  class="{notempty name='class'} {if condition="$class eq 'reject' "} on {/if} {/notempty}" >未通过</a>
+                        <a href="{:url('portalmember/Info/show',array('class'=>'istop'))}" class="{notempty name='class'} {if condition="$class eq 'istop' "} on {/if} {/notempty}"  >推广中</a>
+                        <a href="{:url('portalmember/Info/show',array('class'=>'nopay'))}" class="{notempty name='class'} {if condition="$class eq 'nopay' "} on {/if} {/notempty}" >未付款</a>
+                        <a href="{:url('portalmember/Info/show',array('class'=>'refresh'))}" class="{notempty name='class'} {if condition="$class eq 'refresh' "} on {/if} {/notempty}" >待刷新</a>
+                    </div>
+                </div>
+                <div class="base-info-content">
+                    <div class="tablelist info clearfix">
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="info-pic">
+                                    <img src=" {$vo.litpic|get_picture_url2='portalmember'}" width="180" height="120">
+                                </div>
+                                <div class="info-text">
+                                    <div class="title">
+                                        <a href="{:url('index/Info/view',array('iid'=>$vo.id))}" target="_blank"> {$vo.title}
+                                            <span class="status"> (
+                                            {if condition="$vo.status eq '0'"}
+                                            <font class="yellow">未审核</font>
+                                            {else /}
+                                            <font class="blue">已发布</font>
+                                            {/if}
+                                            )
+                                               </span>
+                                        </a>
+                                    </div>
+                                    <div class="one">
+                                        <span>分类： {$vo.type_id_name}-{$vo.type_id2_name} </span>
+                                        <span>编号：{$vo.id}</span>
+                                        <span>点击2次</span>
+                                    </div>
+                                    <div class="two">
+                                        <span class="time"> 刷新：{$vo.pubdate_time|strtotime|date='Y-m-d',###}</span>
+                                        <span class="time"> 创建：{$vo.create_time|strtotime|date='Y-m-d',###}</span>
+                                        <span class="time"> 修改：{$vo.update_time}</span>
+                                    </div>
+                                    <div class="last-line">
+                                        <a href="{:url('portalmember/Info/edit',array('id'=>$vo.id))}" class="">【修改】</a>
+                                        <a href="{:url('portalmember/Info/del',array('id'=>$vo.id))}" class="ajax-get">【删除】</a>
+                                        <a href="{:url('portalmember/Info/refresh',array('id'=>$vo.id))}" class="blue ajax-get">【刷新】</a>
+                                        <a href="{:url('portalmember/Info/istop',array('id'=>$vo.id))}"  class="red">【推广】</a>
+                                    </div>
+                                </div>
+
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>信息排名规则</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>信息查询列表排名规则，排名因素公布如下，从先到后的顺序：</li>
+                    <li>1、优先展示推广置顶信息</li>
+                    <li>2、优先展示最新当月发布的信息(202101)(一键新发功能可以将上月信息转化为当月新发布信息)</li>
+                    <li>3、优先展示有封面图的信息</li>
+                    <li>4、优先展示VIP和SVIP会员的信息，其次是实名认证会员信息。(被降权的信息排列在最后)</li>
+                    <li>5、最新刷新日期的信息（搜索框结果页采用最新发布日期）</li>
+                    <li>6、VIP会员设定的[全省发布]课程</li>
+                    <li>7、以上所有因素均相同的情况，随机排名</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

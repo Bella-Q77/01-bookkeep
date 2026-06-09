@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>品牌修改_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010806" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 图片上传</a></span>
+                <span class="fr"><a href="#" class="blue btn-history">返回</a></span>
+                <span class="help"></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="help-box">
+                        您的账号可以上传 <b class="yellow">{$member.level.upload_img}</b> 张图片,您已上传  <b class="blue">{$totals}</b> 张图片
+                    </div>
+                </div>
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/MemberPicture/add')}" method="post" autocomplete="off">
+                        <input type="hidden" name="username" value="{$member.username}">
+                        <input type="hidden" name="member_id" value="{$member.id}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>图片文件：</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {assign name="litpic" value="$info.litpic|default=''" /}
+                                    {:hook('File', ['addons_model' =>'portalmember' ,'name' => 'litpic', 'value' => $litpic, 'type' => 'imgs'])}
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">保存上传图片</button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span>图片上传说明</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>课程发布可添加 一张封面图 和 N张正文图 。</li>
+                    <li>封面图的质量将直接影响：<font class="yellow">信息审核 和 查询排名</font></li>
+                    <li>封面图硬性要求：<font class="yellow">一眼就可识别图中文字或图像要表达的含义</font></li>
+                    <li>封面图将显示在查询列表里，有封面图的会排列在无封面图的信息前面。</li>
+                    <li>封面图对上传尺寸没有限制，无论何种尺寸均会裁剪至此尺寸。（参考比例：360*200）</li>
+                    <li>封面图硬性规范：不允许包含电话/网址/QQ等信息、不允许包含二维码、不允许包含第三方水印、每行文字不超过10字、文字行数不允许超过5行、不允许使用未经授权的肖像/著作权图/商标等；封面图要求使用元素少，字体大，清晰特写，意义明确，扫一眼即可知大意（可以多条信息共用封面图）</li>
+                    <li>正文图：为方便学员在手机阅读：正文图要求使用元素少，字体大，清晰特写，意义明确，扫一眼即可知大意 图片最小尺寸有限制（最大尺寸无限制，系统自动裁切），正文图不允许包含其它第三方LOGO水印/正文图不允许使用未授权的LOGO或商标或肖像，没有其它特别审核规则（可以多条信息共用正文图）。正文图主要显示在信息正文中。为确保排版效果，正文图宽度推荐>=1010像素 （可以使用长图，最大支持高5000像素）</li>
+                    <li>VIP会员LOGO图：不允许包含电话/网址/QQ等信息、不允许包含二维码、不允许包含第三方水印、不允许使用未经授权的肖像/著作权图/商标等；LOGO图要求使用元素少，字体大，清晰特写，意义明确，扫一眼即可知大意</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+</body>
+</html>

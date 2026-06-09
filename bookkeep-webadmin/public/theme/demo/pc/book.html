@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>{$fly.chapinfo.title}-{$fly.bookinfo.name}-{fly:global name='web_name'/}</title>
+    <meta name="keywords" content="{$fly.chapinfo.keywords}"/>
+    <meta name="description" content="{$fly.chapinfo.description}"/>
+    <meta name="renderer" content="webkit">
+    <link href="__STATIC__/module/admin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/animate.css" rel="stylesheet">
+    <link href="__STATIC__/module/admin/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="{$template_dir}static/css/book.css?v=1.1.3" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="window-container">
+    <div class="window-head">
+        <div class="logo">
+            <img src="/theme/07fly/pc/skin/images/logo.png">
+        </div>
+        <div class="booklist">
+            {fly:booklist pagesize ='10'}
+                <a href="{$field.bookurl}">{$field.title}</a>
+            {/fly:booklist}
+        </div>
+    </div>
+    <div class="window-body with-sidebar">
+        <div class="sidebar">
+            <div class="sidebar-header"><a href="/" class="title">{$fly.bookinfo.name}</a>
+<!--                <div class="search-form">-->
+<!--                    <div class="ui small fluid icon input"><input type="text" placeholder="请输入搜索关键词...">-->
+<!--                        <i class="icon search"></i></div>-->
+<!--                </div>-->
+            </div>
+            <div class="sidebar-body" data-pjax>
+                <div id="left-tree" class="catalog-body" data-url="{:url('index/book/chap_list_tree',array('bookid'=>$fly.bookinfo.id))}">
+                    <div class="tree">
+                        {$fly.chapmenu}
+                    </div>
+                </div>
+
+            </div>
+            <div class="sidebar-copyright">本文档使用<a href="https://www.07fly.xyz" target="_blank">零起飞</a>构建</div>
+        </div>
+        <div class="workspace">
+            <div id="book-chap-content" class="article" data-url="{:url('index/book/read',array('bookid'=>$fly.bookinfo.id))}">
+                <div class="article-head"></div>
+                <div class="article-body">
+                    <div id="test-editormd-view" style="width:700px;" class="editormd-view">
+                        <textarea style="display:none;" id="test-editormd-markdown-doc">{$fly.chapinfo.body}</textarea>
+                    </div>
+                    <div id="test-editormd-view-menu"></div>
+                </div>
+                <div class="article-foot"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="__STATIC__/module/admin/js/jquery.min.js?v=2.1.4"></script>
+<script src="__STATIC__/module/admin/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__STATIC__/module/admin/js/jquery.pjax.js"></script>
+
+<!-- 引入editormd样式文件 -->
+<link rel="stylesheet" href="__STATIC__/addon/editor/editormd/css/editormd.css">
+<script src="__STATIC__/addon/editor/editormd/editormd.js"></script>
+
+
+<script>
+
+    var bookid='bookid-{$fly.bookinfo.id}';
+    var markdownEditor='';
+    $(document).ready(function () {
+
+        editormdInit();
+
+        if(checkLocalStorage(bookid)){
+            menu_html=getLocalStorage(bookid);
+           $("#left-tree").html(menu_html);
+           // console.log(menu_html);
+        }
+
+        //树形展示
+        $('.tree li.has_child > span').on('click', function (e) {
+            var d = $(this).siblings('ul').is(":visible");
+            $(this).siblings('ul').slideToggle('fast');//.siblings('dt').css('background-position','right -40px');
+            if (d) {
+                console.log($(this).find(">i"));
+                //$(this).find(">i").addClass('icon-minus-sign').removeClass('icon-plus-sign');
+                $(this).find(">i").addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                $(this).find('>i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+                //$(this).find(">i").addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            }
+            e.stopPropagation();
+        });
+
+
+        // $(document).pjax('[data-pjax] a, a[data-pjax]', '#book-chap-content');
+        //
+
+            // 栏目点击事件
+            $('.tree a').click(function (e) {
+
+                if ( e && e.preventDefault ) {
+                    //阻止默认浏览器动作(W3C)
+                    e.preventDefault();
+                }else{
+                    //IE中阻止函数器默认动作的方式
+                    window.event.returnValue = false;
+                    return false;
+                }
+
+                var menu_html=$("#left-tree").html();
+                setLocalStorage(bookid,menu_html);
+
+                //增加录前的样式
+                $('.tree a').removeClass('active');
+                $(this).addClass('active');
+
+                var target=$(this).attr('href');
+                var id='';
+                var title='';
+                $.ajax({
+                    type:"get",
+                    url: target+'?pajx=1',
+                    data: '',
+                    dataType: "json",
+                    success: function (jsonData) {
+                        if (jsonData.id > 0) {
+                            document.title = jsonData.title;
+                            editormdInit(jsonData.body);
+                        }
+                    }
+                });//end ajax post
+
+                window.history.pushState(id,title,target);//增加一记历史记录
+                history.replaceState(id,title,target);//修改当前url
+                return false;
+            });
+
+    });
+
+
+    //更新内容
+    function editormdInit(content='') {
+        if(content!=''){
+            //先对容器初始化，在需要展示的容器中创建textarea隐藏标签，
+            $("#test-editormd-view").html('<textarea id="test-editormd-markdown-doc" style="display:none;"></textarea>');
+            $("#test-editormd-markdown-doc").val(content);//将需要转换的内容加到转换后展示容器的textarea隐藏标签中
+        }
+        markdownEditor=editormd.markdownToHTML("test-editormd-view", {
+            htmlDecode: "style,script,iframe", // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true, // 默认不解析
+            flowChart: false, // 默认不解析
+            sequenceDiagram: true, // 默认不解析
+            toc:true,
+            tocContainer : "#test-editormd-view-menu",
+            path: "__STATIC__/addon/editor/editormd/lib/",
+            previewTheme: "dark"
+        });
+
+    }
+
+    //初始栏目
+    // function menuinit() {
+    //     var d=true;
+    //     $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+    //     $('.tree li:has(ul)').find(' > span i').addClass('icon-plus-sign');
+    //     $('.tree li:has(ul)').find(' > ul').css('display', 'none');
+    // }
+
+    function setLocalStorage(key, value) {
+        var curtime = new Date().getTime(); // 获取当前时间 ，转换成JSON字符串序列
+        var valueDate = JSON.stringify({
+            val: value,
+            timer: curtime
+        });
+        try {
+            localStorage.setItem(key, valueDate);
+        } catch(e) {
+            /*if(e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                console.log("Error: 本地存储超过限制");
+                localStorage.clear();
+            } else {
+                console.log("Error: 保存到本地存储失败");
+            }*/
+            // 兼容性写法
+            if(isQuotaExceeded(e)) {
+                console.log("Error: 本地存储超过限制");
+                localStorage.clear();
+            } else {
+                console.log("Error: 保存到本地存储失败");
+            }
+        }
+    }
+
+    function isQuotaExceeded(e) {
+        var quotaExceeded = false;
+        if(e) {
+            if(e.code) {
+                switch(e.code) {
+                    case 22:
+                        quotaExceeded = true;
+                        break;
+                    case 1014: // Firefox
+                        if(e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                            quotaExceeded = true;
+                        }
+                        break;
+                }
+            } else if(e.number === -2147024882) { // IE8
+                quotaExceeded = true;
+            }
+        }
+        return quotaExceeded;
+    }
+
+    function getLocalStorage(key) {
+        var exp = 60 * 60 * 24; // 一天的秒数
+        if(localStorage.getItem(key)) {
+            var vals = localStorage.getItem(key); // 获取本地存储的值
+            var dataObj = JSON.parse(vals); // 将字符串转换成JSON对象
+            // 如果(当前时间 - 存储的元素在创建时候设置的时间) > 过期时间
+            var isTimed = (new Date().getTime() - dataObj.timer) > exp;
+            if(isTimed) {
+                console.log("存储已过期");
+                localStorage.removeItem(key);
+                return null;
+            } else {
+                var newValue = dataObj.val;
+            }
+            return newValue;
+        } else {
+            return null;
+        }
+    }
+
+    function checkLocalStorage(key) {
+        var localKey = getLocalStorage(key);
+        if (localKey != null && localKey != "") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+</script>
+
+</body>
+</html>

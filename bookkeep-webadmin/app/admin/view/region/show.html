@@ -1,0 +1,111 @@
+<div class="wrapper wrapper-content">
+    <div class="row">
+<!--        <div class="col-md-3">-->
+<!--            <div class="ibox">-->
+<!--                <div class="ibox-title"><h5>{:lang('地区结构')}</h5>-->
+<!--                    <div class="ibox-tools"><a class="refresh-tree">{:lang('refresh')}</a></div>-->
+<!--                </div>-->
+<!--                <div class="ibox-content right_centent" style="">-->
+<!--                    <div id="left-tree" data-url="{:url('Region/get_list_tree')}"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">{$page_title}:{$regionpath} </div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="upid" value="{$upid|default='100000'}">
+                            <div class="col-sm-3 m-b-xs">
+                                <lqf_link><a class="btn btn-info ajax-open add-btn" data-url="{:url('Region/add',array('upid'=>$upid))}"
+                                             data-title="用户"><i class="fa fa-plus"></i> {:lang('add')}</a></lqf_link>
+                            </div>
+                            <div class="col-sm-9 m-b-xs text-right">
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('enter keyword search')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary ajaxSearchForm"><i
+                                            class="fa fa-search"></i> {:lang('search')}</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ibox-content"></div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Region/show_json')}">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="100">{:lang('regional code')}</th>
+                            <th width="100">{:lang('region name')}</th>
+                            <th width="100">{:lang('superior code')}</th>
+                            <th width="100">{:lang('regional abbreviation')}</th>
+                            <th width="100">{:lang('administrative code')}</th>
+                            <th width="100">{:lang('zip code')}</th>
+                            <th width="100">{:lang('pinyin code')}</th>
+                            <th width="60">{:lang('sort')}</th>
+                            <th width="60">{:lang('enable')}</th>
+                            <th width="60">{:lang('hots')}</th>
+                            <th width="80">{:lang('operate')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="8" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible='';
+    if(data[i]['visible']=='1') visible='checked';
+    ishot='';
+    if(data[i]['ishot']=='1') ishot='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><a class="ajax-goto" data-url="{:url('Region/show')}" data-ids="{'upid':'<%=data[i]['id']%>'}"><%=data[i]['name']%></a></td>
+        <td><%=data[i]['upid']%></td>
+        <td><%=data[i]['shortname']%></td>
+        <td><%=data[i]['citycode']%></td>
+        <td><%=data[i]['zipcode']%></td>
+        <td><%=data[i]['pinyin']%></td>
+        <td><input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort"
+                   data-url="{:url('Region/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5">
+        </td>
+        <td><input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('Region/set_visible',array('name'=>'visible'))}" data-id="<%=data[i]['id']%>"
+            <%=visible%> >
+        </td>
+        <td><input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('Region/set_visible',array('name'=>'ishot'))}" data-id="<%=data[i]['id']%>"
+            <%=ishot%> >
+        </td>
+        <td>
+            <lqf_link><a class="ajax-goto" data-url="{:url('Region/show')}" data-ids="{'upid':'<%=data[i]['id']%>'}">{:lang('lower level')}</a></lqf_link>
+            <lqf_link><a class="ajax-open" data-url="{:url('Region/edit')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('modify')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('Region/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('delete')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

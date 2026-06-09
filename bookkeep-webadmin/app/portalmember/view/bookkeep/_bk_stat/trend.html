@@ -1,0 +1,272 @@
+<div class="wrapper wrapper-content ">
+    <div class="ibox-content">
+        <div class="row">
+            <form id="pagerForm" method="post" class="form-inline">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div data-toggle="buttons" class="btn-group">
+                            <label class="btn btn-sm btn-info btn-outline active">
+                                <input type="radio" value="month" name="period_type" checked>{:lang('本月')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="year" name="period_type">{:lang('本年')}
+                            </label>
+                            <label class="btn btn-sm btn-info btn-outline">
+                                <input type="radio" value="diy" name="period_type">{:lang('自定义')}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="period_date"
+                               class="form-control stat-workbench-date"
+                               value="{$rangedate|default=''}">
+                    </div>
+                    <div class="input-group">
+                        <button class="btn btn-info stat-workbench-btn">{:lang('查询')}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--支出分类,收入分类-->
+    <div class="row m-t-xs">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <h4>收支趋势</h4>
+                <div id="workbench-categoryexpense" data-type="line"
+                     data-url="{:url('bookkeep.BkStat/index',array('listtype'=>'incomeexpensetrend'))}"
+                     class="statistics-box" style="height: 500px;"></div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="stat-table-list"></div>
+        </div>
+    </div>
+
+</div>
+<!--加载数据模板-->
+{include file="bookkeep/_bk_stat/js_function"/}
+
+<script>
+    // 列表加载
+    $(document).ready(function () {
+
+        initAjaxBoxData();
+
+        $("body").on("click", ".stat-workbench-btn", function (e) {
+            e.preventDefault();  // 阻止默认表单提交
+            initAjaxBoxData();
+        })
+        $('form input[name="period_type"]').on('change', function () {
+            autoFillStatDate();
+            initAjaxBoxData();
+        });
+
+        function initAjaxBoxData() {
+            $('.statistics-box').each(function () {
+                var id = $(this).attr("id");
+                var type = $(this).attr("data-type");
+
+                var that = $('#' + id + '');
+                var target = that.attr('data-url');
+                var searchData = $('form').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: target,
+                    data: searchData,
+                    dataType: "json",
+                    async: false,
+                    beforeSend: function () {
+                        layer.msg('加载数据',
+                            {
+                                time: 1000,
+                                icon: 16,
+                                shade: 0.2
+                            }
+                        );
+                    },
+                    success: function (jsonData) {
+                        if (jsonData.code == 1) {
+                            var chartsData = null2zero(jsonData.data);
+                            // log(jsonData);
+                            loadChartTpl(id, chartsData, type);
+
+                            generateTable(chartsData);
+                        }else {
+                            layer.msg(jsonData.msg, {icon: 2});
+                        }
+                    },
+                    complete: function () {
+
+                    }
+                });
+            });
+        }
+
+        function loadChartTpl(id, chartsData, type) {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById(id));
+            switch (type) {
+                case 'line':
+                    var option = {
+                        title: {
+                            text: chartsData.title.text
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+
+                        legend: {
+                            data: chartsData.legend
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: chartsData.xaxis
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series:chartsData.series
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                    break;
+                case "bar":
+                    option = {
+                        title: {
+                            text: chartsData.title.text
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {},
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: 'value',
+                            boundaryGap: [0, 0.01]
+                        },
+                        yAxis: {
+                            type: 'category',
+                            data: chartsData.yAxis
+                        },
+                        series: chartsData.series
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+
+                    break;
+                //饼状图
+                case 'pie':
+                    option = {
+                        title: {
+                            text: chartsData.title.text,
+                            subtext: chartsData.title.subtext,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            bottom: '50'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                mark: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        series: [
+                            {
+                                // name: 'Access From',
+                                type: 'pie',
+                                radius: '50%',
+                                data: chartsData.series.data,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    if (option && typeof option === 'object') {
+                        myChart.setOption(option);
+                    }
+                    break;
+            }//end switch
+        }
+
+        // 修改 generateTable 函数，添加下载功能
+        function generateTable(chartsData) {
+            // 创建表格HTML
+            var tableHtml = '<div class="ibox-content"><h4>数据明细</h4>' +
+                '<div class="table-responsive">' +
+                '<div class="pull-right" style="margin-bottom: 10px;">' +
+                '<button class="btn btn-primary btn-sm" onclick="downloadTableAsCSV(\'statDataTable\')">下载CSV</button>' +
+                '<button class="btn btn-success btn-sm" onclick="downloadTableAsExcel(\'statDataTable\')" style="margin-left: 5px;">下载Excel</button>' +
+                '</div>' +
+                '<table class="table table-bordered table-hover" id="statDataTable">';
+
+            // 创建表头
+            tableHtml += '<thead><tr><th>日期</th>';
+            for (var i = 0; i < chartsData.series.length; i++) {
+                tableHtml += '<th>' + chartsData.series[i].name + '</th>';
+            }
+            tableHtml += '</tr></thead>';
+
+            // 创建表体
+            tableHtml += '<tbody>';
+            for (var j = 0; j < chartsData.xaxis.length; j++) {
+                tableHtml += '<tr>';
+                tableHtml += '<td>' + chartsData.xaxis[j] + '</td>';
+                for (var k = 0; k < chartsData.series.length; k++) {
+                    var value = chartsData.series[k].data[j];
+                    // 如果是数字且不为0，格式化显示
+                    if (value !== 0 && !isNaN(value)) {
+                        tableHtml += '<td>' + parseFloat(value).toFixed(2) + '</td>';
+                    } else {
+                        tableHtml += '<td>' + (value !== 0 ? value : '0.00') + '</td>';
+                    }
+                }
+                tableHtml += '</tr>';
+            }
+            tableHtml += '</tbody>';
+
+            tableHtml += '</table></div></div>';
+
+            // 插入到指定位置
+            $('.stat-table-list').html(tableHtml);
+        }
+    });
+
+
+</script>

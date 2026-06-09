@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员注册_{$webconfig.web_name}</title>
+    <meta name="keywords" content="{$webconfig.web_keywords}"/>
+    <meta name="description" content={$webconfig.web_description}""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010801" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="{$template_member_dir}static/js/modernizr.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--top begin-->
+{include file="header_nologin" /}
+<!--top end-->
+<div class="member-login">
+    <div class="box">
+        <div class="login-enter">
+            <form class="target-post-form" action="{:url('portalmember/Login/login')}" method="post">
+                <h3>会员登录</h3>
+                <div class="form-box">
+                    <div class="form-group">
+                        <label>帐号</label>
+                        <input type="text" name="username" class="form-control" placeholder="输入您的帐号/手机号码">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" name="password" class="form-control" placeholder="输入您的密码">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">登录</button>
+                    </div>
+                    <div class="row text-center grey">
+                        <a href="{:url('portalmember/Login/reg')}" class="grey">注册</a> | <a href="#" class="grey">忘记密码？</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--top begin-->
+{include file="footer" /}
+<!--top end-->
+</body>
+</html>
+
+<script>
+    /*-----页面pannel内容区高度自适应 start-----*/
+    $(window).resize(function () {
+        setCenterHeight();
+    });
+
+    setCenterHeight();
+
+    function setCenterHeight() {
+        var height = $(window).height();
+        console.log(height);
+        var centerHight = height - 190;
+        $(".member-login").height(centerHight).css("overflow", "auto");
+    }
+</script>

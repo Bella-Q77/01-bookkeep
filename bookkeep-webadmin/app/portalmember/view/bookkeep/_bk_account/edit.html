@@ -1,0 +1,68 @@
+<div class="ibox-title">{:lang('修改账户')}</div>
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('bookkeep.BkAccount/edit')}">
+        <input type="hidden" name="id" value="{$info.id|default='0'}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户名称')}</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text" value="{$info.name|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户类型')}</label>
+            <div class="col-sm-10">
+                <select name="account_type" class="form-control">
+                    {volist name="account_type_list" id="vo"}
+                    <option value="{$key}" {eq name="info.account_type" value="$key"} selected {/eq}>{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('账户币种')}</label>
+            <div class="col-sm-10">
+                <input name="currency" class="form-control" type="text" value="{$info.currency|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('排序')}</label>
+            <div class="col-sm-10">
+                <input name="sort" class="form-control" type="text" placeholder="" value="{$info.sort|default='0'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('是否计入总资产')}</label>
+            <div class="col-sm-8">
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="isasset1" value="1" name="is_asset" {eq name="info.is_asset" value="1"} checked {/eq}>
+                    <label for="isasset1"> {:lang('是')} </label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="isasset0" value="0" name="is_asset" {eq name="info.is_asset" value="0"} checked {/eq}>
+                    <label for="isasset0"> {:lang('否')} </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('是否启用')}</label>
+            <div class="col-sm-8">
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="visible1" value="1" name="visible" {eq name="info.visible" value="1"} checked {/eq}>
+                    <label for="visible1"> {:lang('是')} </label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="visible0" value="0" name="visible" {eq name="info.visible" value="0"} checked {/eq}>
+                    <label for="visible0"> {:lang('否')} </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

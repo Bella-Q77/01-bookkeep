@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{$fly.field.tag} - {fly:global name='web_name'/}</title>
+    <meta name="keywords"
+          content="{$fly.field.tag}Excel模板下载,{$fly.field.tag}PPT模板,{$fly.field.tag}word模板,{$fly.field.tag}范文模板"/>
+    <meta name="description"
+          content="{fly:global name='web_description' /}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_dir}static/css/base.css" rel="stylesheet">
+    <link href="{$template_dir}static/css/m.css" rel="stylesheet">
+    <script src="{$template_dir}static/js/jquery-1.8.3.min.js"></script>
+    <script src="{$template_dir}static/js/comm.js"></script>
+    <!--[if lt IE 9]>
+    <script src="{$template_dir}static/js/modernizr.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--top begin-->
+{include file='demo/pc/header'}
+<!--top end-->
+
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+        <div class="whitebg lanmu">
+            <img src="{$fly.field.tag|get_picture_url}">
+            <h1>{$fly.field.tag}</h1>
+            <p>
+                办公达人提供各类:{$fly.field.tag}办公模板下载,{$fly.field.tag}Excel模板下载,{$fly.field.tag}PPT模板,{$fly.field.tag}word模板,{$fly.field.tag}范文模板等信息。</p>
+        </div>
+      <div class="whitebg bloglist">
+        <h2 class="htitle">最近更新</h2>
+        <ul>
+          {fly:list  pagesize='10' infolen='100' empty='暂时没有数据'}
+          <li>
+            <h3 class="blogtitle"><a href="{$field.arcurl}">{$field.title}</a></h3>
+            <!--                    <span class="blogpic imgscale">-->
+            <!--                        <i><a href="{$field.typeurl}">{$field.typename}</a></i>-->
+            <!--                        <a href="{$field.arcurl}" title="{$field.title}"><img src="{$field.litpic}" alt="{$field.title}"></a>-->
+            <!--                    </span>-->
+            <p class="blogtext"> {$field.description} </p>
+            <p class="bloginfo">
+              <i class="avatar"><img src="{$template_dir}static/images/favicon.png "></i>
+              <span>小海龟</span>
+              <span>{$field.create_time|strtotime|date='Y-m-d',###}</span>
+              <span>【<a href="{$field.typeurl}">{$field.typename}</a>】</span>
+            </p>
+            <a href="{$field.arcurl}" class="viewmore">阅读更多</a></li>
+          {/fly:list}
+        </ul>
+        <!--pagelist-->
+        <div class="pagelist">
+          {fly:pagelist listitem='index,pre,pageno,next,end' listsize='2'/}
+        </div>
+        <!--pagelist end-->
+      </div>
+        <!--bloglist end-->
+    </div>
+    <div class="rbox">
+        <!--包含右侧模块-->
+        {include file='demo/pc/right'}
+    </div>
+</article>
+
+<!--footer-->
+{include file='demo/pc/footer'}
+
+</body>
+</html>

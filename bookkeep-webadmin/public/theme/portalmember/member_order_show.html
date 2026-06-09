@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>订单管理_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020012804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="{:url('portalmember/MemberOrder/show')}" class="tit on"> 所有订单</a></span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <div class="lable-group-info">
+                        <a href="{:url('portalmember/MemberOrder/show',array('class'=>'nopay'))}" class="{notempty name='class'} {if condition="$class eq 'nopay' "} on {/if} {/notempty}"  >未支付</a>
+                        <a href="{:url('portalmember/MemberOrder/show',array('class'=>'pay'))}"  class="{notempty name='class'} {if condition="$class eq 'pay' "} on {/if} {/notempty}" >已支付</a>
+                    </div>
+                </div>
+                <div class="base-info-content">
+                    <div class="tablelist order clearfix">
+                        <ul class="tbody">
+                            {notempty name='list'}
+                            {volist name='list' id='vo'}
+                            <li class="row clearfix">
+                                <div class="row tit">
+                                    <div class="col-10">{$vo.create_time} <span class="h3">订单号：{$vo.order_code}</span> </div>
+                                    <div class="col-2 text-right">
+                                        <a href="{:url('portalmember/memberOrder/del',array('id'=>$vo.id))}" class="btn btn-del ajax-get">删除</a>
+                                    </div>
+                                </div>
+                                <div class="row txt">
+                                    <div class="col-3"><span>{$vo.bus_info.html}</span> </div>
+                                    <div class="col-4"><span>{$vo.name}&nbsp;</span> </div>
+                                    <div class="col-2"><span>支付总额：￥{$vo.order_amount}元</span> </div>
+                                    <div class="col-1 text-center"><span>{$vo.payment_info.html}</span> </div>
+                                    <div class="col-2 text-center">
+                                        {if condition="$vo.payment_status eq '0'"}
+                                        <a href="{:url('portalmember/memberOrder/pay',array('id'=>$vo.id))}"class="btn btn-buy">去支付</a>
+                                        {/if}
+                                    </div>
+                                </div>
+                            </li>
+                            {/volist}
+                            {/notempty}
+                        </ul>
+                    </div>
+                    <div class="pagelist">
+                        {$pages}
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabtitle">
+                <span>充值说明</span>
+            </div>
+            <div class="base-info">
+                <div class="help-block">
+                    <li>1. 积分充值比率：1元充值1个积分。0.01支付仅供测试用，不增加积分</li>
+                    <li>2. 仅限1的整数倍充值，小数点后面的金额无法充值。</li>
+                    <li>3. 充值积分无法退还，建议小额充值，消费完再续充。</li>
+                    <li>4. 每个账号每24小时最多可充值5次。</li>
+                    <li>5. 目前仅支持【微信】在线充值。</li>
+                    <li>6. 点击“购买”并确定后，即表示您已阅读并同意以上条款。</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="footer" /}
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>品牌修改_会员中心</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_member_dir}static/css/base.css?version=2020010804" rel="stylesheet">
+    <link href="{$template_member_dir}static/css/m.css?version=2020010705" rel="stylesheet">
+    <script src="{$template_member_dir}static/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--top begin-->
+{include file="header" /}
+<!--top end-->
+<div class="box member-box">
+    <div class="left-col">
+        {include file="left_menu" /}
+    </div>
+    <div class="right-col pjax-container">
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span><a href="#" class="tit on"> 洽谈代码</a></span>
+                <span class="fr"><a href="{:url('portalmember/MemberProductLevel/show')}" class="yellow">会员升级</a></span>
+                <span class="help"></span>
+            </div>
+            <div class="tabcontent">
+                <div class="help-box">
+                    <p>您当前帐号会员等级为：<b class="yellow">{$member.level.level_name}</b></p>
+                    <p>*在线客服功能将显示在你的每一条培训信息页，已支持的在线客服系统：</p>
+                </div>
+                <div class="base-info-content form-list">
+                    <form class="target-post-form" action="{:url('portalmember/Member/member_talk_code')}" method="post"
+                          autocomplete="off">
+                        <input type="hidden" name="id" value="{$member.id}">
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>当前状态</label></div>
+                            <div class="base-info-content-r">
+                                <div class="form-group">
+                                    {if condition="$member.level_id gt '1'"}
+                                    <font class="blue">已开通</font>
+                                    {else /}
+                                    <font class="red">还未开通</font>
+                                    {/if}
+                                    <span class="help-block">此功能仅对签约VIP会员开通</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l"><label>官服代码</label></div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <textarea name="talk_code"
+                                              class="form-control">{$member.talk_code|default='0'}</textarea>
+                                    <span class="help-block">仅限输入一种客服代码，此栏提交您的服务商提供的在线客服 HTML代码</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="base-info-content-l">&nbsp;</div>
+                            <div class="base-info-content-r textarea">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-red btn-save ajax-post" target-form="target-post-form">
+                                        保存修改
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="whitebg">
+            <div class="tabtitle">
+                <span> 支持的在线客服系统</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info">
+                    <li>百度商桥 baidu.com | 企业QQ b.qq.com | 53客服53kf.com | live800.com | tq.cn | CC客服qycn.com |
+                        乐语looyu.com(soperson.com) | 商务精灵35tool.com | 商务通zoosnet.net | cckefu.com | 美恰 meiqia.com | 快商通
+                        kuaishang.cn
+                    </li>
+                    <li>其它客服系统将陆续支持，若您使用的客服系统不在此列表中，请向客服QQ建议</li>
+                </div>
+            </div>
+            <div class="tabtitle">
+                <span class="blue"> tq.cn 代码示例</span>
+            </div>
+            <div class="tabcontent">
+                <div class="base-info help-box">
+                    <li>
+                        <xmp class="text-left"><script language=JavaScript src=//float2006.tq.cn/floatcard?adminid=12345&sort=0></script></xmp>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="footer" /}
+</body>
+</html>

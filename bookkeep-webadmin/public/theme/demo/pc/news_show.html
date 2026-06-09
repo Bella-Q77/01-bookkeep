@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{$fly.field.title}-{fly:global name='web_name'}</title>
+    <meta name="keywords" content="{$fly.field.keywords}"/>
+    <meta name="description" content="{$fly.field.description}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{$template_dir}static/css/base.css" rel="stylesheet">
+    <link href="{$template_dir}static/css/m.css" rel="stylesheet">
+    <script src="{$template_dir}static/js/jquery-1.8.3.min.js"></script>
+    <script src="{$template_dir}static/js/comm.js"></script>
+    <!--[if lt IE 9]>
+    <script src="{$template_dir}static/js/modernizr.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--top begin-->
+{include file='demo/pc/header'}
+<!--top end-->
+<article>
+    <!--lbox begin-->
+    <div class="lbox">
+        <div class="ad whitebg">
+            <div class="pcd_ad">
+                <table width="100%" height="90" bgcolor="">
+                    <tbody>
+                    <tr align="center">
+                        <td style="text-align: center;color: #fff;line-height: 90px;"><img
+                                src="{$template_dir}static/images/ad700.jpg"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="content_box whitebg">
+            <h2 class="htitle"><span class="con_nav">您现在的位置是：{fly:position symbol=''/}</span></h2>
+            <h1 class="con_tilte">{$fly.field.title}</h1>
+            <p class="bloginfo"><span>{$fly.field.update_time}</span><span><a href="{$fly.type.typeurl}">{$fly.type.typename}</a> </span><span>{$fly.field.click}人已围观</span>
+            </p>
+            <p class="con_info"><b>简介</b> {$fly.field.description}...</p>
+            <div class="con_text"> <!-- txt -->
+                {$fly.field.body}
+                <!-- txt --><!-- content -->
+                <div class="pagelist"></div>
+                <p>Tags：
+                    {fly:tag getall='0' }
+                    <a href='{$field.link}'>{$field.tag}</a>
+                    {/fly:tag}
+                </p>
+                <p class="share"><b>转载：</b>感谢您对网站平台的认可，以及对我们原创作品以及文章的青睐，所显示的信息或资料的为演示测试数据，仅供学习与参考。</p>
+                <div class="nextinfo">
+
+                    {fly:prenext get='pre'}
+                    <p>上一篇：<a href="{$field.arcurl}" title="{$field.title}"> {$field.title} </a></p>
+                    {fly:else /}
+                    <p>上一篇：暂无</p>
+                    {/fly:prenext}
+
+                    {fly:prenext get='next'}
+                    <p>下一篇：<a href="{$field.arcurl}" title="{$field.title}"> {$field.title} </a></p>
+                    {fly:else /}
+                    <p>下一篇：暂无</p>
+                    {/fly:prenext}
+                </div>
+            </div>
+        </div>
+        <div class="ad whitebg">
+            <div class="pcd_ad">
+                <table width="100%" height="90" bgcolor="#D10101">
+                    <tbody>
+                    <tr align="center">
+                        <td style="text-align: center;color: #fff;line-height: 90px;"><img
+                                src="{$template_dir}static/images/ad700.jpg"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="whitebg">
+            <h2 class="htitle">相关文章</h2>
+            <ul class="otherlink">
+                {fly:likearticle limit='0,12'}
+                <li><a href='{$field.arcurl}' title="{$field.title}">{$field.title}</a></li>
+                {/fly:likearticle}
+
+            </ul>
+        </div>
+        <div class="whitebg">
+            <h2 class="htitle">随机图文</h2>
+            <ul class="xiangsi">
+                {fly:arclist typeid='0' row='4' flag='p'}
+                <li><a href="{$field.arcurl}"><i><img src="{$field.litpic}"></i>
+                    <p>{$field.title}</p>
+                    <span>{$field.description}...</span></a></li>
+                {/fly:arclist}
+            </ul>
+        </div>
+    </div>
+
+    <!--包含右侧模块-->
+    {include file='demo/pc/right_box'}
+
+</article>
+
+<!--footer-->
+{include file='demo/pc/footer'}
+
+</body>
+</html>

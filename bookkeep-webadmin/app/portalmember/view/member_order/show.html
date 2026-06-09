@@ -1,0 +1,88 @@
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>订单管理</h5>
+                </div>
+                <div class="ibox-content">
+                    <form id="pagerForm" method="post" class="form-inline searchForm">
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div data-toggle="buttons" class="btn-group">
+                                <label class="btn btn-sm btn-info btn-outline ajaxSearchForm"><input type="radio" value="" name="payment_status">{:lang('全部')}</label>
+                                <label class="btn btn-sm btn-info btn-outline ajaxSearchForm active"><input type="radio" value="0" name="payment_status" checked>{:lang('未支付')}</label>
+                                <label class="btn btn-sm btn-info btn-outline ajaxSearchForm"><input type="radio" value="1" name="payment_status">{:lang('已支付')}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9 text-right">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> 搜索</button></span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    </form>
+
+                </div>
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('MemberOrder/show')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="50"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="50"><span>ID</span></th>
+                            <th width="150"><span>订单编号</span></th>
+                            <th width="200"><span>产品名称</span></th>
+                            <th width="100"><span>产品类型</span></th>
+                            <th width="100"><span>支付金额</span></th>
+                            <th width="100"><span>当前状态</span></th>
+                            <th width="120"><span>创建时间</span></th>
+                            <th width="120" class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><%=data[i]['order_code']%></td>
+        <td><%=data[i]['name']%></td>
+        <td><%:=data[i]['bus_info']['html']%></td>
+        <td><%=data[i]['order_amount']%></td>
+        <td><%:=data[i]['payment_info']['html']%></td>
+        <td><%=data[i]['create_time']%></td>
+        <td class="text-center">
+            <%if(data[i]['payment_status']==0){%>
+            <a class="ajax-open btn btn-success" data-url="{:url('MemberOrder/pay')}"
+               data-ids="{'id':'<%=data[i]['id']%>'}" width="800" height="600" title="支付">支付</a>
+           <a class="ajax-del btn btn-warning" data-url="{:url('MemberOrder/del')}"
+              data-ids="{'id':'<%=data[i]['id']%>'}">删除</a>
+            <%}%>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);//页面加载时初始化分页
+    });
+</script>

@@ -1,0 +1,224 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-title">内容栏目分类</div>
+                <div class="no-padding">
+                    <div id="left-tree" data-url="{:url('Archives/show',array('data_type'=>'get_arctype_tree'))}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="ibox">
+                <div class="ibox-title archive-list-title">文章列表</div>
+                <div class="ibox-content table-responsive">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <input type="hidden" name="type_id" id="type_id" value="">
+                            <div class="col-sm-4 m-b-xs">
+                                <lqf_link><a id="archives_add" class="btn btn-info ajax-open" data-url="{:url('Archives/add')}" data-ids="" data-title="添加文章"><i class="fa fa-plus"></i>添加</a></lqf_link>
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">批量操作 <span class="caret"></span> </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="ajax-open-more"  data-url="{:url('Archives/move')}"  >移动栏目</a></li>
+                                        <li><a  class="ajax-get-more"  data-url="{:url('Archives/del')}"  >批量删除</a></li>
+                                        <li class="divider"></li>
+                                        <li><a  class="ajax-get-more"  data-url="{:url('Archives/visible',array('visible'=>1))}"  >批量审核</a></li>
+                                        <li><a  class="ajax-get-more"  data-url="{:url('Archives/visible',array('visible'=>0))}"  >取消审核</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 m-b-xs text-right">
+<!--                                <div class="input-group text-left">-->
+<!--                                    <select data-placeholder="选择地区..." name="sys_area_id" class="chosen-select">-->
+<!--                                        <option value="">请选择地区</option>-->
+<!--                                        {volist name='sys_area_list' id='vo'}-->
+<!--                                        <option value="{$vo['id']}">{$vo['name']}</option>-->
+<!--                                        {/volist}-->
+<!--                                    </select>-->
+<!--                                </div>-->
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i  class="fa fa-search"></i> 搜索</button></span>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('Archives/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="30"><span>ID号</span></th>
+                            <th width="200"><span>文章标题</span></th>
+                            <th width="100"><span>栏目名称</span></th>
+                            <th width="80"><span>点击</span></th>
+                            <th width="80"><span>作者</span></th>
+                            <th width="100" class="text-center"><span>更新时间</span></th>
+                            <th width="80" class="text-center"><span>排序</span></th>
+                            <th width="60" class="text-center"><span>发布</span></th>
+                            <th width="80" class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="9" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) {
+    visible='';
+    if(data[i]['visible']=='1') visible='checked';
+    %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><a class="ajax-goto" href="{:url('index/view/adminindex')}" data-ids="{'aid':'<%=data[i]['id']%>'}" target="_blank"><%=data[i]['title']%></a>
+            <% if(data[i]['flag_name'] != ''){ %>
+            [ <span class="text-danger"><%:=data[i]['flag_name']%></span>]
+            <%}%>
+        </td>
+        <td><%=data[i]['typename']%></td>
+        <td><%=data[i]['click']%></td>
+        <td><%=data[i]['writer']%></td>
+        <td class="text-center"><%=data[i]['pubdate']%></td>
+        <td class="text-center"><input type="text" class="w50 ajax-sort text-center" data-url="{:url('Archives/set_sort')}" data-ids="{'id':'<%=data[i]['id']%>'}" value="<%=data[i]['sort']%>"></td>
+        <td class="text-center">
+            <input name="visible" class="ajax-checkbox" type="checkbox"
+                   data-url="{:url('Archives/set_visible',array('name'=>'visible'))}" data-id="<%=data[i]['id']%>" <%=visible%>>
+        </td>
+        <td class="text-center">
+                <lqf_link><a class="ajax-open" data-url="{:url('Archives/edit')}" data-ids="{'id':'<%=data[i]['id']%>'}" data-title="修改">修改</a></lqf_link>
+                <lqf_link><a class="ajax-del confirm" data-url="{:url('Archives/del')}" data-ids="{'id':'<%=data[i]['id']%>'}">删除</a></lqf_link>
+            <%if(data[i]['arcext_id']>0){%>
+            <lqf_link><a class="ajax-open" data-url="{:url('ArcextInfo/show')}" data-ids="{'archives_id':'<%=data[i]['id']%>','channel_id':'<%=data[i]['channel_id']%>'}">扩展</a></lqf_link>
+           <%}%>
+        </td>
+    </tr>
+    <% } %>
+</script>
+
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+<link href="__STATIC__/module/admin/js/plugins/jquery-contextmenu/jquery.contextMenu.min.css?version=2022090401" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/jquery-contextmenu/jquery.contextMenu.min.js"></script>
+<script src="__STATIC__/module/admin/js/plugins/jquery-contextmenu/jquery.ui.position.min.js"></script>
+<style type="text/css">
+    .list-group-item{position: relative;}
+    .list-group-item:hover span.node-icon{
+        position: absolute;
+        display: inline-block;
+        text-align:left;
+        right: -70px;
+        top:10px;
+        width: 100px;
+        z-index: 10;
+        height: 20px;
+    }
+    .list-group-item:hover span.node-icon:after{content: "···";font-weight: bold;color: #000;font-size: 20px;}
+    .list-group-item .list-group-menu{
+        z-index: 9999;
+        padding: 10px;
+        border:solid 1px #ccc;
+        background: #EFEFEF;
+        display: none;text-align: center;
+        border-radius: 10px;
+        position: absolute;
+        width: 100px;
+    }
+    .list-group-item span.node-icon:hover .list-group-menu{display: block;color: #666;}
+    .list-group-item .list-group-menu p{background: #DDDDDD;color: #000;}
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ajax_type_list();
+
+        turnPage(1);//页面加载时初始化分页
+
+        //增加操作菜单
+        // $('body').on('mouseover', '.list-group-item span.node-icon', function (e) {
+        //     var html="<div class='list-group-menu'><p>添加</p><p>删除</p></div>"
+        //     $(this).html(html);
+        //     console.log(html);
+        // });
+
+    });
+
+    //加载栏目分类到左边数据
+    function ajax_type_list() {
+       // var getArcypeUrl = "{:url('Archives/show',array('typelist'=>'all'))}";
+        var target = $('#left-tree').attr('data-url');
+        //左边栏目加载
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: '',
+            dataType: "json",
+            success: function (jsondata) {
+                $('#left-tree').treeview({
+                    data: jsondata,
+                    levels: 1,
+                    showTags: false,//显示右边tags
+                    showCheckbox: false,//是否显示多选
+                    multiSelect: false,
+                    showBorder: true,
+                    onNodeSelected: function (event, node) {
+                        type_id = node.tags;
+                        $("#type_id").val(type_id);
+                        //设置添加地址
+                        ids='{\'type_id\':\''+type_id+'\'}';
+                        $("#archives_add").attr('data-ids',ids);
+                        $(".archive-list-title").html(node.text+'文章列表');
+
+                        singpage(type_id);
+                    }
+                });
+            }
+        });
+    }
+
+    //操作当前内容
+    function singpage(type_id) {
+        var getArcypeOneUrl = "{:url('Archives/show',array('data_type'=>'get_arctype_info'))}";
+        $.ajax({
+            type: "POST",
+            url: getArcypeOneUrl,
+            data: {'id': type_id},
+            dataType: "json",
+            success: function (data) {
+                if (data.ispart == '0' || data.ispart == '2' ) {
+                    ajaxSearchFormData = $("form").serialize();
+                    turnPage(1);
+                } else {
+                    var editArcypeUrl = "{:url('Arctype/edit_content')}";
+                    layer.open({
+                        type: 2,
+                        title: '编辑内容',
+                        shadeClose: false,
+                        fixed: true, //不固定
+                        area: ['90%', '90%'],
+                        content: editArcypeUrl + '?id=' + type_id,
+                        end: function () {
+                            //ajax_type_list();
+                        }
+                    });
+                    return false;
+                }
+            }
+        });
+    }
+
+
+
+</script>

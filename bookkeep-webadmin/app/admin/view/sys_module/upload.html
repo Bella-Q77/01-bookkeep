@@ -1,0 +1,153 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <lqf_link><a class="btn btn-default btn-block" id="upload_file_btn"><i class="fa fa-upload"></i></a>
+                        </lqf_link>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content table-responsive">
+                <table class="table table-hover sorttable ajax-list-table-file" data-url="{$ajaxtarget}" width="100%">
+                    <thead>
+                    <tr>
+                        <th width=""><span>{:lang('文件名称')}</span></th>
+                        <th width="200"><span>{:lang('修改时间')}</span></th>
+                        <th width="150"><span>{:lang('大小')}</span></th>
+                        <th width="100" class="text-center">{:lang('operate')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot class="ibox-content">
+                    <tr>
+                        <td colspan="4" align="center"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="__STATIC__/addon/file/Huploadify.css"/>
+<script src="__STATIC__/addon/file/jquery.Huploadify.js"></script>
+<script type="text/javascript">
+    var target = '';
+    $(document).ready(function () {
+        //文件目录
+        getUploadFile();
+        //删除
+        $("body").on("click", ".uploadfile-del", function () {
+            var pathname = $(this).attr('data-val');
+            var layerLoadIndex, layerMsgIndex;
+            $.ajax({
+                type: "POST",
+                url: target,
+                data: {"pathname": pathname, "ajaxmodel": 'del'},
+                dataType: "json",
+                async: true,
+                beforeSend: function () {
+                    layer.msg('数据处理中，请稍等...', {icon: 16, time: 100000, shade: [0.5, '#000', true]});
+                },
+                success: function (resultJsonJson) {
+                    if (resultJsonJson.code == '1') {
+                        layer.msg(resultJsonJson.msg, {icon: 1});
+                    } else {
+                        layer.msg(resultJsonJson.msg, {icon: 5});
+                    }
+                },
+                complete: function () {
+                    getUploadFile();
+                }
+            });
+        });
+
+        //安装
+        $("body").on("click", ".uploadfile-install", function () {
+            var filename = $(this).attr('data-val');//文件名含全路径
+            var layerLoadIndex, layerMsgIndex;
+            $.ajax({
+                type: "POST",
+                url: target,
+                data: {"filename": filename, "ajaxmodel": 'install'},
+                dataType: "json",
+                async: true,
+                beforeSend: function () {
+                    layerMsgIndex = layer.msg('正在执行导入操作,请稍等...',
+                        {
+                            time: 100000,
+                            icon: '16',
+                            shade: [0.5, '#000', true]
+                        });
+                },
+                success: function (resultJson) {
+                    if (resultJson.code == '1') {
+                        layer.msg(resultJson.msg, {icon: 1});
+                    } else {
+                        layer.msg(resultJson.msg, {icon: 5});
+                    }
+                },
+                complete: function () {
+                    // layer.close(layerMsgIndex);
+                    // layer.close(layerLoadIndex);
+                }
+            });
+        })
+
+    });
+
+    //上传插件
+    $("#upload_file_btn").Huploadify({
+        auto: true,
+        height: 30,
+        fileObjName: "file",
+        buttonText: "上传文件",
+        uploader: "{$uploadtarget}",
+        width: 120,
+        removeTimeout: 1,
+        fileSizeLimit: "52000",
+        fileTypeExts: "*.zip;",//上传文件类型
+        onUploadComplete: uploadBackFunction
+    });
+
+    //上传成功回调地址
+    function uploadBackFunction(file, data) {
+        getUploadFile()
+    }
+
+    //获取文件目录文件
+    function getUploadFile() {
+        var obj = $('.ajax-list-table-file');
+        var target = obj.attr('data-url');
+        $.ajax({
+            type: "POST",
+            url: target,
+            data: {"uploadfilepath": '{$uploadfilepath}', "ajaxmodel": 'get'},
+            dataType: "json",
+            async: true,
+            beforeSend: function () {
+                //$('.ajax-list-table-file').empty();
+            },
+            success: function (jsondata) {
+                var html = '';
+                $.each(jsondata.data, function (idx, row) {
+                    html += '<tr>';
+                    html += '<td>' + row.basename + '</td>';
+                    html += '<td>' + row.uptime + '</td>';
+                    html += '<td>' + row.size + '</td>';
+                    html += '<td class="text-center"> ' +
+                        '<a href="#" class="uploadfile-install" data-val="' + row.pathname + '"> {:lang("导入")}</a> | ' +
+                        '<a href="#" class="uploadfile-del" data-val="' + row.pathname + '"> {:lang("删除")} </a> ' +
+                        '</td>';
+                    html += '</tr>';
+                });
+                obj.find('tbody').html(html);
+            },
+            complete: function () {
+
+            }
+        });
+    }
+</script>

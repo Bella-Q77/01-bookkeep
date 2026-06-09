@@ -1,0 +1,127 @@
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('CstComment/edit')}">
+        <input type="hidden" name="id" value="{$info.id|default='0'}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('关联客户')}</label>
+            <div class="col-sm-4">
+                <div class="suggest-search-box">
+                    <div class="input-group customer-suggest">
+                        <input type="hidden" name="customer_id"  value="{$info.customer_id|default=''}">
+                        <input type="text" name="customer_name" value="{$info.customer_name|default=''}" class="form-control suggest-input" placeholder="请输入搜索名称"
+                               data-url="{:url('Comm/suggest_search',array('datatype'=>'customer'))}"
+                               searchFields="keywords" value="{$info.customer_name|default=''}"
+                               target-group="customer-suggest" target-name='{"customer_id":"id","customer_name":"name"}'>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                        </div>
+                    </div>
+                </div>
+                <span class="help-block m-b-none"></span>
+            </div>
+            <label class="col-sm-2 control-label">{:lang('客户联系人')}</label>
+            <div class="col-sm-4">
+                <div class="suggest-search-box">
+                    <div class="input-group linkman-suggest">
+                        <input type="hidden" name="linkman_id" value="{$info.linkman_id|default=''}">
+                        <input type="text" name="linkman_name" value="{$info.linkman_name|default=''}" class="form-control suggest-input" placeholder="请输入搜索名称"
+                               data-url="{:url('Comm/suggest_search',array('datatype'=>'linkman'))}"
+                               searchFields="keywords" source-group="customer-suggest" source-name='{"customer_id":"客户"}'
+                               target-group="linkman-suggest" target-name='{"linkman_id":"id","linkman_name":"name"}'>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                        </div>
+                    </div>
+                </div>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('跟进方式')}</label>
+            <div class="col-sm-4">
+                <select name="salemode" class="chosen-select chosen-select-typetag">
+                    <option value="">{:lang('跟进方式')}</option>
+                    {volist name='$dict.salemode' id='vo'}
+                    <option value="{$vo['name']}" {notempty name="info['salemode']" } {if condition="$info['salemode'] eq $vo['name'] " } selected="selected" {/if} {/notempty} >{$vo['name']}</option>
+                    {/volist}
+                </select>
+                <span class="help-block m-b-none"></span>
+            </div>
+            <label class="col-sm-2 control-label">{:lang('沟通时间')}</label>
+            <div class="col-sm-4">
+                <input name="link_time" class="form-control datetimepicker-now" type="text" placeholder="选择沟通时间"
+                       value="{$info.link_time|default=''}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('沟通内容')}</label>
+            <div class="col-sm-10">
+                <textarea name="link_body" class="form-control">{$info.link_body|default=''}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('当前阶段')}</label>
+            <div class="col-sm-4">
+                <select name="salestage" class="chosen-select chosen-select-typetag">
+                    <option value="">{:lang('当前阶段')}</option>
+                    {volist name='$dict.salestage' id='vo'}
+                    <option value="{$vo['name']}" {notempty name="info['salestage']" } {if condition="$info['salestage'] eq $vo['name'] " } selected="selected" {/if} {/notempty} >{$vo['name']}</option>
+                    {/volist}
+                </select>
+                <span class="help-block m-b-none"></span>
+            </div>
+            <label class="col-sm-2 control-label">{:lang('销售机会')}</label>
+            <div class="col-sm-4">
+                <div class="suggest-search-box">
+                    <div class="input-group chance-suggest">
+                        <input type="hidden" name="chance_id" value="{$info.chance_id|default=''}">
+                        <input type="text" name="chance_name" value="{$info.chance_name|default=''}" class="form-control suggest-input"  placeholder="请输入搜索名称"
+                               data-url="{:url('Comm/suggest_search',array('datatype'=>'chance'))}"
+                               searchFields="keywords" source-group="customer-suggest" source-name='{"customer_id":"客户"}'
+                               target-group="chance-suggest" target-name='{"chance_id":"id","chance_name":"name"}'>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+                        </div>
+                    </div>
+                </div>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('下次沟通')}</label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">选择下次沟通时间 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="1" data-type="d" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('明天')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="2" data-type="d" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('后天')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="3" data-type="d" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('三天后')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="7" data-type="d" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('一周后')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="14" data-type="d" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('二周后')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="1" data-type="m" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('一个月后')}</a></li>
+                            <li><a class="date-add-interval" data-gid="link_time" data-sid="next_time" data-val="3" data-type="m" data-fmt="yyyy-MM-dd hh:mm:ss">{:lang('三个月后')}</a></li>
+                        </ul>
+                    </div>
+                    <input name="next_time" class="form-control datetimepicker" type="text" placeholder="选择下次沟通日期" value="{$info.next_time|default=''}"/>
+                </div>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

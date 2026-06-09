@@ -1,0 +1,81 @@
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('SysModule/add')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('title')}</label>
+            <div class="col-sm-8">
+                <input name="title" class="form-control" type="text" placeholder="{:lang('title')}" required/>
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('name')}</label>
+            <div class="col-sm-8">
+                <input name="name" class="form-control" type="text" placeholder="{:lang('name')}" required/>
+                <span class="help-block m-b-none">{:lang('module names can only be letters')}{:lang('module name')}{:lang('只能为字母')}</span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('description')}</label>
+            <div class="col-sm-8">
+                <textarea name="intro" class="form-control" cols="80" rows="2"></textarea>
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('author')}</label>
+            <div class="col-sm-8">
+                <input name="author" class="form-control" type="text" placeholder="{:lang('author')}"/>
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('author website')}</label>
+            <div class="col-sm-8">
+                <input name="author_url" class="form-control" type="text" placeholder="{:lang('author website')}"/>
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('version')}</label>
+            <div class="col-sm-8">
+                <input name="version" class="form-control" type="text" placeholder="{:lang('version')}" />
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>{:lang('quickly generate module directory structure')}</legend>
+        </fieldset>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('public documents')}</label>
+            <div class="col-sm-8">
+                <input name="comm_file" class="form-control" type="text" placeholder="{:lang('public documents')}" value="command.php"/>
+                <span class="help-block m-b-none"></span> </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('module directory')}</label>
+            <div class="col-sm-8">
+                <textarea name="module_dir" class="form-control" cols="80" rows="8">
+controller
+logic
+service
+model
+sql
+validate
+view
+                </textarea>
+                <span class="help-block m-b-none"></span>
+            </div>
+            <div class="col-sm-2">
+                {:lang('generate directory under the current module')}<br>
+                controller(后台控制器)<br>
+                logic(逻辑层)<br>
+                service(服务层)<br>
+                model(模型层)<br>
+                sql(数据库文件)<br>
+                vaidate(验证规则)<br>
+                view(后台模板)<br>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

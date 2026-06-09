@@ -1,0 +1,99 @@
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{$page_title|default=''}</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form id="pagerForm" method="post" class="form-inline searchForm">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <input type="text" name="member_id" placeholder="{:lang('会员ID')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="book_id" placeholder="{:lang('账本ID')}" class="form-control" value="{$book_id}">
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" name="keywords" placeholder="{:lang('关键字搜索')}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary ajaxSearchForm"><i
+                                                class="fa fa-search"></i> {:lang('查询')}</button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <lqf_link><a class="btn btn-info ajax-open" data-url="{:url('BkShop/add')}" width="800" height="600"><i
+                                    class="fa fa-plus"></i> {:lang('添加')}</a></lqf_link>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('BkShop/show_json')}"
+                           width="100%">
+                        <thead>
+                        <tr>
+                            <th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="50"><span>{:lang('商家ID')}</span></th>
+                            <th width="200"><span>{:lang('商家名称')}</span></th>
+                            <th width="80"><span>{:lang('联系人')}</span></th>
+                            <th width="80"><span>{:lang('联系电话')}</span></th>
+                            <th width="80"><span>{:lang('地址')}</span></th>
+                            <th width="80"><span>{:lang('排序')}</span></th>
+                            <th width="80"><span>{:lang('会员ID')}</span></th>
+                            <th width="80"><span>{:lang('账本ID')}</span></th>
+                            <th width="80"  class="text-center">{:lang('操作')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="8" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><input name="id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['contact']%> </td>
+        <td><%=data[i]['phone']%></td>
+        <td><%=data[i]['address']%></td>
+        <td>
+            <input type="text" name="sort" value="<%=data[i]['sort']%>" class="form-control w50 ajax-sort"
+                   data-url="{:url('BkShop/set_sort',array('name'=>'sort'))}" data-id="<%=data[i]['id']%>" size="5">
+        </td>
+        <td><%=data[i]['member_id']%></td>
+        <td><%=data[i]['book_id']%></td>
+        <td class="text-center">
+            <lqf_link><a class="ajax-open" data-url="{:url('BkShop/edit')}" width="800" height="600"
+                         data-ids="{'id':'<%=data[i]['id']%>'}" data-title="{:lang('修改')}">{:lang('修改')}</a></lqf_link>
+            <lqf_link><a class="ajax-del confirm" data-url="{:url('BkShop/del')}"
+                         data-ids="{'id':'<%=data[i]['id']%>'}">{:lang('删除')}</a></lqf_link>
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);
+    });
+</script>

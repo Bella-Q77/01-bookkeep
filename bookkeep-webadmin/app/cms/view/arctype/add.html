@@ -1,0 +1,195 @@
+<body class="gray-bg">
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('Arctype/add')}">
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" style="margin-bottom:0;">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">常规选项</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">高级选项</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">栏目内容</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">是否隐藏栏目 </label>
+                                    <div class="col-sm-10">
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="inlineRadio1" value="1" name="visible" checked>
+                                            <label for="inlineRadio1"> 显示 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="inlineRadio2" value="0" name="visible">
+                                            <label for="inlineRadio2"> 隐藏 </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">内容模型</label>
+                                    <div class="col-sm-10">
+                                        <select data-placeholder="请选内容模型..." name="channel_id" class="chosen-select" style="width: 200px;">
+                                            {volist name='channellist' id='vo'}
+                                            <option value="{$vo['id']}">{$vo['name']}</option>
+                                            {/volist}
+                                        </select>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">上级栏目</label>
+                                    <div class="col-sm-10">
+                                        <select data-placeholder="上级栏目..." name="parent_id" class="chosen-select" style="width: 200px;">
+                                            <option value="0">选择栏目</option>
+                                        {volist name='arctypelist' id='vo'}
+                                        <option value="{$vo['id']}"  {notempty name="pid"} {if condition="$pid eq $vo['id'] " }  selected="selected" {/if} {/notempty} >{$vo['name']}</option>
+                                        {/volist}
+                                        </select>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">栏目名称</label>
+                                    <div class="col-sm-10">
+                                        <input name="typename" class="form-control" type="text" placeholder="请输入名称" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">栏目排序</label>
+                                    <div class="col-sm-10">
+                                        <input name="sort" class="form-control" type="text" value="50" placeholder="只能输入数字" required/>
+                                        <span class="help-block m-b-none">（由低 -> 高）</span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">保存目录</label>
+                                    <div class="col-sm-10">
+                                        <input name="typedir" class="form-control" type="text" value="" placeholder="请输入保存目录" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">默认页的名称 </label>
+                                    <div class="col-sm-10">
+                                        <input name="defaultname" class="form-control" type="text" value="" required/>
+                                        <span class="help-block m-b-none"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">栏目缩略图 </label>
+                                    <div class="col-sm-10">
+                                        {assign name="litpic" value="$info.litpic|default='0'" /}
+                                        {:hook('File', ['name' => 'litpic', 'value' => $litpic, 'type' => 'img'])}
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">栏目属性 </label>
+                                    <div class="col-sm-10">
+                                        <div class="radio radio-success">
+                                            <input type="radio" name="ispart" id="radio0" value="0">
+                                            <label for="radio0"> 最终列表栏目（允许在本栏目发布文档，并生成文档列表） </label>
+                                        </div>
+                                        <div class="radio radio-success">
+                                            <input type="radio" name="ispart" id="radio1" value="1">
+                                            <label for="radio1"> 频道封面（栏目本身不允许发布文档,默认为单页面使用）</label>
+                                        </div>
+                                        <div class="radio radio-success">
+                                            <input type="radio" name="ispart" id="radio2" value="2">
+                                            <label for="radio2"> 外部连接（在"外部地址"处填写网址，可以直接跳转到第三方网址） </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">外部地址 </label>
+                                    <div class="col-sm-10">
+                                        <input name="jump_url" class="form-control" type="text" value="" required/>
+                                        <span class="help-block m-b-none"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">是否支持在线投稿 </label>
+                                    <div class="col-sm-10">
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="issend1" value="1" name="issend" checked>
+                                            <label for="issend1"> 是 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="issend2" value="0" name="issend">
+                                            <label for="issend2"> 否 </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">封面模板</label>
+                                    <div class="col-sm-10">
+                                        <input name="temp_index" class="form-control" type="text" value="cms/index_article.htm"
+                                               required/>
+                                        <span class="help-block m-b-none">按不同的内容类型设定相关模板及命名规则。</span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">列表模板</label>
+                                    <div class="col-sm-10">
+                                        <input name="temp_list" class="form-control" type="text" value="cms/list_article.htm"
+                                               required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">文章模板</label>
+                                    <div class="col-sm-10">
+                                        <input name="temp_article" class="form-control" type="text" value="cms/article_article.htm" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">文章命名规则</label>
+                                    <div class="col-sm-10">
+                                        <input name="name_rule_article" class="form-control" type="text"  value="{typedir}/{Y}/{M}{D}/{aid}.html" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">列表命名规则</label>
+                                    <div class="col-sm-10">
+                                        <input name="name_rule_list" class="form-control" type="text" value="{typedir}/list_{tid}_{page}.html" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">SEO标题</label>
+                                    <div class="col-sm-10">
+                                        <input name="seotitle" class="form-control" type="text" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">关键字</label>
+                                    <div class="col-sm-10">
+                                        <input name="keywords" class="form-control" type="text" required/>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">栏目描述</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="description"></textarea>
+                                        <span class="help-block m-b-none"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <textarea class="content" name="content"></textarea>
+                                {:hook('ArticleEditor', ['name' => 'content'])}
+                                <div class="row">
+                                    <div class="col-sm-12">说明：栏目内容是替代原来栏目单独页的更灵活的一种方式，可在栏目模板中用$fly.field.content调用，通常用于企业简介之类的用途。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,50 @@
+<div class="ibox-content auto-height-box">
+    <form class="form-horizontal" method="post" action="{:url('BkBook/add')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('分类名称')}</label>
+            <div class="col-sm-10">
+                <input name="name" class="form-control" type="text"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('币种')}</label>
+            <div class="col-sm-10">
+                <input name="category_icon" class="form-control" type="text" placeholder="" value="{$info.category_icon|default='0'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('排序')}</label>
+            <div class="col-sm-10">
+                <input name="sort" class="form-control" type="text" placeholder="" value="{$info.sort|default='0'}"/>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('备注说明')}</label>
+            <div class="col-sm-10">
+                <textarea name="remark" class="form-control" rows="3">{$info.remark|default=''}</textarea>
+                <span class="help-block m-b-none"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{:lang('是否模板')}</label>
+            <div class="col-sm-10">
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="istemplate1" value="1" name="is_template" checked>
+                    <label for="istemplate1"> {:lang('是')}</label>
+                </div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="istemplate11" value="-1" name="is_template">
+                    <label for="istemplate11"> {:lang('否')}</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>

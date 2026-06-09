@@ -1,0 +1,29 @@
+{
+  "name": "base-bookkeep-uniapp",
+  "version": "1.0.0",
+  "description": "记账小程序",
+  "main": "main.js",
+  "scripts": {
+    "dev:mp-weixin": "vue-cli-service uni-build --platform mp-weixin --watch",
+    "build:mp-weixin": "vue-cli-service uni-build --platform mp-weixin",
+    "dev:h5": "npx vue-cli-service uni-serve --platform h5",
+    "build:h5": "npx vue-cli-service uni-build --platform h5"
+  },
+  "dependencies": {
+    "@dcloudio/uni-ui": "^1.5.11"
+  },
+  "devDependencies": {
+    "@dcloudio/uni-cli-i18n": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-cli-shared": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-h5": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-migration": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-mp-vue": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-mp-weixin": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-quickapp-webview": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-stat": "^2.0.2-4070620250821001",
+    "@dcloudio/uni-template-compiler": "^2.0.2-4070620250821001",
+    "@dcloudio/webpack-uni-pages-loader": "^2.0.2-4070620250821001",
+    "@vue/cli-service": "^4.5.19",
+    "vue": "^2.7.16"
+  }
+}

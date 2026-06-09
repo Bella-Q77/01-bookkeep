@@ -1,0 +1,41 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div id="ArctypeListTreeview" class="test"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="__STATIC__/module/admin/js/plugins/bootstrap-treeview/bootstrap-treeview.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ajax_type_list();
+    });
+
+    function ajax_type_list() {
+        var getArcypeUrl = "{:url('Archives/show',array('data_type'=>'get_arctype_tree'))}";
+        //左边栏目加载
+        $.ajax({
+            type: "POST",
+            url: getArcypeUrl,
+            data: '',
+            dataType: "json",
+            success: function (jsondata) {
+                $('#ArctypeListTreeview').treeview({
+                    data: jsondata,
+                    levels: 2,
+                    onNodeSelected: function (event, node) {
+                        type_id = node.tags;
+
+                        url="{:url('Archives/add')}"+'?type_id='+type_id;
+
+                        window.location.href=url;
+                    }
+                });
+            }
+        });
+    }
+</script>

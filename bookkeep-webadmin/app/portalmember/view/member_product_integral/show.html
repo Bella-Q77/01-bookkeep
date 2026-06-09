@@ -1,0 +1,75 @@
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>积分充值</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="form-control-static">当前账号积分：<span class="text-danger">{$member.member_integral}</span></p>
+                        </div>
+                        <div class="col-sm-9 text-right">
+                            <form id="pagerForm" method="post" class="form-inline searchForm">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <input type="text" name="keywords" placeholder="输入关键字搜索" class="form-control">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-primary ajaxSearchForm"><i class="fa fa-search"></i> 搜索</button></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <table class="table table-hover sorttable ajax-list-table" data-url="{:url('MemberProductIntegral/show')}" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="50"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+                            <th width="50"><span>ID</span></th>
+                            <th width=""><span>产品名称</span></th>
+                            <th width="100"><span>积分数</span></th>
+                            <th width="100"><span>产品价格</span></th>
+                            <th width="60"><span>备注</span></th>
+                            <th width="100" class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot class="ibox-content">
+                        <tr>
+                            <td colspan="7" align="center"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="tableListTpl" type="text/html">
+    <% for(var i=0;i<data.length;i++) { %>
+    <tr>
+        <td><input name="user_id" class="checkboxCtrlId" value="<%=data[i]['id']%>" type="checkbox"></td>
+        <td><%=data[i]['id']%></td>
+        <td><%=data[i]['name']%></td>
+        <td><%=data[i]['integral']%></td>
+        <td><%=data[i]['price']%></td>
+        <td><%=data[i]['remark']%></td>
+        <td class="text-center">
+           <a class="ajax-open btn btn-success" data-url="{:url('MemberProductIntegral/buy')}"
+              data-ids="{'id':'<%=data[i]['id']%>'}">购买</a>
+
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        turnPage(1);//页面加载时初始化分页
+    });
+</script>

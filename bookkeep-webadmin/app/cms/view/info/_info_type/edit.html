@@ -1,0 +1,150 @@
+<body class="gray-bg">
+<div class="ibox-content">
+    <form class="form-horizontal" method="post" action="{:url('info.InfoType/edit')}">
+        <input type="hidden" name="id" value="{$info['id']|default='0'}">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">常规选项</a></li>
+                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">高级选项</a></li>
+                <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">栏目内容</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">是否隐藏栏目 </label>
+                            <div class="col-sm-10">
+                                <input name="visible" type="radio"  value="1"  {notempty name="$info.visible"} {if condition="$info.visible eq '1' " }  checked {/if} {/notempty}> 显示
+                                <input name="visible" type="radio"  value="0"  {notempty name="$info.visible"} {if condition="$info.visible eq '0' " }  checked {/if} {/notempty}> 隐藏
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上级栏目</label>
+                            <div class="col-sm-10">
+                                <select data-placeholder="上级栏目..." name="parent_id" class="chosen-select chosen-select-parent">
+                                    <option value="0">选择栏目</option>
+                                    {volist name='info_type_list' id='vo'}
+                                    <option value="{$vo['id']}" {notempty name="info['parent_id']"} {if condition="$info['parent_id'] eq $vo['id'] " }  selected="selected" {/if} {/notempty}>{$vo['treename']}</option>
+                                    {/volist}
+                                </select>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">栏目名称</label>
+                            <div class="col-sm-10">
+                                <input name="typename" class="form-control" type="text" value="{$info.typename}" placeholder="请输入名称" required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">栏目排序</label>
+                            <div class="col-sm-10">
+                                <input name="sort" class="form-control" type="text" value="{$info.sort}" placeholder="只能输入数字"
+                                       required/>
+                                <span class="help-block m-b-none">（由低 -> 高）</span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">保存目录</label>
+                            <div class="col-sm-10">
+                                <input name="typedir" class="form-control" type="text" value="{$info.typedir}"  laceholder="请输入保存目录" required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">默认页的名称 </label>
+                            <div class="col-sm-10">
+                                <input name="defaultname" class="form-control" type="text" value="{$info.defaultname}"/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">栏目缩略图 </label>
+                            <div class="col-sm-10">
+                                {assign name="litpic" value="$info.litpic|default='0'" /}
+                                {:hook('File', ['name' => 'litpic', 'value' => $litpic, 'type' => 'img'])}
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">栏目属性 </label>
+                            <div class="col-sm-10">
+                                <input name="ispart" type="radio" value="0" {notempty name="$info.ispart"} {if condition="$info.ispart eq '0' " }  checked {/if} {/notempty}>
+                                最终列表栏目（允许在本栏目发布文档，并生成文档列表） <br>
+                                <input name="ispart" type="radio" value="1" {notempty name="$info.ispart"} {if condition="$info.ispart eq '1' " }  checked {/if} {/notempty}>
+                                频道封面（栏目本身不允许发布文档） <br>
+                                <input name="ispart" type="radio" value="2"  {notempty name="$info.ispart"} {if condition="$info.ispart eq '2' " }  checked {/if} {/notempty}>
+                                外部连接（在"文件保存目录"处填写网址） <span class="help-block m-b-none"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">封面模板</label>
+                            <div class="col-sm-10">
+                                <input name="temp_index" class="form-control" type="text" value="{$info.temp_index}"
+                                       required/>
+                                <span class="help-block m-b-none">按不同的内容类型设定相关模板及命名规则。</span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">列表模板</label>
+                            <div class="col-sm-10">
+                                <input name="temp_list" class="form-control" type="text" value="{$info.temp_list}"
+                                       required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">文章模板</label>
+                            <div class="col-sm-10">
+                                <input name="temp_article" class="form-control" type="text" value="{$info.temp_article}" required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">文章命名规则</label>
+                            <div class="col-sm-10">
+                                <input name="name_rule_article" class="form-control" type="text"  value="{$info.name_rule_article}" required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">列表命名规则</label>
+                            <div class="col-sm-10">
+                                <input name="name_rule_list" class="form-control" type="text" value="{$info.name_rule_list}" required/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">SEO标题</label>
+                            <div class="col-sm-10">
+                                <input name="seotitle" class="form-control" type="text" value="{$info.seotitle}"/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">关键字</label>
+                            <div class="col-sm-10">
+                                <input name="keywords" class="form-control" type="text"  value="{$info.keywords}"/>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">栏目描述</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="description">{$info.description}</textarea>
+                                <span class="help-block m-b-none"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-3" class="tab-pane">
+                    <div class="panel-body">
+                        <textarea class="content" name="content">{$info.content|default=''}</textarea>
+                        {:hook('ArticleEditor', ['name' => 'content'])}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                {include file="admin@layout/save_btn"}
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(".chosen-select-parent").val("{$info.parent_id}").trigger("chosen:updated");
+</script>

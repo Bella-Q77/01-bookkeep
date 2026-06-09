@@ -1,0 +1,48 @@
+
+<hr>
+<h3>{$fly.field.title}</h3>
+
+<p>
+    <br>日期：{$fly.field.update_time}
+    <br>作者：{$fly.field.writer}
+
+</p>
+
+<p>
+    {$fly.field.body}
+</p>
+
+
+<hr>
+<h3>栏目信息</h3>
+{$fly.type.typename}
+{$fly.type.content}
+
+
+<h3>相关文章</h3>
+{fly:likearticle limit='0,12'}
+<p><a href='{$field.arcurl}'>{$field.title}</a></p>
+{/fly:likearticle}
+
+<h3>自定义字段：多个图片</h3>
+{notempty name="fly.field.images"}
+{assign name="img_ids_list" value="$fly.field.images|str2arr" /}
+{volist name="img_ids_list" id='img'}
+    <li><img src="{$img|get_picture_url}"></li>
+{/volist}
+{/notempty}
+
+
+<h3>上一篇 : </h3>
+{fly:prenext get='pre'}
+<a href="{$field.arcurl}" title="{$field.title}"> {$field.title} </a>
+{fly:else /}
+    暂无数据
+{/fly:prenext}
+
+<h3>下一篇: </h3>
+{fly:prenext get='next'}
+<a href="{$field.arcurl}" title="{$field.title}"> {$field.title} </a>
+{fly:else /}
+    暂无数据
+{/fly:prenext}
